@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-PEM-001 · Planta de Emergencia PLANELEC 500 kW
-# Actualizado: 28/10/2026, 3:06:07 p.m.
+# Actualizado: 28/10/2026, 3:08:15 p.m.
 # Este archivo lo escribe index.html. Si lo editas a mano,
 # respeta el formato  campo = valor  y los títulos [ ].
 # ==========================================================
@@ -32,9 +32,10 @@ Voltaje de baterías = 24 VCD
 Año de fabricación = Agosto 2023
 Peso = 5524 kg
 
-# ---------------- ÍNDICE DE REGISTROS (1) ----------------
+# ---------------- ÍNDICE DE REGISTROS (2) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-03-20 | Lectura semanal            | Lectura inicial (fotografía del panel)
+# 0002 | 2026-10-28 | Mantenimiento preventivo   | CARLOS GR
 
 [REGISTRO 0001]
 id = r1
@@ -52,6 +53,38 @@ energia_kwh = 2603
 v_linea_linea = 219 / 221 / 221
 v_linea_neutro = 127 / 127 / 128
 observaciones = Datos capturados de fotografías del panel PEM-CAP.
+
+[REGISTRO 0002]
+id = rmvslwb1x
+fecha = 2026-10-28
+tipo = Mantenimiento preventivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 4565456555
+actividad = Nivel de aceite de motor
+actividad = Nivel de refrigerante
+actividad = Nivel de combustible y fugas
+actividad = Bandas y mangueras
+actividad = Indicador de filtro de aire
+actividad = Bornes y voltaje de baterías (24 VCD)
+actividad = Cargador de baterías operando
+actividad = Calentador de motor operando
+actividad = Arranque y operación en vacío 15–30 min
+actividad = Transferencia en AUTOMÁTICO
+actividad = Radiador limpio y sin obstrucciones
+actividad = Limpieza general del área
+actividad = fgtffbjjkuhgtghmkjggjg
+combustible_pct = 60
+presion_aceite_bar = 90
+temp_motor_c = 100
+baterias_v = 12
+rpm = 3600
+frecuencia_hz = 60
+energia_kwh = 220
+v_linea_linea = 221 221 222
+v_linea_neutro = 127 127 127
+refacciones = fgjythjuj
+observaciones = ghmkuyhtbhhj
 
 # ---- Acceso del modo técnico. Todo va cifrado; no modifiques estas secciones ----
 [CONFIG]
