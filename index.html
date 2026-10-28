@@ -80,22 +80,27 @@ textarea{font-family:var(--body);min-height:70px;resize:vertical}
 .help{font-size:13px;color:var(--muted);margin:0}
 footer{font-size:12px;color:var(--muted);text-align:center}
 @media (max-width:480px){h1{font-size:28px}.spec-edit{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:600 13px/1 var(--body);padding:8px 12px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--plate);color:var(--plate-ink);border-color:var(--plate)}
+.users{display:grid;gap:8px}
+.urow{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field)}
+input[readonly]{opacity:.8}
 </style>
 </head>
 <body>
 <div id="app"></div>
 
-<!-- DATOS DEL EQUIPO: la página los reescribe sola al guardar. No editar a mano salvo que sepas JSON. -->
-<script type="application/json" id="estado">{"equipo":{"id":"CGR-PEM-001","nombre":"Planta de Emergencia PLANELEC 500 kW","ubicacion":"Planta 1 · Muebles Liz","subtitulo":"Equipo de respaldo","area":"Mantenimiento Industrial"},"placa":[["Fabricante","PLANELEC · Plantas Eléctricas México, S.A. de C.V."],["Modelo","1S069D0500B1600"],["Tablero de control","PEM-CAP"],["Motor","69X18-69"],["No. serie motor","B0393007"],["Generador","54L1D-641"],["No. serie generador","X23B082603"],["Potencia emergencia","500 kW / 625 kVA"],["Potencia continua","452 kW / 565 kVA"],["Voltaje","220 / 127 V"],["Fases / hilos","3 fases · 4 hilos"],["Frecuencia","60 Hz"],["Velocidad","1800 RPM"],["Factor de potencia","0.8"],["Voltaje de baterías","24 VCD"],["Año de fabricación","Agosto 2023"],["Peso","5524 kg"]],"historial":[{"id":"r1","fecha":"2026-03-20","tipo":"Lectura semanal","tecnico":"Lectura inicial (fotografía del panel)","horometro":103.25,"actividades":[],"lectura":{"comb":55,"aceite":2.72,"temp":62,"bat":28.15,"rpm":1798,"hz":60,"kwh":2603,"vll":"219 / 221 / 221","vln":"127 / 127 / 128"},"refacciones":"","obs":"Datos capturados de fotografías del panel PEM-CAP."}],"cfg":null}</script>
-
+<!-- Los datos del equipo viven en datos.txt, en la misma carpeta. Esta página solo los muestra y los guarda. -->
 <script>
 (function(){
-var MARCA_INI = '<script type="application/json" id="estado">';
-var MARCA_FIN = '</' + 'script>';
-var S = JSON.parse(document.getElementById('estado').textContent);
-var TOKEN = null, view = 'pub', editId = null, pendingDelete = null, notice = null, busy = false, placaTmp = null;
+var ARCHIVO_DATOS = 'datos.txt';
+var IT = 600000;
+var S = null, SES = null;   // SES = sesión: {u, nombre, rol, token, kraw}
+var view = 'pub', editId = null, pendingDelete = null, pendingUser = null, notice = null, busy = false, placaTmp = null, filtro = 'todos';
 var TIPOS = ['Lectura semanal','Mantenimiento preventivo','Mantenimiento correctivo','Prueba con carga','Inspección'];
 var CHECKS = ['Nivel de aceite de motor','Nivel de refrigerante','Nivel de combustible y fugas','Bandas y mangueras','Indicador de filtro de aire','Bornes y voltaje de baterías (24 VCD)','Cargador de baterías operando','Calentador de motor operando','Arranque y operación en vacío 15–30 min','Transferencia en AUTOMÁTICO','Radiador limpio y sin obstrucciones','Limpieza general del área'];
+var FILTROS = [['todos','Todos'],['mant','Mantenimientos'],['corr','Correctivos'],['lect','Lecturas y pruebas']];
 
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
@@ -104,27 +109,103 @@ function fmtF(f){if(!f)return '—';var p=String(f).split('-');if(p.length<3)ret
 function pillCls(t){return /preventivo/i.test(t)?'prev':/correctivo/i.test(t)?'corr':/prueba|inspec/i.test(t)?'prue':'lect'}
 function val(k){var f=S.placa.find(function(p){return p[0]===k});return f?f[1]:''}
 function ordenado(){return S.historial.slice().sort(function(a,b){return a.fecha<b.fecha?1:a.fecha>b.fecha?-1:0})}
+function esAdmin(){return SES&&SES.rol==='admin'}
+function puedeEditar(e){return SES&&(esAdmin()||e.usuario===SES.u)}
 
-/* ───── Cifrado del token con la clave (PBKDF2 + AES-GCM) ───── */
+/* ───── Formato de datos.txt (legible en el Bloc de notas) ───── */
+var LEC = [['comb','combustible_pct'],['aceite','presion_aceite_bar'],['temp','temp_motor_c'],['bat','baterias_v'],['rpm','rpm'],['hz','frecuencia_hz'],['kwh','energia_kwh'],['vll','v_linea_linea'],['vln','v_linea_neutro']];
+function tEsc(v){return String(v==null?'':v).replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n')}
+function tUnesc(v){return v.replace(/\\(n|\\)/g,function(m,c){return c==='n'?'\n':'\\'})}
+function tNum(v){return /^-?\d+(\.\d+)?$/.test(v)?Number(v):v}
+function leerTxt(txt){
+  var st={equipo:{},placa:[],historial:[],cfg:null}, sec=null, cur=null, cfg={}, usuarios=[];
+  txt.replace(/^﻿/,'').split(/\r?\n/).forEach(function(raw){
+    var l=raw.trim(); if(!l||l.charAt(0)==='#')return;
+    var m=l.match(/^\[(.+)\]$/);
+    if(m){var n=m[1].trim(), N=n.toUpperCase();
+      if(N.indexOf('REGISTRO')===0){sec='REG';cur={id:'',fecha:'',tipo:'',tecnico:'',usuario:'',horometro:null,actividades:[],lectura:{},refacciones:'',obs:''};st.historial.push(cur)}
+      else if(N.indexOf('USUARIO')===0){sec='USR';cur={u:n.slice(7).trim().toLowerCase(),nombre:'',rol:'tecnico'};usuarios.push(cur)}
+      else sec=N; return}
+    var i=l.indexOf('='); if(i<0)return;
+    var k=l.slice(0,i).trim(), v=tUnesc(l.slice(i+1).trim());
+    if(sec==='EQUIPO')st.equipo[k]=v;
+    else if(sec==='PLACA')st.placa.push([k,v]);
+    else if(sec==='CONFIG')cfg[k]=v;
+    else if(sec==='USR'){ if(k==='nombre')cur.nombre=v; else if(k==='rol')cur.rol=v; else if(k==='sal')cur.s=v; else if(k==='iv')cur.iv=v; else if(k==='llave_cifrada')cur.ct=v; else if(k==='iteraciones')cur.it=Number(v)||IT; }
+    else if(sec==='REG'){
+      if(k==='actividad')cur.actividades.push(v);
+      else if(k==='horometro')cur.horometro=v===''?null:tNum(v);
+      else if(k==='observaciones')cur.obs=v;
+      else{var lk=LEC.find(function(p){return p[1]===k}); if(lk)cur.lectura[lk[0]]=v===''?null:tNum(v); else cur[k]=v}
+    }
+  });
+  st.historial.forEach(function(r,i){if(!r.id)r.id='r'+(i+1)});
+  if(cfg.token_cifrado)st.cfg={owner:cfg.cuenta_github,repo:cfg.repositorio,branch:cfg.rama||'main',path:cfg.archivo||ARCHIVO_DATOS,tiv:cfg.token_iv,tct:cfg.token_cifrado,usuarios:usuarios};
+  return st;
+}
+function escribirTxt(st){
+  var L=[], q=st.equipo, h=st.historial.slice().sort(function(a,b){return a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0});
+  function kv(k,v){L.push(k+' = '+tEsc(v))}
+  L.push('# ==========================================================');
+  L.push('# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO');
+  L.push('# Equipo: '+tEsc(q.id)+' · '+tEsc(q.nombre));
+  L.push('# Actualizado: '+new Date().toLocaleString('es-MX'));
+  L.push('# Este archivo lo escribe index.html. Si lo editas a mano,');
+  L.push('# respeta el formato  campo = valor  y los títulos [ ].');
+  L.push('# ==========================================================','');
+  L.push('[EQUIPO]'); Object.keys(q).forEach(function(k){kv(k,q[k])}); L.push('');
+  L.push('[PLACA]'); st.placa.forEach(function(p){kv(String(p[0]).replace(/=/g,'-'),p[1])}); L.push('');
+  L.push('# ---------------- ÍNDICE DE REGISTROS ('+h.length+') ----------------');
+  L.push('# No.  | Fecha      | Tipo                       | Técnico');
+  h.forEach(function(r,i){L.push('# '+String(i+1).padStart(4,'0')+' | '+r.fecha+' | '+(r.tipo+'                          ').slice(0,26)+' | '+tEsc(r.tecnico))});
+  L.push('');
+  h.forEach(function(r,i){
+    L.push('[REGISTRO '+String(i+1).padStart(4,'0')+']');
+    kv('id',r.id); kv('fecha',r.fecha); kv('tipo',r.tipo); kv('tecnico',r.tecnico); if(r.usuario)kv('usuario',r.usuario);
+    kv('horometro',hasN(r.horometro)?r.horometro:'');
+    (r.actividades||[]).forEach(function(a){kv('actividad',a)});
+    LEC.forEach(function(p){var v=r.lectura&&r.lectura[p[0]]; if(hasN(v))kv(p[1],v)});
+    if(r.refacciones)kv('refacciones',r.refacciones);
+    if(r.obs)kv('observaciones',r.obs);
+    L.push('');
+  });
+  if(st.cfg){var c=st.cfg;
+    L.push('# ---- Acceso del modo técnico. Todo va cifrado; no modifiques estas secciones ----');
+    L.push('[CONFIG]'); kv('cuenta_github',c.owner); kv('repositorio',c.repo); kv('rama',c.branch); kv('archivo',c.path);
+    kv('token_iv',c.tiv); kv('token_cifrado',c.tct); L.push('');
+    c.usuarios.forEach(function(u){
+      L.push('[USUARIO '+u.u+']'); kv('nombre',u.nombre); kv('rol',u.rol); kv('sal',u.s); kv('iv',u.iv); kv('llave_cifrada',u.ct); kv('iteraciones',u.it); L.push('');
+    });
+  }
+  return L.join('\r\n');
+}
+
+/* ───── Cifrado: el token se cifra con una llave maestra; cada usuario guarda esa llave cifrada con su contraseña ───── */
 function b64e(u8){var s='';for(var i=0;i<u8.length;i+=8192)s+=String.fromCharCode.apply(null,u8.subarray(i,i+8192));return btoa(s)}
-function b64d(s){var b=atob(s.replace(/\s/g,'')),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
-async function llave(clave,salt,it){
-  var base=await crypto.subtle.importKey('raw',new TextEncoder().encode(clave),'PBKDF2',false,['deriveKey']);
+function b64d(s){var b=atob(String(s).replace(/\s/g,'')),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+async function llavePw(pw,salt,it){
+  var base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
   return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:it,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
 }
-async function cifrar(token,clave){
-  var salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12)),it=600000;
-  var k=await llave(clave,salt,it);
-  var ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},k,new TextEncoder().encode(token)));
-  return {s:b64e(salt),iv:b64e(iv),ct:b64e(ct),it:it};
+function llaveMaestra(raw){return crypto.subtle.importKey('raw',raw,'AES-GCM',false,['encrypt','decrypt'])}
+async function aesCifrar(key,bytes){var iv=crypto.getRandomValues(new Uint8Array(12));var ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,bytes));return {iv:b64e(iv),ct:b64e(ct)}}
+async function aesDescifrar(key,iv,ct){return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(iv)},key,b64d(ct)))}
+async function envolverUsuario(kraw,u,nombre,rol,pw){
+  var salt=crypto.getRandomValues(new Uint8Array(16)), k=await llavePw(pw,salt,IT), e=await aesCifrar(k,kraw);
+  return {u:u,nombre:nombre,rol:rol,s:b64e(salt),iv:e.iv,ct:e.ct,it:IT};
 }
-async function descifrar(enc,clave){
-  var k=await llave(clave,b64d(enc.s),enc.it);
-  var pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(enc.iv)},k,b64d(enc.ct));
-  return new TextDecoder().decode(pt);
+async function cifrarToken(kraw,token){var e=await aesCifrar(await llaveMaestra(kraw),new TextEncoder().encode(token));return {tiv:e.iv,tct:e.ct}}
+async function entrar(u,pw){
+  var us=(S.cfg.usuarios||[]).find(function(x){return x.u===u});
+  if(!us)throw new Error('x');
+  var kraw=await aesDescifrar(await llavePw(pw,b64d(us.s),us.it),us.iv,us.ct);
+  var token=new TextDecoder().decode(await aesDescifrar(await llaveMaestra(kraw),S.cfg.tiv,S.cfg.tct));
+  return {u:us.u,nombre:us.nombre,rol:us.rol,token:token,kraw:kraw};
 }
+function claveValida(pw){return pw.length>=10&&/[a-zA-Z]/.test(pw)&&/\d/.test(pw)}
+function usuarioValido(u){return /^[a-z0-9._-]{3,20}$/.test(u)}
 
-/* ───── GitHub: lee este mismo archivo, cambia sus datos y lo vuelve a subir ───── */
+/* ───── GitHub: lee datos.txt, aplica el cambio y lo vuelve a subir ───── */
 async function gh(token,method,url,body){
   var r=await fetch('https://api.github.com'+url,{method:method,headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},body:body?JSON.stringify(body):undefined,cache:'no-store'});
   var j=null;try{j=await r.json()}catch(e){}
@@ -132,22 +213,23 @@ async function gh(token,method,url,body){
   return j;
 }
 function rutaApi(cfg){return '/repos/'+encodeURIComponent(cfg.owner)+'/'+encodeURIComponent(cfg.repo)+'/contents/'+cfg.path.split('/').map(encodeURIComponent).join('/')}
-function sacarEstado(txt){var i=txt.indexOf(MARCA_INI);if(i<0)throw new Error('No encontré los datos dentro del archivo.');var a=i+MARCA_INI.length,b=txt.indexOf(MARCA_FIN,a);return {st:JSON.parse(txt.slice(a,b)),a:a,b:b}}
-function meterEstado(txt,pos,st){return txt.slice(0,pos.a)+JSON.stringify(st).replace(/</g,'\\u003c')+txt.slice(pos.b)}
 async function confirmar(cfg,token,cambio,mensaje){
   for(var intento=0;intento<2;intento++){
-    var f=await gh(token,'GET',rutaApi(cfg)+'?ref='+encodeURIComponent(cfg.branch));
-    var txt=new TextDecoder().decode(b64d(f.content));
-    var pos=sacarEstado(txt), st=pos.st;
+    var f=null, st;
+    try{ f=await gh(token,'GET',rutaApi(cfg)+'?ref='+encodeURIComponent(cfg.branch)); }
+    catch(e){ if(e.status!==404||!S)throw e; }
+    st = f ? leerTxt(new TextDecoder().decode(b64d(f.content))) : JSON.parse(JSON.stringify(S));
     cambio(st);
     try{
-      await gh(token,'PUT',rutaApi(cfg),{message:mensaje,content:b64e(new TextEncoder().encode(meterEstado(txt,pos,st))),sha:f.sha,branch:cfg.branch});
+      var body={message:mensaje,content:b64e(new TextEncoder().encode(escribirTxt(st))),branch:cfg.branch};
+      if(f)body.sha=f.sha;
+      await gh(token,'PUT',rutaApi(cfg),body);
       return st;
     }catch(e){ if(e.status!==409||intento===1)throw e; }
   }
 }
 function errorTexto(e){
-  if(e.status===401)return 'El token de GitHub ya no es válido o venció. Vuelve a configurarlo en la sección Configurar.';
+  if(e.status===401)return 'El token de GitHub ya no es válido o venció. El administrador debe renovarlo en Usuarios → Renovar token.';
   if(e.status===403||e.status===404)return 'El token no tiene permiso para escribir en este repositorio. Revisa que tenga "Contents: Read and write".';
   if(e.status===409)return 'Otra persona guardó al mismo tiempo. Intenta de nuevo.';
   if(e instanceof TypeError)return 'Sin conexión a internet. Intenta de nuevo.';
@@ -173,18 +255,24 @@ function statusHTML(){
   var h=ordenado(),horo=null;
   h.forEach(function(e){if(hasN(e.horometro)&&(horo===null||+e.horometro>horo))horo=+e.horometro});
   var mp=h.find(function(e){return /preventivo|correctivo/i.test(e.tipo)}), ult=h[0];
-  var lect=h.find(function(e){return e.lectura&&hasN(e.lectura.comb)});
+  var nm=h.filter(function(e){return /preventivo|correctivo/i.test(e.tipo)}).length;
   return '<div class="status">'+
-   '<div class="stat"><span class="k">Último registro</span><span class="v">'+(ult?fmtF(ult.fecha):'—')+'</span><span class="s">'+(ult?esc(ult.tipo):'Sin registros')+'</span></div>'+
+   '<div class="stat"><span class="k">Último mantenimiento</span><span class="v">'+(mp?fmtF(mp.fecha):'—')+'</span><span class="s">'+(mp?esc(mp.tipo)+' · '+esc(mp.tecnico):'Aún no registrado')+'</span></div>'+
+   '<div class="stat"><span class="k">Mantenimientos</span><span class="v">'+nm+'</span><span class="s">preventivos y correctivos</span></div>'+
    '<div class="stat"><span class="k">Horómetro</span><span class="v">'+(horo!==null?horo.toLocaleString('es-MX')+' h':'—')+'</span><span class="s">lectura más alta</span></div>'+
-   '<div class="stat"><span class="k">Último mantenimiento</span><span class="v">'+(mp?fmtF(mp.fecha):'—')+'</span><span class="s">'+(mp?esc(mp.tipo):'Aún no registrado')+'</span></div>'+
-   '<div class="stat"><span class="k">Combustible</span><span class="v">'+(lect?esc(lect.lectura.comb)+' %':'—')+'</span><span class="s">'+(lect?'al '+fmtF(lect.fecha):'sin lectura')+'</span></div></div>';
+   '<div class="stat"><span class="k">Último registro</span><span class="v">'+(ult?fmtF(ult.fecha):'—')+'</span><span class="s">'+(ult?esc(ult.tipo):'Sin registros')+'</span></div></div>';
+}
+function pasaFiltro(e){
+  if(filtro==='mant')return /preventivo|correctivo/i.test(e.tipo);
+  if(filtro==='corr')return /correctivo/i.test(e.tipo);
+  if(filtro==='lect')return !/preventivo|correctivo/i.test(e.tipo);
+  return true;
 }
 function entryHTML(e){
   var acts=(e.actividades||[]).length?'<ul>'+e.actividades.map(function(a){return '<li>'+esc(a)+'</li>'}).join('')+'</ul>':'';
-  var tools=TOKEN?'<div class="row"><button class="small" data-act="edit" data-id="'+esc(e.id)+'">Editar</button>'+
+  var tools=puedeEditar(e)?'<div class="row"><button class="small" data-act="edit" data-id="'+esc(e.id)+'">Editar</button>'+
     (pendingDelete===e.id?'<button class="small danger" data-act="del-ok" data-id="'+esc(e.id)+'">Confirmar eliminar</button><button class="small" data-act="del-no">Cancelar</button>':'<button class="small danger" data-act="del" data-id="'+esc(e.id)+'">Eliminar</button>')+'</div>':'';
-  return '<article class="entry"><div class="entry-h"><span class="date">'+fmtF(e.fecha)+'</span><span class="pill '+pillCls(e.tipo)+'">'+esc(e.tipo)+'</span><span class="who">'+esc(e.tecnico)+(hasN(e.horometro)?' · '+esc(e.horometro)+' h':'')+'</span></div>'+
+  return '<article class="entry"><div class="entry-h"><span class="date">'+fmtF(e.fecha)+'</span><span class="pill '+pillCls(e.tipo)+'">'+esc(e.tipo)+'</span><span class="who">Realizó: '+esc(e.tecnico)+(hasN(e.horometro)?' · '+esc(e.horometro)+' h':'')+'</span></div>'+
     readings(e.lectura)+acts+(e.refacciones?'<div class="meta"><b>Refacciones:</b> '+esc(e.refacciones)+'</div>':'')+(e.obs?'<div class="obs">'+esc(e.obs)+'</div>':'')+tools+'</article>';
 }
 function formHTML(){
@@ -192,14 +280,14 @@ function formHTML(){
   var hoy=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   function v(x){return hasN(x)?esc(x):''}
   var acts=(e&&e.actividades)||[];
-  return '<form class="panel" id="frm" novalidate><div class="legend">'+(e?'Editar registro':'Nuevo registro de mantenimiento')+'</div>'+
+  return '<form class="panel" id="frm" novalidate><div class="legend">'+(e?'Editar registro':'Registrar trabajo realizado')+'</div>'+
    '<div class="grid">'+
     '<label class="f">Fecha<input type="date" id="f-fecha" value="'+(e?esc(e.fecha):hoy)+'"></label>'+
     '<label class="f">Tipo<select id="f-tipo">'+TIPOS.map(function(t){return '<option'+((e?e.tipo:TIPOS[1])===t?' selected':'')+'>'+t+'</option>'}).join('')+'</select></label>'+
-    '<label class="f">Técnico<input id="f-tec" value="'+(e?v(e.tecnico):'')+'" placeholder="Nombre"></label>'+
+    '<label class="f">Técnico<input id="f-tec" value="'+esc(e?e.tecnico:SES.nombre)+'" readonly></label>'+
     '<label class="f">Horómetro (h)<input id="f-horo" type="number" step="0.01" inputmode="decimal" value="'+(e?v(e.horometro):'')+'"></label></div>'+
    '<div class="legend">Actividades realizadas</div><div class="checks">'+CHECKS.map(function(c,i){return '<label><input type="checkbox" id="c-'+i+'"'+(acts.indexOf(c)>=0?' checked':'')+'><span>'+esc(c)+'</span></label>'}).join('')+'</div>'+
-   '<label class="f">Otras actividades (una por renglón)<textarea id="f-otras">'+esc(acts.filter(function(a){return CHECKS.indexOf(a)<0}).join('\n'))+'</textarea></label>'+
+   '<label class="f">Otros trabajos realizados (uno por renglón)<textarea id="f-otras">'+esc(acts.filter(function(a){return CHECKS.indexOf(a)<0}).join('\n'))+'</textarea></label>'+
    '<div class="legend">Lecturas del panel (opcional)</div><div class="grid">'+
     '<label class="f">Combustible %<input id="l-comb" type="number" inputmode="decimal" value="'+v(l.comb)+'"></label>'+
     '<label class="f">Presión aceite bar<input id="l-aceite" type="number" step="0.01" inputmode="decimal" value="'+v(l.aceite)+'"></label>'+
@@ -220,33 +308,67 @@ function placaHTML(){
    '<div class="row"><button class="small" data-act="p-add">+ Agregar dato</button></div>'+
    '<div class="row"><button class="primary" data-act="p-save"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':'Guardar datos de placa')+'</button><button data-act="go-form">Cancelar</button></div></div>';
 }
+function usuariosHTML(){
+  var us=S.cfg.usuarios||[];
+  return '<div class="panel"><div class="legend">Usuarios del modo técnico</div>'+
+   '<div class="users">'+us.map(function(u){
+     return '<div class="urow"><div><b>'+esc(u.nombre)+'</b><div class="meta">Usuario: '+esc(u.u)+' · '+(u.rol==='admin'?'Administrador':'Técnico')+'</div></div>'+
+       (u.u===SES.u?'<span class="meta">Tú</span>':(pendingUser===u.u?'<div class="row"><button class="small danger" data-act="u-del-ok" data-u="'+esc(u.u)+'">Confirmar quitar</button><button class="small" data-act="u-del-no">Cancelar</button></div>':'<button class="small danger" data-act="u-del" data-u="'+esc(u.u)+'">Quitar</button>'))+'</div>';
+   }).join('')+'</div>'+
+   '<form id="ufrm" novalidate style="display:grid;gap:12px"><div class="legend">Agregar usuario o cambiar contraseña</div>'+
+    '<div class="grid">'+
+     '<label class="f">Usuario<input id="u-u" autocapitalize="off" autocomplete="off" placeholder="ej. brandon"></label>'+
+     '<label class="f">Nombre completo<input id="u-nombre" placeholder="Nombre del técnico"></label>'+
+     '<label class="f">Rol<select id="u-rol"><option value="tecnico">Técnico</option><option value="admin">Administrador</option></select></label></div>'+
+    '<div class="grid">'+
+     '<label class="f">Contraseña<input id="u-pw" type="password" autocomplete="new-password"></label>'+
+     '<label class="f">Repite la contraseña<input id="u-pw2" type="password" autocomplete="new-password"></label></div>'+
+    '<p class="help">Mínimo 10 caracteres, con letras y números. Si el usuario ya existe, se le cambia la contraseña.</p>'+
+    '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':'Guardar usuario')+'</button></div></form>'+
+   '<form id="tfrm" novalidate style="display:grid;gap:12px;border-top:1px solid var(--line);padding-top:14px"><div class="legend">Renovar token de GitHub</div>'+
+    '<p class="help">Cuando venza el token, genera uno nuevo y pégalo aquí. Los usuarios y contraseñas no cambian.</p>'+
+    '<label class="f">Token nuevo<input id="t-token" type="password" autocomplete="off" placeholder="github_pat_…"></label>'+
+    '<div class="row"><button type="submit"'+(busy?' disabled':'')+'>Guardar token</button><button type="button" data-act="go-form">Cerrar</button></div></form></div>';
+}
 function adivinar(){
   var h=location.hostname, partes=location.pathname.split('/').filter(Boolean);
   var owner=/\.github\.io$/i.test(h)?h.split('.')[0]:'';
   var repo=owner?(partes[0]||(owner+'.github.io')):'';
   var resto=owner&&partes[0]?partes.slice(1):partes;
-  var path=resto.length&&/\.html?$/i.test(resto[resto.length-1])?resto.join('/'):(resto.concat(['index.html']).join('/'));
-  return {owner:owner,repo:repo,path:path,branch:'main'};
+  if(resto.length&&/\.html?$/i.test(resto[resto.length-1]))resto=resto.slice(0,-1);
+  return {owner:owner,repo:repo,path:resto.concat([ARCHIVO_DATOS]).join('/'),branch:'main'};
 }
 function configHTML(){
-  var c=S.cfg||adivinar();
-  return '<form class="panel" id="cfgf" novalidate><div class="legend">Configurar guardado en GitHub</div>'+
-   '<p class="help">Solo lo hace el jefe de mantenimiento, una vez. El token se guarda cifrado con la clave; sin la clave no sirve.</p>'+
+  if(S.cfg)return '<div class="panel"><div class="legend">Configuración</div><p class="help">El modo técnico ya está configurado. Para agregar técnicos o renovar el token, entra como administrador y abre Usuarios.</p><div class="row"><button class="primary" data-act="login">Entrar</button><button data-act="login-close">Cerrar</button></div></div>';
+  var c=adivinar();
+  return '<form class="panel" id="cfgf" novalidate><div class="legend">Configurar modo técnico</div>'+
+   '<p class="help">Se hace una sola vez. Crea la cuenta del administrador; después él da de alta a los técnicos.</p>'+
    '<div class="grid">'+
-    '<label class="f">Usuario u organización<input id="g-owner" value="'+esc(c.owner)+'" autocapitalize="off"></label>'+
+    '<label class="f">Cuenta de GitHub<input id="g-owner" value="'+esc(c.owner)+'" autocapitalize="off"></label>'+
     '<label class="f">Repositorio<input id="g-repo" value="'+esc(c.repo)+'" autocapitalize="off"></label>'+
-    '<label class="f">Rama<input id="g-branch" value="'+esc(c.branch||'main')+'" autocapitalize="off"></label>'+
-    '<label class="f">Archivo<input id="g-path" value="'+esc(c.path)+'" autocapitalize="off"></label></div>'+
+    '<label class="f">Rama<input id="g-branch" value="main" autocapitalize="off"></label>'+
+    '<label class="f">Archivo de datos<input id="g-path" value="'+esc(c.path)+'" autocapitalize="off"></label></div>'+
    '<label class="f">Token de GitHub (fine-grained)<input id="g-token" type="password" autocomplete="off" placeholder="github_pat_…"></label>'+
+   '<div class="legend">Administrador</div>'+
    '<div class="grid">'+
-    '<label class="f">Clave para técnicos<input id="g-clave" type="password" autocomplete="new-password"></label>'+
-    '<label class="f">Repite la clave<input id="g-clave2" type="password" autocomplete="new-password"></label></div>'+
-   '<p class="help">La clave debe tener al menos 10 caracteres, con letras y números. Ejemplo de formato: Planta51-Liz2026.</p>'+
+    '<label class="f">Usuario<input id="a-u" autocapitalize="off" autocomplete="off" placeholder="ej. cgil"></label>'+
+    '<label class="f">Nombre completo<input id="a-nombre"></label>'+
+    '<label class="f">Contraseña<input id="a-pw" type="password" autocomplete="new-password"></label>'+
+    '<label class="f">Repite la contraseña<input id="a-pw2" type="password" autocomplete="new-password"></label></div>'+
+   '<p class="help">Usuario: 3 a 20 letras minúsculas o números. Contraseña: mínimo 10 caracteres, con letras y números.</p>'+
    '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':'Guardar configuración')+'</button><button type="button" data-act="login-close">Cancelar</button></div></form>';
+}
+function loginHTML(){
+  if(!S.cfg)return '<div class="panel"><div class="legend">Modo técnico</div><p class="help">El modo técnico todavía no está configurado. El jefe de mantenimiento debe configurarlo una vez.</p><div class="row"><button class="primary" data-act="config">Configurar</button><button data-act="login-close">Cancelar</button></div></div>';
+  return '<form class="panel" id="login" novalidate><div class="legend">Modo técnico</div>'+
+   '<div class="grid"><label class="f">Usuario<input id="lg-u" autocapitalize="off" autocomplete="username"></label>'+
+   '<label class="f">Contraseña<input id="lg-pw" type="password" autocomplete="current-password"></label></div>'+
+   '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Verificando…':'Entrar')+'</button><button type="button" data-act="login-close">Cancelar</button></div></form>';
 }
 
 function render(){
-  var q=S.equipo,h=ordenado();
+  if(!S){$('app').innerHTML='<main class="wrap"><div class="empty">'+(notice?esc(notice.t):'Cargando ficha del equipo…')+'</div></main>';return}
+  var q=S.equipo, h=ordenado(), hf=h.filter(pasaFiltro);
   var html='<main class="wrap"><header class="plate"><div class="stripe"></div><div class="plate-in">'+
    '<span class="eyebrow">'+esc(q.ubicacion)+' · '+esc(q.subtitulo)+'</span><h1>'+esc(q.nombre)+'</h1>'+
    '<div class="tags"><span class="tag id">'+esc(q.id)+'</span><span class="tag">'+esc(val('Modelo'))+'</span><span class="tag">'+esc(val('Voltaje'))+' · 3Φ</span><span class="tag">'+esc(val('Frecuencia'))+'</span></div></div></header>'+
@@ -254,87 +376,128 @@ function render(){
    statusHTML()+
    '<section><h2>Ficha técnica</h2><dl class="specs">'+S.placa.map(function(p){return '<div><dt>'+esc(p[0])+'</dt><dd>'+esc(p[1])+'</dd></div>'}).join('')+'</dl></section>';
   if(view==='config') html+=configHTML();
-  if(view==='login'&&!TOKEN){
-    html+=S.cfg?'<form class="panel" id="login" novalidate><div class="legend">Modo técnico</div><label class="f">Clave de técnico<input id="pin" type="password" autocomplete="off"></label><div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Verificando…':'Entrar')+'</button><button type="button" data-act="login-close">Cancelar</button></div></form>'
-      :'<div class="panel"><div class="legend">Modo técnico</div><p class="help">Esta página todavía no tiene configurado el guardado. El jefe de mantenimiento debe configurarlo una vez.</p><div class="row"><button class="primary" data-act="config">Configurar</button><button data-act="login-close">Cancelar</button></div></div>';
-  }
-  if(TOKEN&&view==='placa') html+=placaHTML();
-  if(TOKEN&&view==='form') html+=formHTML();
-  html+='<section><h2>Historial de mantenimiento <small>'+h.length+' registro'+(h.length===1?'':'s')+'</small></h2>'+
-   (h.length?'<div class="log">'+h.map(entryHTML).join('')+'</div>':'<div class="empty">Todavía no hay mantenimientos registrados.</div>')+'</section>';
-  html+='<div class="techbar">'+(TOKEN?'<span class="meta">Modo técnico activo</span><div class="row">'+(view!=='form'?'<button data-act="go-form" class="primary">Nuevo registro</button>':'')+(view!=='placa'?'<button data-act="go-placa">Editar placa</button>':'')+'<button data-act="logout">Salir</button></div>'
+  if(view==='login'&&!SES) html+=loginHTML();
+  if(SES&&view==='placa'&&esAdmin()) html+=placaHTML();
+  if(SES&&view==='usuarios'&&esAdmin()) html+=usuariosHTML();
+  if(SES&&view==='form') html+=formHTML();
+  html+='<section><h2>Mantenimientos realizados <small>'+hf.length+' de '+h.length+'</small></h2>'+
+   '<div class="chips" role="group" aria-label="Filtrar historial">'+FILTROS.map(function(f){return '<button class="chip" data-act="filtro" data-f="'+f[0]+'" aria-pressed="'+(filtro===f[0])+'">'+f[1]+'</button>'}).join('')+'</div>'+
+   (hf.length?'<div class="log">'+hf.map(entryHTML).join('')+'</div>':'<div class="empty">'+(h.length?'No hay registros de este tipo.':'Todavía no hay mantenimientos registrados.')+'</div>')+'</section>';
+  html+='<div class="techbar">'+(SES?'<span class="meta">Sesión: <b>'+esc(SES.nombre)+'</b> ('+(esAdmin()?'administrador':'técnico')+')</span><div class="row">'+
+      (view!=='form'?'<button data-act="go-form" class="primary">Nuevo registro</button>':'')+
+      (esAdmin()&&view!=='placa'?'<button data-act="go-placa">Editar placa</button>':'')+
+      (esAdmin()&&view!=='usuarios'?'<button data-act="go-usuarios">Usuarios</button>':'')+
+      '<button data-act="logout">Salir</button></div>'
     :'<span class="meta">Consulta pública · solo lectura</span>'+(view!=='login'&&view!=='config'?'<button data-act="login">Modo técnico</button>':''))+'</div>'+
    '<footer>'+esc(q.area)+' · '+esc(q.ubicacion)+'</footer></main>';
   $('app').innerHTML=html;
-  if(view==='login'&&$('pin'))$('pin').focus();
+  if(view==='login'&&$('lg-u')&&!busy)$('lg-u').focus();
 }
 
 async function guardar(cambio,mensaje,okTxt,despues){
   busy=true;notice=null;render();
   try{
-    S=await confirmar(S.cfg,TOKEN,cambio,mensaje);
+    S=await confirmar(S.cfg,SES.token,cambio,mensaje);
     if(despues)despues();
-    notice={ok:true,t:okTxt+' Quien escanee el QR lo verá en 1 a 2 minutos.'};
+    notice={ok:true,t:okTxt};
   }catch(e){notice={ok:false,t:errorTexto(e)}}
   busy=false;render();window.scrollTo({top:0});
 }
 function num(id){var v=$(id).value.trim();return v===''?null:Number(v)}
 function txt(id){return $(id).value.trim()}
+function aviso(t){notice={ok:false,t:t};render();window.scrollTo({top:0})}
 
 document.addEventListener('submit',async function(ev){
   ev.preventDefault(); if(busy)return;
   var id=ev.target.id;
   if(id==='login'){
-    var clave=$('pin').value; busy=true; render();
-    try{ TOKEN=await descifrar(S.cfg.enc,clave); view='form'; notice=null; }
-    catch(e){ notice={ok:false,t:'Clave incorrecta.'}; }
+    var u=txt('lg-u').toLowerCase(), pw=$('lg-pw').value; busy=true; render();
+    try{ SES=await entrar(u,pw); view='form'; notice={ok:true,t:'Bienvenido, '+SES.nombre+'.'}; }
+    catch(e){ notice={ok:false,t:'Usuario o contraseña incorrectos.'}; }
     busy=false; render(); return;
   }
   if(id==='cfgf'){
-    var cfg={owner:txt('g-owner'),repo:txt('g-repo'),branch:txt('g-branch')||'main',path:txt('g-path').replace(/^\/+/,'')||'index.html'};
-    var tok=txt('g-token'),c1=$('g-clave').value,c2=$('g-clave2').value;
-    if(!cfg.owner||!cfg.repo||!tok){notice={ok:false,t:'Faltan usuario, repositorio o token.'};render();return}
-    if(c1!==c2){notice={ok:false,t:'Las claves no coinciden.'};render();return}
-    if(c1.length<10||!/[a-z]/i.test(c1)||!/\d/.test(c1)){notice={ok:false,t:'La clave debe tener al menos 10 caracteres, con letras y números.'};render();return}
+    var cfg={owner:txt('g-owner'),repo:txt('g-repo'),branch:txt('g-branch')||'main',path:txt('g-path').replace(/^\/+/,'')||ARCHIVO_DATOS,usuarios:[]};
+    var tok=txt('g-token'), au=txt('a-u').toLowerCase(), an=txt('a-nombre'), p1=$('a-pw').value, p2=$('a-pw2').value;
+    if(!cfg.owner||!cfg.repo||!tok)return aviso('Faltan la cuenta de GitHub, el repositorio o el token.');
+    if(!usuarioValido(au))return aviso('El usuario debe tener de 3 a 20 letras minúsculas o números, sin espacios.');
+    if(!an)return aviso('Falta el nombre del administrador.');
+    if(p1!==p2)return aviso('Las contraseñas no coinciden.');
+    if(!claveValida(p1))return aviso('La contraseña debe tener al menos 10 caracteres, con letras y números.');
     busy=true;notice=null;render();
     try{
-      var enc=await cifrar(tok,c1);
-      cfg.enc=enc;
-      S=await confirmar(cfg,tok,function(st){st.cfg=cfg},'Configura guardado del modo técnico');
-      TOKEN=tok; view='form';
-      notice={ok:true,t:'Configuración guardada. Los técnicos ya pueden entrar con la clave.'};
+      var kraw=crypto.getRandomValues(new Uint8Array(32));
+      var t=await cifrarToken(kraw,tok); cfg.tiv=t.tiv; cfg.tct=t.tct;
+      cfg.usuarios=[await envolverUsuario(kraw,au,an,'admin',p1)];
+      S=await confirmar(cfg,tok,function(st){st.cfg=cfg},'Configura modo técnico (administrador '+au+')');
+      SES={u:au,nombre:an,rol:'admin',token:tok,kraw:kraw}; view='usuarios';
+      notice={ok:true,t:'Configuración guardada. Ahora da de alta a los técnicos.'};
     }catch(e){notice={ok:false,t:errorTexto(e)}}
     busy=false;render();return;
   }
+  if(id==='ufrm'&&esAdmin()){
+    var nu=txt('u-u').toLowerCase(), nn=txt('u-nombre'), rol=$('u-rol').value, q1=$('u-pw').value, q2=$('u-pw2').value;
+    if(!usuarioValido(nu))return aviso('El usuario debe tener de 3 a 20 letras minúsculas o números, sin espacios.');
+    var existe=(S.cfg.usuarios||[]).find(function(x){return x.u===nu});
+    if(!nn&&existe)nn=existe.nombre;
+    if(!nn)return aviso('Falta el nombre completo.');
+    if(q1!==q2)return aviso('Las contraseñas no coinciden.');
+    if(!claveValida(q1))return aviso('La contraseña debe tener al menos 10 caracteres, con letras y números.');
+    busy=true;render();
+    var nuevo=await envolverUsuario(SES.kraw,nu,nn,rol,q1);
+    busy=false;
+    await guardar(function(st){
+      var l=st.cfg.usuarios, i=l.findIndex(function(x){return x.u===nu});
+      if(i>=0)l[i]=nuevo; else l.push(nuevo);
+    },(existe?'Cambia contraseña de ':'Agrega usuario ')+nu,(existe?'Contraseña actualizada para ':'Usuario creado: ')+nu+'.');
+    return;
+  }
+  if(id==='tfrm'&&esAdmin()){
+    var nt=txt('t-token'); if(!nt)return aviso('Pega el token nuevo.');
+    busy=true;render();
+    var tc=await cifrarToken(SES.kraw,nt); busy=false;
+    var viejo=SES.token; SES.token=nt;
+    await guardar(function(st){st.cfg.tiv=tc.tiv;st.cfg.tct=tc.tct},'Renueva token de GitHub','Token renovado.');
+    if(notice&&!notice.ok)SES.token=viejo;
+    return;
+  }
   if(id==='frm'){
-    if(!txt('f-fecha')||!txt('f-tec')){notice={ok:false,t:'Falta la fecha o el nombre del técnico.'};render();return}
+    if(!txt('f-fecha'))return aviso('Falta la fecha.');
     var acts=CHECKS.filter(function(c,i){return $('c-'+i).checked});
     txt('f-otras').split('\n').map(function(s){return s.trim()}).filter(Boolean).forEach(function(s){acts.push(s)});
-    var reg={id:editId||('r'+Date.now().toString(36)),fecha:txt('f-fecha'),tipo:$('f-tipo').value,tecnico:txt('f-tec'),horometro:num('f-horo'),actividades:acts,
+    if(!acts.length&&!txt('f-obs'))return aviso('Marca al menos una actividad o escribe qué se le hizo a la máquina.');
+    var prev=editId?S.historial.find(function(x){return x.id===editId}):null;
+    var reg={id:editId||('r'+Date.now().toString(36)),fecha:txt('f-fecha'),tipo:$('f-tipo').value,
+      tecnico:prev?prev.tecnico:SES.nombre, usuario:prev?(prev.usuario||''):SES.u,
+      horometro:num('f-horo'),actividades:acts,
       lectura:{comb:num('l-comb'),aceite:num('l-aceite'),temp:num('l-temp'),bat:num('l-bat'),rpm:num('l-rpm'),hz:num('l-hz'),kwh:num('l-kwh'),vll:txt('l-vll'),vln:txt('l-vln')},
       refacciones:txt('f-ref'),obs:txt('f-obs')};
-    var was=editId;
     await guardar(function(st){
       var i=st.historial.findIndex(function(x){return x.id===reg.id});
       if(i>=0)st.historial[i]=reg; else st.historial.push(reg);
-    },(was?'Edita':'Agrega')+' registro '+reg.fecha+' · '+reg.tipo+' · '+reg.tecnico,was?'Cambios guardados.':'Registro guardado.',function(){editId=null});
+    },(prev?'Edita':'Agrega')+' registro '+reg.fecha+' · '+reg.tipo+' · '+SES.u,(prev?'Cambios guardados.':'Registro guardado.')+' Quien escanee el QR lo verá en 1 a 2 minutos.',function(){editId=null});
   }
 });
 
 document.addEventListener('click',async function(ev){
   var b=ev.target.closest('[data-act]');if(!b||busy)return;
   var a=b.dataset.act,id=b.dataset.id;
-  if(a==='login'){view='login';notice=null;render();}
+  if(a==='filtro'){filtro=b.dataset.f;render();}
+  else if(a==='login'){view='login';notice=null;render();}
   else if(a==='config'){view='config';notice=null;render();}
   else if(a==='login-close'){view='pub';notice=null;history.replaceState(null,'',location.pathname+location.search);render();}
-  else if(a==='logout'){TOKEN=null;view='pub';editId=null;notice=null;render();}
+  else if(a==='logout'){SES=null;view='pub';editId=null;notice=null;history.replaceState(null,'',location.pathname+location.search);render();}
   else if(a==='go-form'){view='form';editId=null;render();}
   else if(a==='go-placa'){placaTmp=S.placa.map(function(p){return p.slice()});view='placa';render();}
+  else if(a==='go-usuarios'){view='usuarios';pendingUser=null;notice=null;render();}
   else if(a==='cancel-edit'){editId=null;render();}
   else if(a==='edit'){editId=id;view='form';render();$('frm').scrollIntoView({block:'start'});}
   else if(a==='del'){pendingDelete=id;render();}
   else if(a==='del-no'){pendingDelete=null;render();}
-  else if(a==='del-ok'){pendingDelete=null;await guardar(function(st){st.historial=st.historial.filter(function(x){return x.id!==id})},'Elimina registro '+id,'Registro eliminado.');}
+  else if(a==='del-ok'){pendingDelete=null;await guardar(function(st){st.historial=st.historial.filter(function(x){return x.id!==id})},'Elimina registro '+id+' · '+SES.u,'Registro eliminado.');}
+  else if(a==='u-del'){pendingUser=b.dataset.u;render();}
+  else if(a==='u-del-no'){pendingUser=null;render();}
+  else if(a==='u-del-ok'){var uu=b.dataset.u;pendingUser=null;await guardar(function(st){st.cfg.usuarios=st.cfg.usuarios.filter(function(x){return x.u!==uu})},'Quita usuario '+uu,'Usuario quitado: '+uu+'.');}
   else if(a==='p-add'){syncP();placaTmp.push(['','']);render();}
   else if(a==='p-del'){syncP();placaTmp.splice(+b.dataset.i,1);render();}
   else if(a==='p-save'){syncP();var nueva=placaTmp.filter(function(p){return p[0]||p[1]});await guardar(function(st){st.placa=nueva},'Actualiza datos de placa','Datos de placa guardados.',function(){view='form'});}
@@ -342,12 +505,16 @@ document.addEventListener('click',async function(ev){
 function syncP(){placaTmp.forEach(function(p,i){var k=$('p-k-'+i),v=$('p-v-'+i);if(k&&v){p[0]=k.value.trim();p[1]=v.value.trim();}})}
 
 function porHash(){
-  if(location.hash==='#tecnico'){view=TOKEN?'form':'login'}
+  if(location.hash==='#tecnico'){view=SES?'form':'login'}
   else if(location.hash==='#configurar'){view='config'}
   render();
 }
 window.addEventListener('hashchange',porHash);
-porHash();
+render();
+fetch(ARCHIVO_DATOS+'?v='+Date.now(),{cache:'no-store'})
+  .then(function(r){if(!r.ok)throw new Error(r.status);return r.text()})
+  .then(function(t){S=leerTxt(t);porHash()})
+  .catch(function(){notice={ok:false,t:'No se encontró el archivo '+ARCHIVO_DATOS+'. Súbelo a la misma carpeta que index.html.'};render()});
 })();
 </script>
 </body>

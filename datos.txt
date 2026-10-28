@@ -1,0 +1,54 @@
+﻿# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-PEM-001 · Planta de Emergencia PLANELEC 500 kW
+# Actualizado: 28/10/2026, 2:47:07 p.m.
+# Este archivo lo escribe index.html. Si lo editas a mano,
+# respeta el formato  campo = valor  y los títulos [ ].
+# ==========================================================
+
+[EQUIPO]
+id = CGR-PEM-001
+nombre = Planta de Emergencia PLANELEC 500 kW
+ubicacion = Planta 1 · Muebles Liz
+subtitulo = Equipo de respaldo
+area = Mantenimiento Industrial
+
+[PLACA]
+Fabricante = PLANELEC · Plantas Eléctricas México, S.A. de C.V.
+Modelo = 1S069D0500B1600
+Tablero de control = PEM-CAP
+Motor = 69X18-69
+No. serie motor = B0393007
+Generador = 54L1D-641
+No. serie generador = X23B082603
+Potencia emergencia = 500 kW / 625 kVA
+Potencia continua = 452 kW / 565 kVA
+Voltaje = 220 / 127 V
+Fases / hilos = 3 fases · 4 hilos
+Frecuencia = 60 Hz
+Velocidad = 1800 RPM
+Factor de potencia = 0.8
+Voltaje de baterías = 24 VCD
+Año de fabricación = Agosto 2023
+Peso = 5524 kg
+
+# ---------------- ÍNDICE DE REGISTROS (1) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2026-03-20 | Lectura semanal            | Lectura inicial (fotografía del panel)
+
+[REGISTRO 0001]
+id = r1
+fecha = 2026-03-20
+tipo = Lectura semanal
+tecnico = Lectura inicial (fotografía del panel)
+horometro = 103.25
+combustible_pct = 55
+presion_aceite_bar = 2.72
+temp_motor_c = 62
+baterias_v = 28.15
+rpm = 1798
+frecuencia_hz = 60
+energia_kwh = 2603
+v_linea_linea = 219 / 221 / 221
+v_linea_neutro = 127 / 127 / 128
+observaciones = Datos capturados de fotografías del panel PEM-CAP.
