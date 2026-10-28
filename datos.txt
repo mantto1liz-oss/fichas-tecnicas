@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-PEM-001 · Planta de Emergencia PLANELEC 500 kW
-# Actualizado: 28/10/2026, 3:08:15 p.m.
+# Actualizado: 28/10/2026, 3:25:31 p.m.
 # Este archivo lo escribe index.html. Si lo editas a mano,
 # respeta el formato  campo = valor  y los títulos [ ].
 # ==========================================================
@@ -101,4 +101,12 @@ rol = admin
 sal = cqbx8G+IxW43mWUyKJxUQg==
 iv = av4qtYnVPSD30s0X
 llave_cifrada = aJd6spKg2iDSoSkjBEXhAcgwVecZo501aIoBrMVIxHFjoH/6IjojPKp2tFCEwaGK
+iteraciones = 600000
+
+[USUARIO brandon]
+nombre = Brandon Y.Miranda Navarro
+rol = tecnico
+sal = ByHsKiU7MK4qbVIY93XW8g==
+iv = K7CYpZnJVRmHsOVG
+llave_cifrada = XaZIKinzkYqszRSihGa/CLX+U7QWeUfJsOXTCYO83mkCTzmR7RmfTYnjzqb91vma
 iteraciones = 600000
