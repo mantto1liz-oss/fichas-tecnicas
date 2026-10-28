@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#f2f4f6; --surface:#ffffff; --ink:#151c24; --muted:#59667a; --line:#d5dbe3;
+  --plate:#1f2a36; --plate-ink:#f4f6f8; --safety:#f2b705; --safety-ink:#1a1400;
+  --ok:#1d7a4c; --warn:#a86400; --bad:#b3261e; --field:#f7f8fa;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0e1319; --surface:#161d26; --ink:#e6ebf1; --muted:#97a4b6; --line:#28323f;
+  --plate:#1b2531; --plate-ink:#eef2f6; --safety:#f5c02a; --safety-ink:#1a1400;
+  --ok:#4cc38a; --warn:#e2a03f; --bad:#f2827a; --field:#10161e; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
+.wrap{max-width:780px;margin:0 auto;padding:16px 16px 56px;display:grid;gap:18px}
+.plate{background:var(--plate);color:var(--plate-ink);border-radius:10px;overflow:hidden}
+.stripe{height:10px;background:repeating-linear-gradient(-45deg,var(--safety) 0 14px,var(--plate) 14px 28px)}
+.plate-in{padding:16px 18px 18px;display:grid;gap:10px}
+.eyebrow{font:600 12px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+h1{font:700 34px/1.05 var(--display);margin:0}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font:600 13px/1 var(--mono);padding:7px 9px;border-radius:6px;background:rgba(255,255,255,.12)}
+.tag.id{background:var(--safety);color:var(--safety-ink)}
+.status{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stat{background:var(--surface);padding:12px 14px;display:grid;gap:2px}
+.stat .k{font:600 11px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font:600 20px/1.2 var(--mono)}
+.stat .s{font-size:12px;color:var(--muted)}
+h2{font:700 22px/1.1 var(--display);margin:0;text-transform:uppercase;display:flex;align-items:baseline;gap:10px}
+h2 small{font:500 13px/1 var(--body);text-transform:none;color:var(--muted)}
+section{display:grid;gap:10px}
+dl.specs{margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));background:var(--surface);border:1px solid var(--line);border-radius:10px}
+dl.specs div{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);min-width:0}
+dl.specs dt{color:var(--muted);font-size:13px}
+dl.specs dd{margin:0;font:600 14px/1.4 var(--mono);text-align:right;overflow-wrap:anywhere}
+.log{display:grid;gap:10px}
+.entry{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:8px;min-width:0}
+.entry-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.date{font:600 15px/1 var(--mono)}
+.pill{font:600 11px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:99px;border:1px solid currentColor}
+.pill.prev{color:var(--ok)} .pill.corr{color:var(--bad)} .pill.lect{color:var(--muted)} .pill.prue{color:var(--warn)}
+.who{color:var(--muted);font-size:13px}
+.entry ul{margin:0;padding-left:18px;font-size:14px}
+.readings{display:flex;flex-wrap:wrap;gap:6px}
+.rd{font:500 12px/1 var(--mono);padding:6px 8px;border-radius:6px;background:var(--field);border:1px solid var(--line)}
+.rd.w{border-color:var(--warn);color:var(--warn)} .rd.b{border-color:var(--bad);color:var(--bad)}
+.obs{font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.meta{font-size:13px;color:var(--muted)}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:20px;color:var(--muted);text-align:center}
+button{font:600 14px/1 var(--body);border-radius:8px;padding:11px 16px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--safety);outline-offset:2px}
+button.primary{background:var(--safety);color:var(--safety-ink);border-color:var(--safety)}
+button.danger{color:var(--bad);border-color:var(--bad);background:transparent}
+button.small{padding:7px 10px;font-size:12px}
+button:disabled{opacity:.55;cursor:default}
+.techbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px}
+.panel{background:var(--surface);border:2px solid var(--safety);border-radius:10px;padding:16px;display:grid;gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+label.f{display:grid;gap:5px;font:600 12px/1.2 var(--body);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);min-width:0}
+input,select,textarea{font:500 15px/1.3 var(--mono);color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:9px 10px;width:100%;min-width:0}
+textarea{font-family:var(--body);min-height:70px;resize:vertical}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px}
+.checks label{display:flex;gap:8px;align-items:flex-start;font-size:14px;padding:6px 8px;border-radius:6px;background:var(--field)}
+.checks input{width:auto;margin-top:3px}
+.legend{font:700 16px/1 var(--display);text-transform:uppercase;letter-spacing:.04em}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+.msg{padding:10px 12px;border-radius:8px;font-size:14px;border:1px solid var(--line);background:var(--field)}
+.msg.ok{border-color:var(--ok);color:var(--ok)} .msg.err{border-color:var(--bad);color:var(--bad)}
+.spec-edit{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center}
+.loading{padding:40px;text-align:center;color:var(--muted)}
+footer{font-size:12px;color:var(--muted);text-align:center}
+@media (max-width:480px){h1{font-size:28px}.spec-edit{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading">Cargando ficha del equipo…</div></div>
+<script>
+(function(){
+var MODO_TEC = <?!= JSON.stringify(modoTecnico) ?>;
+var D = null, PIN = null;
+var view = MODO_TEC ? 'login' : 'pub';
+var editId = null, pendingDelete = null, notice = null, busy = false, placaTmp = null;
+var TIPOS = ['Lectura semanal','Mantenimiento preventivo','Mantenimiento correctivo','Prueba con carga','Inspección'];
+var CHECKS = ['Nivel de aceite de motor','Nivel de refrigerante','Nivel de combustible y fugas','Bandas y mangueras','Indicador de filtro de aire','Bornes y voltaje de baterías (24 VCD)','Cargador de baterías operando','Calentador de motor operando','Arranque y operación en vacío 15–30 min','Transferencia en AUTOMÁTICO','Radiador limpio y sin obstrucciones','Limpieza general del área'];
+
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function hasN(v){return v!==null&&v!==undefined&&String(v)!==''}
+function fmtF(f){if(!f)return '—';var p=f.split('-');if(p.length<3)return f;var m=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];return p[2]+' '+m[+p[1]-1]+' '+p[0]}
+function pillCls(t){return /preventivo/i.test(t)?'prev':/correctivo/i.test(t)?'corr':/prueba|inspec/i.test(t)?'prue':'lect'}
+function val(k){var f=D.ficha.find(function(p){return p[0]===k});return f?f[1]:''}
+
+function cargar(msg){
+  google.script.run.withSuccessHandler(function(d){D=d;busy=false;if(msg)notice=msg;render();})
+    .withFailureHandler(function(e){$('app').innerHTML='<div class="wrap"><div class="msg err">No se pudo cargar la información. Revisa tu conexión y vuelve a abrir el QR.</div></div>';})
+    .getData();
+}
+
+function readings(l){
+  if(!l)return '';var o=[];
+  function add(t,c){o.push('<span class="rd '+(c||'')+'">'+esc(t)+'</span>')}
+  if(hasN(l.comb))add('Comb '+l.comb+' %',+l.comb<25?'b':+l.comb<50?'w':'');
+  if(hasN(l.aceite))add('Aceite '+l.aceite+' bar',+l.aceite<1.5?'b':+l.aceite<2?'w':'');
+  if(hasN(l.temp))add('Temp '+l.temp+' °C',+l.temp>90?'b':+l.temp>75?'w':'');
+  if(hasN(l.bat))add('Bat '+l.bat+' V',(+l.bat<22||+l.bat>29)?'w':'');
+  if(hasN(l.rpm))add(l.rpm+' RPM');
+  if(hasN(l.hz))add(l.hz+' Hz',Math.abs(+l.hz-60)>1?'w':'');
+  if(hasN(l.kwh))add(l.kwh+' kWh');
+  if(hasN(l.vll))add('L-L '+l.vll+' V');
+  if(hasN(l.vln))add('L-N '+l.vln+' V');
+  return o.length?'<div class="readings">'+o.join('')+'</div>':'';
+}
+
+function statusHTML(){
+  var h=D.historial,horo=null;
+  h.forEach(function(e){if(hasN(e.horometro)&&(horo===null||+e.horometro>horo))horo=+e.horometro});
+  var mp=h.find(function(e){return /preventivo|correctivo/i.test(e.tipo)});
+  var ult=h[0];
+  var lect=h.find(function(e){return e.lectura&&hasN(e.lectura.comb)});
+  return '<div class="status">'+
+   '<div class="stat"><span class="k">Último registro</span><span class="v">'+(ult?fmtF(ult.fecha):'—')+'</span><span class="s">'+(ult?esc(ult.tipo):'Sin registros')+'</span></div>'+
+   '<div class="stat"><span class="k">Horómetro</span><span class="v">'+(horo!==null?horo.toLocaleString('es-MX')+' h':'—')+'</span><span class="s">lectura más alta</span></div>'+
+   '<div class="stat"><span class="k">Último mantenimiento</span><span class="v">'+(mp?fmtF(mp.fecha):'—')+'</span><span class="s">'+(mp?esc(mp.tipo):'Aún no registrado')+'</span></div>'+
+   '<div class="stat"><span class="k">Combustible</span><span class="v">'+(lect?esc(lect.lectura.comb)+' %':'—')+'</span><span class="s">'+(lect?'al '+fmtF(lect.fecha):'sin lectura')+'</span></div></div>';
+}
+
+function entryHTML(e){
+  var acts=e.actividades.length?'<ul>'+e.actividades.map(function(a){return '<li>'+esc(a)+'</li>'}).join('')+'</ul>':'';
+  var tools=PIN?'<div class="row"><button class="small" data-act="edit" data-id="'+esc(e.id)+'">Editar</button>'+
+    (pendingDelete===e.id?'<button class="small danger" data-act="del-ok" data-id="'+esc(e.id)+'">Confirmar eliminar</button><button class="small" data-act="del-no">Cancelar</button>':'<button class="small danger" data-act="del" data-id="'+esc(e.id)+'">Eliminar</button>')+'</div>':'';
+  return '<article class="entry"><div class="entry-h"><span class="date">'+fmtF(e.fecha)+'</span><span class="pill '+pillCls(e.tipo)+'">'+esc(e.tipo)+'</span><span class="who">'+esc(e.tecnico)+(hasN(e.horometro)?' · '+esc(e.horometro)+' h':'')+'</span></div>'+
+    readings(e.lectura)+acts+(e.refacciones?'<div class="meta"><b>Refacciones:</b> '+esc(e.refacciones)+'</div>':'')+(e.obs?'<div class="obs">'+esc(e.obs)+'</div>':'')+tools+'</article>';
+}
+
+function formHTML(){
+  var e=editId?D.historial.find(function(x){return x.id===editId}):null, l=(e&&e.lectura)||{};
+  var hoy=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  function v(x){return hasN(x)?esc(x):''}
+  var acts=(e&&e.actividades)||[];
+  return '<form class="panel" id="frm" novalidate><div class="legend">'+(e?'Editar registro':'Nuevo registro de mantenimiento')+'</div>'+
+   '<div class="grid">'+
+    '<label class="f">Fecha<input type="date" id="f-fecha" value="'+(e?esc(e.fecha):hoy)+'"></label>'+
+    '<label class="f">Tipo<select id="f-tipo">'+TIPOS.map(function(t){return '<option'+((e?e.tipo:TIPOS[1])===t?' selected':'')+'>'+t+'</option>'}).join('')+'</select></label>'+
+    '<label class="f">Técnico<input id="f-tec" value="'+(e?v(e.tecnico):'')+'" placeholder="Nombre"></label>'+
+    '<label class="f">Horómetro (h)<input id="f-horo" type="number" step="0.01" inputmode="decimal" value="'+(e?v(e.horometro):'')+'"></label></div>'+
+   '<div class="legend">Actividades realizadas</div><div class="checks">'+CHECKS.map(function(c,i){return '<label><input type="checkbox" id="c-'+i+'"'+(acts.indexOf(c)>=0?' checked':'')+'><span>'+esc(c)+'</span></label>'}).join('')+'</div>'+
+   '<label class="f">Otras actividades (una por renglón)<textarea id="f-otras">'+esc(acts.filter(function(a){return CHECKS.indexOf(a)<0}).join('\n'))+'</textarea></label>'+
+   '<div class="legend">Lecturas del panel (opcional)</div><div class="grid">'+
+    '<label class="f">Combustible %<input id="l-comb" type="number" inputmode="decimal" value="'+v(l.comb)+'"></label>'+
+    '<label class="f">Presión aceite bar<input id="l-aceite" type="number" step="0.01" inputmode="decimal" value="'+v(l.aceite)+'"></label>'+
+    '<label class="f">Temp. motor °C<input id="l-temp" type="number" inputmode="decimal" value="'+v(l.temp)+'"></label>'+
+    '<label class="f">Baterías V<input id="l-bat" type="number" step="0.01" inputmode="decimal" value="'+v(l.bat)+'"></label>'+
+    '<label class="f">RPM<input id="l-rpm" type="number" inputmode="numeric" value="'+v(l.rpm)+'"></label>'+
+    '<label class="f">Frecuencia Hz<input id="l-hz" type="number" step="0.1" inputmode="decimal" value="'+v(l.hz)+'"></label>'+
+    '<label class="f">Energía kWh<input id="l-kwh" type="number" inputmode="numeric" value="'+v(l.kwh)+'"></label>'+
+    '<label class="f">V L-L (L1L2/L2L3/L3L1)<input id="l-vll" value="'+v(l.vll)+'" placeholder="220 / 220 / 221"></label>'+
+    '<label class="f">V L-N (L1/L2/L3)<input id="l-vln" value="'+v(l.vln)+'" placeholder="127 / 127 / 128"></label></div>'+
+   '<label class="f">Refacciones / consumibles<input id="f-ref" value="'+(e?v(e.refacciones):'')+'" placeholder="Ej. filtro de aceite, 40 L aceite 15W-40"></label>'+
+   '<label class="f">Observaciones<textarea id="f-obs">'+(e?esc(e.obs):'')+'</textarea></label>'+
+   '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':e?'Guardar cambios':'Guardar registro')+'</button>'+(e?'<button type="button" data-act="cancel-edit">Cancelar</button>':'')+'</div></form>';
+}
+
+function placaHTML(){
+  return '<div class="panel"><div class="legend">Datos de placa</div>'+
+   placaTmp.map(function(p,i){return '<div class="spec-edit"><input id="p-k-'+i+'" value="'+esc(p[0])+'" aria-label="Campo"><input id="p-v-'+i+'" value="'+esc(p[1])+'" aria-label="Valor"><button class="small danger" data-act="p-del" data-i="'+i+'">Quitar</button></div>'}).join('')+
+   '<div class="row"><button class="small" data-act="p-add">+ Agregar dato</button></div>'+
+   '<div class="row"><button class="primary" data-act="p-save"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':'Guardar datos de placa')+'</button><button data-act="go-form">Cancelar</button></div></div>';
+}
+
+function render(){
+  if(!D)return;
+  var q=D.info,h=D.historial;
+  var html='<main class="wrap"><header class="plate"><div class="stripe"></div><div class="plate-in">'+
+   '<span class="eyebrow">'+esc(q.ubicacion||'')+' · '+esc(q.subtitulo||'')+'</span><h1>'+esc(q.nombre||'')+'</h1>'+
+   '<div class="tags"><span class="tag id">'+esc(D.id)+'</span><span class="tag">'+esc(val('Modelo'))+'</span><span class="tag">'+esc(val('Voltaje'))+' · 3Φ</span><span class="tag">'+esc(val('Frecuencia'))+'</span></div></div></header>'+
+   (notice?'<div class="msg '+(notice.ok?'ok':'err')+'" role="status">'+esc(notice.t)+'</div>':'')+
+   statusHTML()+
+   '<section><h2>Ficha técnica</h2><dl class="specs">'+D.ficha.map(function(p){return '<div><dt>'+esc(p[0])+'</dt><dd>'+esc(p[1])+'</dd></div>'}).join('')+'</dl></section>';
+  if(view==='login'&&!PIN) html+='<form class="panel" id="login" novalidate><div class="legend">Modo técnico</div><label class="f">Clave de técnico<input id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12"></label><div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Verificando…':'Entrar')+'</button><button type="button" data-act="login-close">Cancelar</button></div></form>';
+  if(PIN&&view==='placa') html+=placaHTML();
+  if(PIN&&view==='form') html+=formHTML();
+  html+='<section><h2>Historial de mantenimiento <small>'+h.length+' registro'+(h.length===1?'':'s')+'</small></h2>'+
+   (h.length?'<div class="log">'+h.map(entryHTML).join('')+'</div>':'<div class="empty">Todavía no hay mantenimientos registrados.</div>')+'</section>';
+  html+='<div class="techbar">'+(PIN?'<span class="meta">Modo técnico activo</span><div class="row">'+(view!=='form'?'<button data-act="go-form" class="primary">Nuevo registro</button>':'')+(view!=='placa'?'<button data-act="go-placa">Editar placa</button>':'')+'<button data-act="logout">Salir</button></div>'
+    :'<span class="meta">Consulta pública · solo lectura</span>'+(view!=='login'?'<button data-act="login">Modo técnico</button>':''))+'</div>'+
+   '<footer>'+esc(q.area||'')+' · '+esc(q.ubicacion||'')+'</footer></main>';
+  $('app').innerHTML=html;
+  if(view==='login'&&!PIN&&$('pin'))$('pin').focus();
+}
+
+function run(fn,args,okMsg,after){
+  busy=true;notice=null;render();
+  var r=google.script.run.withSuccessHandler(function(res){
+      if(res&&res.ok){ if(after)after(); cargar({ok:true,t:okMsg}); }
+      else { busy=false; notice={ok:false,t:(res&&res.error)||'No se pudo guardar.'}; render(); }
+    }).withFailureHandler(function(){busy=false;notice={ok:false,t:'Sin conexión con el servidor. Intenta de nuevo.'};render();});
+  r[fn].apply(r,args);
+}
+function num(id){var v=$(id).value.trim();return v===''?null:Number(v)}
+function txt(id){return $(id).value.trim()}
+
+document.addEventListener('submit',function(ev){
+  ev.preventDefault();
+  if(ev.target.id==='login'){
+    var p=txt('pin');busy=true;render();
+    google.script.run.withSuccessHandler(function(r){busy=false;
+        if(r.ok){PIN=p;view='form';notice=null;}else notice={ok:false,t:'Clave incorrecta.'};render();})
+      .withFailureHandler(function(){busy=false;notice={ok:false,t:'Sin conexión con el servidor.'};render();}).login(p);
+    return;
+  }
+  if(ev.target.id==='frm'){
+    if(!txt('f-fecha')||!txt('f-tec')){notice={ok:false,t:'Falta la fecha o el nombre del técnico.'};render();return;}
+    var acts=CHECKS.filter(function(c,i){return $('c-'+i).checked});
+    txt('f-otras').split('\n').map(function(s){return s.trim()}).filter(Boolean).forEach(function(s){acts.push(s)});
+    var reg={id:editId,fecha:txt('f-fecha'),tipo:$('f-tipo').value,tecnico:txt('f-tec'),horometro:num('f-horo'),actividades:acts,
+      lectura:{comb:num('l-comb'),aceite:num('l-aceite'),temp:num('l-temp'),bat:num('l-bat'),rpm:num('l-rpm'),hz:num('l-hz'),kwh:num('l-kwh'),vll:txt('l-vll'),vln:txt('l-vln')},
+      refacciones:txt('f-ref'),obs:txt('f-obs')};
+    var was=editId;
+    run('guardarRegistro',[PIN,reg],was?'Cambios guardados.':'Registro guardado.',function(){editId=null;});
+  }
+});
+
+document.addEventListener('click',function(ev){
+  var b=ev.target.closest('[data-act]');if(!b||busy)return;
+  var a=b.dataset.act,id=b.dataset.id;
+  if(a==='login'){view='login';render();}
+  else if(a==='login-close'){view='pub';notice=null;render();}
+  else if(a==='logout'){PIN=null;view='pub';editId=null;notice=null;render();}
+  else if(a==='go-form'){view='form';editId=null;render();}
+  else if(a==='go-placa'){placaTmp=D.ficha.map(function(p){return p.slice()});view='placa';render();}
+  else if(a==='cancel-edit'){editId=null;render();}
+  else if(a==='edit'){editId=id;view='form';render();$('frm').scrollIntoView({block:'start'});}
+  else if(a==='del'){pendingDelete=id;render();}
+  else if(a==='del-no'){pendingDelete=null;render();}
+  else if(a==='del-ok'){pendingDelete=null;run('eliminarRegistro',[PIN,id],'Registro eliminado.');}
+  else if(a==='p-add'){syncP();placaTmp.push(['','']);render();}
+  else if(a==='p-del'){syncP();placaTmp.splice(+b.dataset.i,1);render();}
+  else if(a==='p-save'){syncP();run('guardarFicha',[PIN,placaTmp],'Datos de placa guardados.',function(){view='form';});}
+});
+function syncP(){placaTmp.forEach(function(p,i){var k=$('p-k-'+i),v=$('p-v-'+i);if(k&&v){p[0]=k.value.trim();p[1]=v.value.trim();}})}
+
+cargar();
+})();
+</script>
+</body>
+</html>
