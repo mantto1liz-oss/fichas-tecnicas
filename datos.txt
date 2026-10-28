@@ -1,7 +1,7 @@
-﻿# ==========================================================
+# ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-PEM-001 · Planta de Emergencia PLANELEC 500 kW
-# Actualizado: 28/10/2026, 2:47:07 p.m.
+# Actualizado: 28/10/2026, 3:06:07 p.m.
 # Este archivo lo escribe index.html. Si lo editas a mano,
 # respeta el formato  campo = valor  y los títulos [ ].
 # ==========================================================
@@ -52,3 +52,20 @@ energia_kwh = 2603
 v_linea_linea = 219 / 221 / 221
 v_linea_neutro = 127 / 127 / 128
 observaciones = Datos capturados de fotografías del panel PEM-CAP.
+
+# ---- Acceso del modo técnico. Todo va cifrado; no modifiques estas secciones ----
+[CONFIG]
+cuenta_github = mantto1liz-oss
+repositorio = fichas-tecnicas
+rama = main
+archivo = datos.txt
+token_iv = OTtPhsk90lcJ4JV/
+token_cifrado = TH/nfWTpUpCE/gxCDYvG6krNELZX2TFgSOSw5yi6zJvOBNIu9doYtw1zM+2jYLIIi7fxrDqli1X3MXw7qAgkL40dGBH1KRtAkM8ObdOhNROlgVPMvrijTwGqbGhW2lpyZF0WxWKzzXdDL/U2NA==
+
+[USUARIO charlie]
+nombre = CARLOS GR
+rol = admin
+sal = cqbx8G+IxW43mWUyKJxUQg==
+iv = av4qtYnVPSD30s0X
+llave_cifrada = aJd6spKg2iDSoSkjBEXhAcgwVecZo501aIoBrMVIxHFjoH/6IjojPKp2tFCEwaGK
+iteraciones = 600000
