@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-PEM-001 · Planta de Emergencia PLANELEC 500 kW
-# Actualizado: 28/10/2026, 3:25:31 p.m.
+# Actualizado: 28/10/2026, 3:27:39 p.m.
 # Este archivo lo escribe index.html. Si lo editas a mano,
 # respeta el formato  campo = valor  y los títulos [ ].
 # ==========================================================
@@ -109,4 +109,12 @@ rol = tecnico
 sal = ByHsKiU7MK4qbVIY93XW8g==
 iv = K7CYpZnJVRmHsOVG
 llave_cifrada = XaZIKinzkYqszRSihGa/CLX+U7QWeUfJsOXTCYO83mkCTzmR7RmfTYnjzqb91vma
+iteraciones = 600000
+
+[USUARIO benito]
+nombre = Omar Benito Sanchez Flores
+rol = tecnico
+sal = M4OyctfzTPyp9uIpumPXIQ==
+iv = RGAiqbM11WawhGua
+llave_cifrada = d+qP2vqblIcka6uFo64l5/XiqAc5lhknzGUFQoxn+r6EJ68seH75duMX4LEifk5Q
 iteraciones = 600000
