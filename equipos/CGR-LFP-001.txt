@@ -1,0 +1,35 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-LFP-001 · Línea de Fibra/Pluma
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-LFP-001
+nombre = Línea de Fibra/Pluma
+tipo = Línea de llenado
+ubicacion = Área de Llenado
+area = Mantenimiento Industrial
+
+[PLACA]
+Equipos = Preabridora, banda de clavos, abridor de clavos (4 motores), tómbola mezcladora
+Resp. área = Gerardo Aguilar
+
+[CHECKLIST]
+actividad = [Semanal] Limpieza banda preabridora
+actividad = [Semanal] Limpieza y revisión de motores de preabridora
+actividad = [Semanal] Revisión de limitadores de carga
+actividad = [Semanal] Revisión de banda de clavos
+actividad = [Semanal] Apretar terminales del sistema de control
+actividad = [Semanal] Revisión sistema abridor de clavos — Motor 1
+actividad = [Semanal] Revisión sistema abridor de clavos — Motor 2
+actividad = [Semanal] Revisión sistema abridor de clavos — Motor 3
+actividad = [Semanal] Revisión sistema abridor de clavos — Motor 4
+actividad = [Semanal] Revisión de tómbola mezcladora
+
+[LECTURAS]
+corriente_a = Corriente motor | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

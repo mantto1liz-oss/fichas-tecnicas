@@ -1,0 +1,95 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-MTC-003 · Montacargas Komatsu FG25T-16
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-MTC-003
+nombre = Montacargas Komatsu FG25T-16
+tipo = Montacargas de combustión
+ubicacion = Patio de Maniobras / Almacén
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Komatsu
+Modelo = FG25T-16
+Combustible = Gas LP
+No. de serie = Por capturar
+Proveedor de servicio = CALLMONTACARGAS
+
+[CHECKLIST]
+actividad = [Tipo A · 250 h] Filtro de aire
+actividad = [Tipo A · 250 h] Bujías
+actividad = [Tipo A · 250 h] Aceite motor y filtro
+actividad = [Tipo A · 250 h] Lavado, lubricación, mástil, cadenas, eje de dirección y graseras en general
+actividad = [Tipo A · 250 h] Limpieza en general
+actividad = [Tipo B · 2000 h / anual] Filtro de aire
+actividad = [Tipo B · 2000 h / anual] Filtro de aceite de motor
+actividad = [Tipo B · 2000 h / anual] Filtro de aceite hidráulico
+actividad = [Tipo B · 2000 h / anual] Filtro aceite transmisión
+actividad = [Tipo B · 2000 h / anual] Bujías
+actividad = [Tipo B · 2000 h / anual] Anticongelante
+actividad = [Tipo B · 2000 h / anual] Aceite de motor
+actividad = [Tipo B · 2000 h / anual] Aceite hidráulico
+actividad = [Tipo B · 2000 h / anual] Aceite de transmisión
+actividad = [Tipo B · 2000 h / anual] Aceite de diferencial
+actividad = [Tipo B · 2000 h / anual] Lavado, lubricación, mástil, cadenas, eje de dirección y graseras en general
+actividad = [Tipo B · 2000 h / anual] Limpieza en general
+
+[LECTURAS]
+nivel_gas_pct = Nivel de gas LP | %
+
+# ---------------- ÍNDICE DE REGISTROS (5) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2022-08-06 | Mantenimiento preventivo   | CALLMONTACARGAS (proveedor externo)
+# 0002 | 2023-01-21 | Mantenimiento preventivo   | CALLMONTACARGAS (proveedor externo)
+# 0003 | 2023-07-22 | Mantenimiento preventivo   | CALLMONTACARGAS (proveedor externo)
+# 0004 | 2024-01-24 | Mantenimiento preventivo   | CALLMONTACARGAS (proveedor externo)
+# 0005 | 2025-02-07 | Mantenimiento preventivo   | CALLMONTACARGAS (proveedor externo)
+
+[REGISTRO 0001]
+id = h4
+fecha = 2022-08-06
+tipo = Mantenimiento preventivo
+tecnico = CALLMONTACARGAS (proveedor externo)
+horometro = 
+actividad = Servicio Tipo B – preventivo 2000 h / anual
+observaciones = Registro migrado del programa Call Montacargas.
+
+[REGISTRO 0002]
+id = h5
+fecha = 2023-01-21
+tipo = Mantenimiento preventivo
+tecnico = CALLMONTACARGAS (proveedor externo)
+horometro = 
+actividad = Servicio Tipo A – preventivo 250 h
+observaciones = Registro migrado del programa Call Montacargas.
+
+[REGISTRO 0003]
+id = h6
+fecha = 2023-07-22
+tipo = Mantenimiento preventivo
+tecnico = CALLMONTACARGAS (proveedor externo)
+horometro = 5870.8
+actividad = Servicio Tipo B – preventivo 2000 h / anual
+observaciones = Registro migrado del programa Call Montacargas.
+
+[REGISTRO 0004]
+id = h7
+fecha = 2024-01-24
+tipo = Mantenimiento preventivo
+tecnico = CALLMONTACARGAS (proveedor externo)
+horometro = 6073.2
+actividad = Servicio Tipo A – preventivo 250 h
+observaciones = Registro migrado del programa Call Montacargas.
+
+[REGISTRO 0005]
+id = h8
+fecha = 2025-02-07
+tipo = Mantenimiento preventivo
+tecnico = CALLMONTACARGAS (proveedor externo)
+horometro = 6451
+actividad = Servicio Tipo A – preventivo 250 h
+observaciones = Registro migrado del programa Call Montacargas.

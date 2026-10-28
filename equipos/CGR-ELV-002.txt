@@ -1,0 +1,39 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-ELV-002 · Elevador de Plataforma – Embarques
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-ELV-002
+nombre = Elevador de Plataforma – Embarques
+tipo = Elevador de carga
+ubicacion = Área de Embarques
+area = Mantenimiento Industrial
+
+[PLACA]
+Tipo = Elevador eléctrico / plataforma de carga
+Marca = Por capturar
+Capacidad = Por capturar
+
+[CHECKLIST]
+actividad = [Anual] Asegurarse que el equipo fue bloqueado eléctricamente (LOTO) antes de iniciar
+actividad = [Anual] Revisión del gancho de levante y cadena de elevación – verificar eslabones y desgaste
+actividad = [Anual] Revisión y medición de nivel de aceite del motoreductor – cambiar si está sucio
+actividad = [Anual] Revisión de guías de plataforma – desgaste, alineación y lubricación
+actividad = [Anual] Revisión de funcionamiento de puertas de seguridad – apertura y cierre suave
+actividad = [Anual] Revisión y prueba de micros de seguridad – todos deben operar correctamente
+actividad = [Anual] Lubricación de cadena de elevación con grasa de litio multipropósito
+actividad = [Anual] Revisión de cables eléctricos de botoneras de llamada en todos los pisos
+actividad = [Anual] Revisión de piso de plataforma – verificar que no presente deformaciones ni daños
+actividad = [Anual] Revisión de estructura metálica – buscar fisuras, corrosión o deformaciones
+actividad = [Anual] Prueba de carga completa – elevar carga máxima nominal y verificar frenos
+actividad = [Anual] Verificar correcto funcionamiento de freno de emergencia
+actividad = [Anual] Emitir reporte de mantenimiento firmado – registrar observaciones y pendientes
+
+[LECTURAS]
+corriente_a = Corriente motor | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

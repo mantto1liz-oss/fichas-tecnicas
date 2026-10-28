@@ -1,0 +1,51 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-ILU-001 · Iluminación Planta 1
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-ILU-001
+nombre = Iluminación Planta 1
+tipo = Luminarias
+ubicacion = Planta 1 (24 áreas)
+area = Mantenimiento Industrial
+
+[PLACA]
+Tipos = LED · Halógeno · Reflector · Incandescente · Fluorescente
+Áreas = 24
+Responsables = Omar Sánchez / Brandon Miranda
+
+[CHECKLIST]
+actividad = [Mensual] Revisión de luminarias – Calle
+actividad = [Mensual] Revisión de luminarias – Vigilancia
+actividad = [Mensual] Revisión de luminarias – Entrada Principal
+actividad = [Mensual] Revisión de luminarias – Estacionamiento
+actividad = [Mensual] Revisión de luminarias – Comedor
+actividad = [Mensual] Revisión de luminarias – Jardín de Cocina
+actividad = [Mensual] Revisión de luminarias – Terraza
+actividad = [Mensual] Revisión de luminarias – Diseño
+actividad = [Mensual] Revisión de luminarias – Sala de Exhibición
+actividad = [Mensual] Revisión de luminarias – Embarques
+actividad = [Mensual] Revisión de luminarias – Productos Terminados
+actividad = [Mensual] Revisión de luminarias – Reparaciones
+actividad = [Mensual] Revisión de luminarias – Oficinas
+actividad = [Mensual] Revisión de luminarias – Patio de Maniobras
+actividad = [Mensual] Revisión de luminarias – Mantenimiento
+actividad = [Mensual] Revisión de luminarias – Almacén
+actividad = [Mensual] Revisión de luminarias – Llenado
+actividad = [Mensual] Revisión de luminarias – Empaque
+actividad = [Mensual] Revisión de luminarias – Tapicería
+actividad = [Mensual] Revisión de luminarias – Costura
+actividad = [Mensual] Revisión de luminarias – Ingeniería
+actividad = [Mensual] Revisión de luminarias – Corte de Piel
+actividad = [Mensual] Revisión de luminarias – Laca
+actividad = [Mensual] Revisión de luminarias – Área de Bodegas Traseras
+
+[LECTURAS]
+luminarias_cambiadas = Luminarias cambiadas | pzas
+luminarias_falla = Luminarias con falla | pzas
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

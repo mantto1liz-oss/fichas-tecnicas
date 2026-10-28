@@ -1,0 +1,49 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-ABR-001 · Abridora de Fibra Bridhi
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-ABR-001
+nombre = Abridora de Fibra Bridhi
+tipo = Abridora de fibra
+ubicacion = Área de Llenado
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Bridhi
+Sistema = Tómbola-rodillo
+Resp. área = Gerardo Aguilar
+No. de serie = Por capturar
+
+[CHECKLIST]
+actividad = [Semanal] Limpieza banda preabridora
+actividad = [Semanal] Limpieza y revisión de motores de preabridora
+actividad = [Semanal] Revisión de limitadores de carga
+actividad = [Semanal] Revisión de banda de clavos
+actividad = [Semanal] Limpieza de rodillos de banda
+actividad = [Semanal] Limpieza de chumaceras
+actividad = [Semanal] Ajuste de cadena de motoreductor
+actividad = [Semanal] Revisar catarinas y opresores
+actividad = [Semanal] Limpieza de rodillos primarios
+actividad = [Semanal] Limpieza de rodillo abridor
+actividad = [Semanal] Limpieza de chumaceras y engrasado
+actividad = [Semanal] Revisar tensión de banda del motor del rodillo abridor
+actividad = [Semanal] Apretar terminales del sistema de control
+actividad = [Mensual] Lubricación de chumacera de rodillo abridor (grasa especificada)
+actividad = [Mensual] Lubricación de chumaceras de rodillos alimentadores
+actividad = [Mensual] Revisión de tensión de bandas de arreadores – registrar tensión
+actividad = [Mensual] Limpieza y lubricación de chumacera de ventilador de succión a tómbola
+actividad = [Semestral] Limpieza y reapriete de terminales del tablero de fuerza
+actividad = [Semestral] Mantenimiento de rodillo abridor y rodillos retenedores (desmontar, limpiar, lubricar)
+actividad = [Semestral] Revisión completa de sistema de transmisión – poleas, bandas, flechas
+actividad = [Semestral] Medición de aislamiento de motores eléctricos
+actividad = [Semestral] Cambio de filtros de la tómbola
+
+[LECTURAS]
+corriente_a = Corriente motor | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

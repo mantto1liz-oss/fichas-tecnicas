@@ -1,0 +1,58 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-INV-001 · Sistema Fotovoltaico – Inversores Growatt
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-INV-001
+nombre = Sistema Fotovoltaico – Inversores Growatt
+tipo = Inversores solares
+ubicacion = Planta 1
+area = Mantenimiento Industrial
+
+[PLACA]
+Inversores = 5 × Growatt
+Tablero de control = Contactores ABB AF116-30 (×5), breakers, relevador térmico, timer
+Mantenimiento anual = Corey Solar (proveedor)
+
+[CHECKLIST]
+actividad = [Semanal · inversores] Verificar encendido y display sin códigos de falla
+actividad = [Semanal · inversores] Revisar LED de estado (verde fijo = operación normal)
+actividad = [Semanal · inversores] Inspeccionar conexiones DC (entrada de paneles) sin holguras
+actividad = [Semanal · inversores] Inspeccionar conector RS485/comunicación
+actividad = [Semanal · inversores] Verificar ausencia de ruido anormal o vibración
+actividad = [Semanal · inversores] Revisar temperatura de carcasa (sin sobrecalentamiento aparente)
+actividad = [Semanal · inversores] Limpieza externa de polvo y suciedad
+actividad = [Semanal · inversores] Verificar ausencia de humedad o corrosión en gabinete
+actividad = [Semanal · tablero] Verificar luces piloto verdes encendidas (5 inversores)
+actividad = [Semanal · tablero] Revisar torre de señalización (luz roja = falla activa)
+actividad = [Semanal · tablero] Inspeccionar botón de paro de emergencia (sin daño, libre)
+actividad = [Semanal · tablero] Verificar selector de operación en posición correcta
+actividad = [Semanal · tablero] Revisión visual de contactores ABB (sin arqueo/quemado)
+actividad = [Semanal · tablero] Verificar ausencia de ruido de contactores (zumbido anormal)
+actividad = [Semanal · tablero] Inspeccionar breakers/guardamotor en posición ON
+actividad = [Semanal · tablero] Limpieza externa de gabinete y sellado de puerta
+actividad = [Mensual · inversores] Revisión de apriete de terminales DC y AC (torque)
+actividad = [Mensual · inversores] Verificar ventilación interna / rejillas libres de obstrucción
+actividad = [Mensual · inversores] Revisar historial de fallas en pantalla/app Growatt
+actividad = [Mensual · inversores] Comprobar coincidencia de generación reportada vs. esperada
+actividad = [Mensual · inversores] Inspeccionar sellos y empaques contra intemperie
+actividad = [Mensual · inversores] Verificar fijación a riel/soporte (tornillería completa)
+actividad = [Mensual · inversores] Revisar cableado de comunicación RS485 entre inversores
+actividad = [Mensual · inversores] Prueba de paro/arranque controlado (si aplica)
+actividad = [Mensual · tablero] Revisión de apriete de terminales en contactores ABB (5 unidades)
+actividad = [Mensual · tablero] Verificar estado de relevador térmico y ajuste de calibración
+actividad = [Mensual · tablero] Revisión de timer/temporizador de control
+actividad = [Mensual · tablero] Inspeccionar borneras y cableado de control (sin flojedad)
+actividad = [Mensual · tablero] Verificar funcionamiento de botones marcha/paro
+actividad = [Mensual · tablero] Revisión de breakers de protección (estado físico, sin sobrecalentamiento)
+actividad = [Mensual · tablero] Inspección de empaques y hermeticidad del gabinete
+actividad = [Mensual · tablero] Verificar conexión a tierra del tablero
+
+[LECTURAS]
+generacion_kwh = Generación reportada | kWh
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

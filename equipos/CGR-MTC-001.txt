@@ -1,0 +1,72 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-MTC-001 · Montacargas Crown SP3500
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-MTC-001
+nombre = Montacargas Crown SP3500
+tipo = Montacargas eléctrico
+ubicacion = Almacén / Pasillo Racks
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Crown
+Modelo = SP3500 / Recogepedidos
+Tipo = Eléctrico
+Cargador = GNB
+No. de serie = Por capturar
+Responsables = Omar Sánchez / Brandon Miranda
+
+[CHECKLIST]
+actividad = [Mensual] Limpieza con aire comprimido (4-5 kg/cm²) de cargador GNB – NO usar en tarjeta de control
+actividad = [Mensual] Verificar nivel de electrolito en baterías – completar con agua destilada
+actividad = [Mensual] Revisar terminales de batería – limpiar y apretar conexiones
+actividad = [Mensual] Inspección del mástil y sistema de elevación de la plataforma del operador
+actividad = [Mensual] Verificar funcionamiento de freno de estacionamiento y freno de emergencia
+actividad = [Mensual] Revisar sistema de señales y dispositivos de seguridad
+actividad = [Mensual] Prueba de funcionamiento completa
+actividad = [Bimestral/Trimestral] Desconectar batería antes de iniciar cualquier trabajo eléctrico
+actividad = [Bimestral/Trimestral] Limpieza con aire comprimido (4 kg/cm²) de componentes eléctricos y conexiones
+actividad = [Bimestral/Trimestral] Revisión del sistema eléctrico completo – tarjetas, conectores y cableado
+actividad = [Bimestral/Trimestral] Revisión de nivel de aceite hidráulico – completar según especificación Crown
+actividad = [Bimestral/Trimestral] Lubricación de mecanismos de traslación y guías del mástil
+actividad = [Bimestral/Trimestral] Revisión del sistema de frenos – ajuste y prueba de efectividad
+
+[LECTURAS]
+voltaje_bateria_v = Voltaje de batería | V
+
+# ---------------- ÍNDICE DE REGISTROS (3) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2023-01-21 | Mantenimiento preventivo   | CALLMONTACARGAS (proveedor externo)
+# 0002 | 2023-07-22 | Mantenimiento preventivo   | CALLMONTACARGAS (proveedor externo)
+# 0003 | 2024-01-22 | Mantenimiento preventivo   | CALLMONTACARGAS (proveedor externo)
+
+[REGISTRO 0001]
+id = h1
+fecha = 2023-01-21
+tipo = Mantenimiento preventivo
+tecnico = CALLMONTACARGAS (proveedor externo)
+horometro = 
+actividad = Servicio Tipo A – preventivo 250 h
+observaciones = Registro migrado del programa Call Montacargas.
+
+[REGISTRO 0002]
+id = h2
+fecha = 2023-07-22
+tipo = Mantenimiento preventivo
+tecnico = CALLMONTACARGAS (proveedor externo)
+horometro = 
+actividad = Servicio Tipo B – preventivo 2000 h / anual
+observaciones = Registro migrado del programa Call Montacargas.
+
+[REGISTRO 0003]
+id = h3
+fecha = 2024-01-22
+tipo = Mantenimiento preventivo
+tecnico = CALLMONTACARGAS (proveedor externo)
+horometro = 3046.5
+actividad = Servicio Tipo A – preventivo 250 h
+observaciones = Registro migrado del programa Call Montacargas.

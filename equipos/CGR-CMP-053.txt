@@ -1,0 +1,51 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-CMP-053 · Compresor Quincy 30 HP #53
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-CMP-053
+nombre = Compresor Quincy 30 HP #53
+tipo = Compresor de aire
+ubicacion = Cuarto de Compresores · Planta 1
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Quincy
+Potencia = 30 HP
+Modelo exacto = Por capturar
+No. de serie = Por capturar
+Voltaje = Por capturar
+Presión de trabajo = 100–120 psi (rango normal)
+Capacidad (CFM) = Por capturar
+Año de fabricación = Por capturar
+Responsables = Omar Sánchez / Brandon Miranda
+
+[CHECKLIST]
+actividad = [Quincenal] Revisión visual de fugas de aceite en cuerpo, mangueras y uniones
+actividad = [Quincenal] Verificar presión de operación en manómetro – rango normal: 100-120 PSI
+actividad = [Quincenal] Verificar temperatura de descarga – máx. permitido según manual Quincy
+actividad = [Quincenal] Drenar tanque receptor de aire – abrir válvula purga hasta salir aire limpio
+actividad = [Quincenal] Revisar nivel de aceite en mirilla – completar con aceite Quincy Plus si es necesario
+actividad = [Quincenal] Inspección visual de correa de transmisión – desgaste, fisuras o holgura excesiva
+actividad = [Quincenal] Limpiar con aire el prefiltro de aspiración si es necesario
+actividad = [Quincenal] Verificar correcto funcionamiento de presostato – arranque y paro automático
+actividad = [Quincenal] Verificar lectura de horas de operación en visor – registrar en bitácora
+actividad = [Programado] Cambio de aceite
+actividad = [Programado] Cambio de filtro de aceite
+actividad = [Programado] Cambio de filtro de aire
+actividad = [Programado] Cambio de separador aire/aceite
+actividad = [Programado] Probar válvula de seguridad
+actividad = [Programado] Engrasar rodamientos del motor
+
+[LECTURAS]
+presion_carga_psi = Presión de carga | psi
+presion_descarga_psi = Presión de descarga | psi
+temp_descarga_c = Temp. descarga | °C
+corriente_a = Corriente motor | A
+horas_carga = Horas en carga | h
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

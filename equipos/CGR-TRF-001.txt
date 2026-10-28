@@ -1,0 +1,43 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-TRF-001 · Transformador 500 kVA
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-TRF-001
+nombre = Transformador 500 kVA
+tipo = Transformador
+ubicacion = Subestación Eléctrica · Planta 1
+area = Mantenimiento Industrial
+
+[PLACA]
+Capacidad = 500 kVA
+Tensión primaria = 13.2 kV
+Tensión secundaria = 440 / 220 V
+Marca = Por capturar
+No. de serie = Por capturar
+Seguridad = Alta tensión: proveedor certificado, coordinación CFE y LOTO
+
+[CHECKLIST]
+actividad = [Anual · proveedor] Confirmar coordinación con CFE para corte de suministro antes de iniciar trabajo
+actividad = [Anual · proveedor] Inspección visual exterior – verificar nivel de aceite dieléctrico en indicador
+actividad = [Anual · proveedor] Limpieza exterior del tanque, bushings y radiadores (sin presión, trapo seco)
+actividad = [Anual · proveedor] Toma de muestra de aceite dieléctrico para análisis de laboratorio
+actividad = [Anual · proveedor] Revisión de bushings de alta y baja tensión – sin grietas, carbonización ni contaminación
+actividad = [Anual · proveedor] Revisión de válvula de alivio de presión – sin señales de operación anterior
+actividad = [Anual · proveedor] Revisión del termómetro indicador de temperatura – lectura correcta
+actividad = [Anual · proveedor] Revisión de radiadores – sin fugas de aceite ni obstrucciones en aletas
+actividad = [Anual · proveedor] Medición de resistencia de aislamiento (megger) en devanados AT y BT
+actividad = [Anual · proveedor] Prueba de relación de transformación en todos los cambiadores de taps
+actividad = [Anual · proveedor] Inspección de pararrayos y descargadores de sobretensión
+actividad = [Anual · proveedor] Revisión de conexiones de tierra del tanque y neutro
+actividad = [Anual · proveedor] Emitir informe técnico firmado con todos los resultados de medición
+
+[LECTURAS]
+aislamiento_mohm = Resistencia de aislamiento | MΩ
+temp_aceite_c = Temp. aceite dieléctrico | °C
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

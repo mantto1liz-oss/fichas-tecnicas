@@ -1,0 +1,38 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-TAB-001 · Tableros Eléctricos
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-TAB-001
+nombre = Tableros Eléctricos
+tipo = Tableros de distribución
+ubicacion = Todas las áreas (rotación mensual)
+area = Mantenimiento Industrial
+
+[PLACA]
+Tensiones = 220 V / 440 V / 127 V
+Rotación = Ene Corte · Feb Tapicería · Mar Llenado · Abr Costura · May Empaque · Jun Subestación · Jul Diseño · Ago P. Terminados · Sep Almacén · Oct Embarques · Nov Principal · Dic Llenado
+
+[CHECKLIST]
+actividad = [Mensual] Confirmar área del mes según rotación (ver nota arriba) y registrar en observaciones
+actividad = [Mensual] Inspección visual exterior del tablero – sin señales de quemaduras, corrosión o daños
+actividad = [Mensual] Medir temperatura de tablero con termómetro infrarrojo – detectar puntos calientes
+actividad = [Mensual] Reapriete de terminales de potencia (main breaker y pastillas) con torque adecuado
+actividad = [Mensual] Reapriete de bornes de control – verificar que ningún cable esté suelto
+actividad = [Mensual] Limpieza interior con Dielectronic NF – NO usar aire a presión en tarjetas electrónicas
+actividad = [Mensual] Verificar correcto funcionamiento de pastillas termomagnéticas – probar palanca de test
+actividad = [Mensual] Revisar que todos los circuitos estén identificados con etiqueta legible
+actividad = [Mensual] Medición de amperaje por circuito con pinza amperimétrica – registrar valores
+actividad = [Mensual] Comparar amperajes con capacidad nominal – detectar sobrecarga o desequilibrio de fases
+actividad = [Mensual] Verificar que no haya cables sin protección (tubo conduit abierto o manguera dañada)
+actividad = [Mensual] Fotografiar tablero antes y después – adjuntar a reporte semanal
+
+[LECTURAS]
+temp_max_c = Temperatura máxima (infrarrojo) | °C
+corriente_max_a = Corriente máxima medida | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

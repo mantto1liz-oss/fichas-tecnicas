@@ -1,0 +1,34 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-BOM-001 · Bombas Sumergibles
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-BOM-001
+nombre = Bombas Sumergibles
+tipo = Bombeo
+ubicacion = Embarques / Producción / Patio de Maniobras
+area = Mantenimiento Industrial
+
+[PLACA]
+Tipo = Aguas negras y pluviales
+Cantidad = Por capturar
+
+[CHECKLIST]
+actividad = [Mensual] Verificar que el pozo o cárcamo no presente acumulación excesiva de agua
+actividad = [Mensual] Revisar funcionamiento del flotador de nivel – encendido y apagado automático
+actividad = [Mensual] Inspección visual del cable eléctrico de alimentación – sin daños en la envoltura
+actividad = [Mensual] Limpieza de rejilla o filtro de aspiración de la bomba – remover sólidos y lodo
+actividad = [Mensual] Verificar que la bomba descargue correctamente al punto de salida
+actividad = [Mensual] Revisar conexiones eléctricas en el tablero de control de bombas
+actividad = [Mensual] Probar arranque manual desde tablero – verificar amperaje de operación
+actividad = [Mensual] Limpiar el área del cárcamo – retirar basura o residuos que puedan obstruir
+actividad = [Mensual] Registrar si la bomba presenta vibración, ruido inusual o sobrecalentamiento
+
+[LECTURAS]
+corriente_a = Corriente de operación | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

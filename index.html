@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>Planta de Emergencia PLANELEC</title>
+<title>Fichas Técnicas de Mantenimiento</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
 /* Placa de equipo con franja de seguridad, datos en rejilla, bitácora en tarjetas, modo técnico abajo */
@@ -85,436 +85,573 @@ footer{font-size:12px;color:var(--muted);text-align:center}
 .chip[aria-pressed="true"]{background:var(--plate);color:var(--plate-ink);border-color:var(--plate)}
 .users{display:grid;gap:8px}
 .urow{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--field)}
+.grupo{font:600 12px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.sub{display:grid;gap:12px;border-top:1px solid var(--line);padding-top:14px}
 input[readonly]{opacity:.8}
+.cat{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.eq{display:grid;gap:6px;align-content:start;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);text-decoration:none;min-width:0}
+.eq:hover,.eq:focus-visible{border-color:var(--safety);outline:none}
+.eq .tag.id{justify-self:start}
+.eq b{font:700 20px/1.15 var(--display);overflow-wrap:anywhere}
+.back{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600}
+.back:hover{color:var(--ink)}
+.qrs{display:flex;flex-wrap:wrap;gap:16px}
+.qrs figure{margin:0;display:grid;gap:8px;justify-items:center;flex:1 1 220px}
+.qrs canvas{width:100%;max-width:280px;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
 </style>
 </head>
 <body>
 <div id="app"></div>
 
-<!-- Los datos del equipo viven en datos.txt, en la misma carpeta. Esta página solo los muestra y los guarda. -->
+<!-- Una sola página para todos los equipos: ?equipo=ID. Los datos están en equipos.txt, equipos/<ID>.txt y config.txt -->
 <script>
 (function(){
-var ARCHIVO_DATOS = 'datos.txt';
-var IT = 600000;
-var S = null, SES = null;   // SES = sesión: {u, nombre, rol, token, kraw}
-var view = 'pub', editId = null, pendingDelete = null, pendingUser = null, notice = null, busy = false, placaTmp = null, filtro = 'todos';
-var TIPOS = ['Lectura semanal','Mantenimiento preventivo','Mantenimiento correctivo','Prueba con carga','Inspección'];
-var CHECKS = ['Nivel de aceite de motor','Nivel de refrigerante','Nivel de combustible y fugas','Bandas y mangueras','Indicador de filtro de aire','Bornes y voltaje de baterías (24 VCD)','Cargador de baterías operando','Calentador de motor operando','Arranque y operación en vacío 15–30 min','Transferencia en AUTOMÁTICO','Radiador limpio y sin obstrucciones','Limpieza general del área'];
-var FILTROS = [['todos','Todos'],['mant','Mantenimientos'],['corr','Correctivos'],['lect','Lecturas y pruebas']];
+/* ═════════ Archivos del repositorio ═════════
+   config.txt          usuarios y token cifrado (uno para todo el sistema)
+   equipos.txt         catálogo: una línea por máquina
+   equipos/<ID>.txt    ficha técnica + bitácora de cada máquina
+   datos.txt           versión anterior (solo planta de emergencia); se migra sola  */
+var F_CONFIG='config.txt', F_CATALOGO='equipos.txt', DIR='equipos/', F_VIEJO='datos.txt';
+var IT=600000;
+var CFG=null, LEGACY=false, CAT=[], EQ=null, EQID=null, EQSRC=null, SES=null;
+var view='pub', editId=null, pendingDelete=null, pendingUser=null, notice=null, busy=false, filtro='todos', buscar='', fichaTmp=null, cargando=true;
+var TIPOS=['Mantenimiento preventivo','Mantenimiento correctivo','Lectura / inspección','Prueba de funcionamiento','Limpieza'];
+var FILTROS=[['todos','Todos'],['mant','Mantenimientos'],['corr','Correctivos'],['otros','Lecturas y pruebas']];
+var PLANTILLAS={
+  PEM:{tipo:'Planta de emergencia',
+    checklist:['Nivel de aceite de motor','Nivel de refrigerante','Nivel de combustible y fugas','Bandas y mangueras','Indicador de filtro de aire','Bornes y voltaje de baterías (24 VCD)','Cargador de baterías operando','Calentador de motor operando','Arranque y operación en vacío 15–30 min','Transferencia en AUTOMÁTICO','Radiador limpio y sin obstrucciones','Limpieza general del área'],
+    lecturas:[['combustible_pct','Combustible','%'],['presion_aceite_bar','Presión aceite','bar'],['temp_motor_c','Temp. motor','°C'],['baterias_v','Baterías','V'],['rpm','RPM','RPM'],['frecuencia_hz','Frecuencia','Hz'],['energia_kwh','Energía acumulada','kWh'],['v_linea_linea','V L-L (L1L2/L2L3/L3L1)','V'],['v_linea_neutro','V L-N (L1/L2/L3)','V']]},
+  CMP:{tipo:'Compresor de aire',
+    checklist:['Drenar condensados de tanque y separador','Revisar nivel de aceite','Revisar fugas de aire y aceite','Limpiar o cambiar filtro de aire','Revisar tensión y estado de bandas','Limpiar enfriador / radiador','Revisar presiones de carga y descarga','Revisar temperatura de descarga','Cambio de aceite','Cambio de filtro de aceite','Cambio de separador aire/aceite','Probar válvula de seguridad','Engrasar rodamientos del motor','Revisar conexiones eléctricas y amperaje'],
+    lecturas:[['presion_carga_psi','Presión de carga','psi'],['presion_descarga_psi','Presión de descarga','psi'],['temp_descarga_c','Temp. descarga','°C'],['corriente_a','Corriente motor','A'],['horas_carga','Horas en carga','h']]},
+  CLI:{tipo:'Aire acondicionado',
+    checklist:['[Trimestral] Limpieza de filtros de la evaporadora','[Trimestral] Limpieza de serpentín evaporador y condensador','[Trimestral] Revisar y destapar drenaje de condensados','[Trimestral] Revisar presión de refrigerante','[Trimestral] Medir amperaje del compresor','[Trimestral] Revisar conexiones eléctricas y control remoto','[Trimestral] Limpieza de ventiladores y carcasa','[Trimestral] Prueba de funcionamiento y temperatura de salida'],
+    lecturas:[['corriente_a','Corriente compresor','A'],['temp_salida_c','Temp. salida de aire','°C'],['presion_psi','Presión de refrigerante','psi']]},
+  ELE:{tipo:'Electrodoméstico',
+    checklist:['[Trimestral] Limpieza general interior y exterior','[Trimestral] Revisar cable de alimentación y clavija','[Trimestral] Revisar empaques y puertas','[Trimestral] Limpieza de rejillas / condensador','[Trimestral] Prueba de funcionamiento'],
+    lecturas:[['temperatura_c','Temperatura','°C']]},
+  GEN:{tipo:'Equipo industrial',
+    checklist:['Inspección visual general','Limpieza','Lubricación','Revisión de conexiones eléctricas','Ajuste de tornillería','Prueba de funcionamiento'],
+    lecturas:[['corriente_a','Corriente','A'],['temperatura_c','Temperatura','°C']]}
+};
+function plantilla(id){var p=String(id||'').split('-')[1];return PLANTILLAS[p]||PLANTILLAS.GEN}
 
+/* ═════════ Utilidades ═════════ */
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function hasN(v){return v!==null&&v!==undefined&&String(v)!==''}
 function fmtF(f){if(!f)return '—';var p=String(f).split('-');if(p.length<3)return f;var m=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];return p[2]+' '+m[+p[1]-1]+' '+p[0]}
+function esMant(t){return /preventivo|correctivo/i.test(t)}
 function pillCls(t){return /preventivo/i.test(t)?'prev':/correctivo/i.test(t)?'corr':/prueba|inspec/i.test(t)?'prue':'lect'}
-function val(k){var f=S.placa.find(function(p){return p[0]===k});return f?f[1]:''}
-function ordenado(){return S.historial.slice().sort(function(a,b){return a.fecha<b.fecha?1:a.fecha>b.fecha?-1:0})}
+function val(k){var f=EQ.placa.find(function(p){return p[0].toLowerCase()===k.toLowerCase()});return f?f[1]:''}
+function ordenado(){return EQ.historial.slice().sort(function(a,b){return a.fecha<b.fecha?1:a.fecha>b.fecha?-1:0})}
 function esAdmin(){return SES&&SES.rol==='admin'}
 function puedeEditar(e){return SES&&(esAdmin()||e.usuario===SES.u)}
+function idValido(id){return /^[A-Z0-9]+(-[A-Z0-9]+)+$/.test(id)&&id.length<=30}
+function normId(s){return String(s||'').toUpperCase().replace(/[^A-Z0-9-]/g,'').slice(0,30)}
+function baseURL(){return location.origin+location.pathname.replace(/[^/]*$/,'')}
+function urlEquipo(id){return baseURL()+'?equipo='+encodeURIComponent(id)}
+function txtFetch(p){return fetch(p+(p.indexOf('?')<0?'?':'&')+'v='+Date.now(),{cache:'no-store'}).then(function(r){if(r.status===404)return null;if(!r.ok)throw new Error('HTTP '+r.status);return r.text()})}
 
-/* ───── Formato de datos.txt (legible en el Bloc de notas) ───── */
-var LEC = [['comb','combustible_pct'],['aceite','presion_aceite_bar'],['temp','temp_motor_c'],['bat','baterias_v'],['rpm','rpm'],['hz','frecuencia_hz'],['kwh','energia_kwh'],['vll','v_linea_linea'],['vln','v_linea_neutro']];
+/* ═════════ Formato de texto (Bloc de notas) ═════════ */
 function tEsc(v){return String(v==null?'':v).replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n')}
 function tUnesc(v){return v.replace(/\\(n|\\)/g,function(m,c){return c==='n'?'\n':'\\'})}
 function tNum(v){return /^-?\d+(\.\d+)?$/.test(v)?Number(v):v}
-function leerTxt(txt){
-  var st={equipo:{},placa:[],historial:[],cfg:null}, sec=null, cur=null, cfg={}, usuarios=[];
-  txt.replace(/^﻿/,'').split(/\r?\n/).forEach(function(raw){
+function lineas(txt,cb){
+  var sec=null,arg='';
+  String(txt||'').replace(/^﻿/,'').split(/\r?\n/).forEach(function(raw){
     var l=raw.trim(); if(!l||l.charAt(0)==='#')return;
-    var m=l.match(/^\[(.+)\]$/);
-    if(m){var n=m[1].trim(), N=n.toUpperCase();
-      if(N.indexOf('REGISTRO')===0){sec='REG';cur={id:'',fecha:'',tipo:'',tecnico:'',usuario:'',horometro:null,actividades:[],lectura:{},refacciones:'',obs:''};st.historial.push(cur)}
-      else if(N.indexOf('USUARIO')===0){sec='USR';cur={u:n.slice(7).trim().toLowerCase(),nombre:'',rol:'tecnico'};usuarios.push(cur)}
-      else sec=N; return}
+    var m=l.match(/^\[([A-ZÁÉÍÓÚa-z]+)\s*(.*)\]$/); if(m){sec=m[1].toUpperCase();arg=m[2].trim();cb(sec,arg,null,null,true);return}
     var i=l.indexOf('='); if(i<0)return;
-    var k=l.slice(0,i).trim(), v=tUnesc(l.slice(i+1).trim());
+    cb(sec,arg,l.slice(0,i).trim(),tUnesc(l.slice(i+1).trim()),false);
+  });
+}
+/* config.txt (o la sección [CONFIG] de datos.txt) */
+function leerConfig(txt){
+  var c={},us=[],cur=null;
+  lineas(txt,function(sec,arg,k,v,head){
+    if(head){if(sec==='USUARIO'){cur={u:arg.toLowerCase(),nombre:'',rol:'tecnico',it:IT};us.push(cur)}return}
+    if(sec==='CONFIG')c[k]=v;
+    else if(sec==='USUARIO'){if(k==='nombre')cur.nombre=v;else if(k==='rol')cur.rol=v;else if(k==='sal')cur.s=v;else if(k==='iv')cur.iv=v;else if(k==='llave_cifrada')cur.ct=v;else if(k==='iteraciones')cur.it=Number(v)||IT}
+  });
+  if(!c.token_cifrado)return null;
+  return {owner:c.cuenta_github,repo:c.repositorio,branch:c.rama||'main',tiv:c.token_iv,tct:c.token_cifrado,usuarios:us};
+}
+function escribirConfig(c){
+  var L=['# ==========================================================','# CONFIGURACIÓN DEL MODO TÉCNICO · Fichas técnicas de mantenimiento','# Todo va cifrado. No modifiques este archivo a mano.','# ==========================================================',''];
+  function kv(k,v){L.push(k+' = '+tEsc(v))}
+  L.push('[CONFIG]');kv('cuenta_github',c.owner);kv('repositorio',c.repo);kv('rama',c.branch);kv('token_iv',c.tiv);kv('token_cifrado',c.tct);L.push('');
+  c.usuarios.forEach(function(u){L.push('[USUARIO '+u.u+']');kv('nombre',u.nombre);kv('rol',u.rol);kv('sal',u.s);kv('iv',u.iv);kv('llave_cifrada',u.ct);kv('iteraciones',u.it);L.push('')});
+  return L.join('\r\n');
+}
+/* equipos.txt: ID = nombre | ubicación | tipo */
+function leerCatalogo(txt){
+  var out=[];
+  lineas(txt,function(sec,arg,k,v,head){if(head||!k)return;var p=v.split('|');out.push({id:normId(k),nombre:(p[0]||'').trim(),ubicacion:(p[1]||'').trim(),tipo:(p[2]||'').trim()})});
+  return out;
+}
+function escribirCatalogo(cat){
+  var L=['# ==========================================================','# CATÁLOGO DE EQUIPOS ('+cat.length+')','# Formato:  ID = Nombre | Ubicación | Tipo','# Cada equipo tiene su archivo en la carpeta equipos/','# ==========================================================',''];
+  cat.slice().sort(function(a,b){return a.id<b.id?-1:1}).forEach(function(e){L.push(e.id+' = '+[e.nombre,e.ubicacion,e.tipo].map(function(x){return tEsc(x).replace(/\|/g,'/')}).join(' | '))});
+  return L.join('\r\n')+'\r\n';
+}
+/* equipos/<ID>.txt */
+function leerEquipo(txt){
+  var st={equipo:{},placa:[],checklist:[],lecturas:[],historial:[]},cur=null;
+  lineas(txt,function(sec,arg,k,v,head){
+    if(head){if(sec==='REGISTRO'){cur={id:'',fecha:'',tipo:'',tecnico:'',usuario:'',horometro:null,actividades:[],lectura:{},refacciones:'',obs:''};st.historial.push(cur)}return}
     if(sec==='EQUIPO')st.equipo[k]=v;
     else if(sec==='PLACA')st.placa.push([k,v]);
-    else if(sec==='CONFIG')cfg[k]=v;
-    else if(sec==='USR'){ if(k==='nombre')cur.nombre=v; else if(k==='rol')cur.rol=v; else if(k==='sal')cur.s=v; else if(k==='iv')cur.iv=v; else if(k==='llave_cifrada')cur.ct=v; else if(k==='iteraciones')cur.it=Number(v)||IT; }
-    else if(sec==='REG'){
-      if(k==='actividad')cur.actividades.push(v);
+    else if(sec==='CHECKLIST')st.checklist.push(v);
+    else if(sec==='LECTURAS'){var p=v.split('|');st.lecturas.push([k,(p[0]||k).trim(),(p[1]||'').trim()])}
+    else if(sec==='REGISTRO'){
+      if(k==='id'||k==='fecha'||k==='tipo'||k==='tecnico'||k==='usuario'||k==='refacciones')cur[k]=v;
+      else if(k==='actividad')cur.actividades.push(v);
       else if(k==='horometro')cur.horometro=v===''?null:tNum(v);
       else if(k==='observaciones')cur.obs=v;
-      else{var lk=LEC.find(function(p){return p[1]===k}); if(lk)cur.lectura[lk[0]]=v===''?null:tNum(v); else cur[k]=v}
+      else cur.lectura[k]=tNum(v);
     }
   });
+  var pl=plantilla(st.equipo.id);
+  if(!st.checklist.length)st.checklist=pl.checklist.slice();
+  if(!st.lecturas.length)st.lecturas=pl.lecturas.map(function(x){return x.slice()});
   st.historial.forEach(function(r,i){if(!r.id)r.id='r'+(i+1)});
-  if(cfg.token_cifrado)st.cfg={owner:cfg.cuenta_github,repo:cfg.repositorio,branch:cfg.rama||'main',path:cfg.archivo||ARCHIVO_DATOS,tiv:cfg.token_iv,tct:cfg.token_cifrado,usuarios:usuarios};
   return st;
 }
-function escribirTxt(st){
-  var L=[], q=st.equipo, h=st.historial.slice().sort(function(a,b){return a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0});
+function escribirEquipo(st){
+  var L=[],q=st.equipo,h=st.historial.slice().sort(function(a,b){return a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0});
   function kv(k,v){L.push(k+' = '+tEsc(v))}
-  L.push('# ==========================================================');
-  L.push('# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO');
-  L.push('# Equipo: '+tEsc(q.id)+' · '+tEsc(q.nombre));
-  L.push('# Actualizado: '+new Date().toLocaleString('es-MX'));
-  L.push('# Este archivo lo escribe index.html. Si lo editas a mano,');
-  L.push('# respeta el formato  campo = valor  y los títulos [ ].');
-  L.push('# ==========================================================','');
-  L.push('[EQUIPO]'); Object.keys(q).forEach(function(k){kv(k,q[k])}); L.push('');
-  L.push('[PLACA]'); st.placa.forEach(function(p){kv(String(p[0]).replace(/=/g,'-'),p[1])}); L.push('');
-  L.push('# ---------------- ÍNDICE DE REGISTROS ('+h.length+') ----------------');
-  L.push('# No.  | Fecha      | Tipo                       | Técnico');
+  L.push('# ==========================================================','# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO','# Equipo: '+tEsc(q.id)+' · '+tEsc(q.nombre),'# Actualizado: '+new Date().toLocaleString('es-MX'),'# Formato  campo = valor . Las líneas con # son comentarios.','# ==========================================================','');
+  L.push('[EQUIPO]');['id','nombre','tipo','ubicacion','area'].concat(Object.keys(q).filter(function(k){return ['id','nombre','tipo','ubicacion','area'].indexOf(k)<0})).forEach(function(k){if(q[k]!==undefined)kv(k,q[k])});L.push('');
+  L.push('[PLACA]');st.placa.forEach(function(p){kv(String(p[0]).replace(/=/g,'-'),p[1])});L.push('');
+  L.push('[CHECKLIST]');st.checklist.forEach(function(c){kv('actividad',c)});L.push('');
+  L.push('[LECTURAS]');st.lecturas.forEach(function(x){kv(x[0],x[1]+' | '+x[2])});L.push('');
+  L.push('# ---------------- ÍNDICE DE REGISTROS ('+h.length+') ----------------','# No.  | Fecha      | Tipo                       | Técnico');
   h.forEach(function(r,i){L.push('# '+String(i+1).padStart(4,'0')+' | '+r.fecha+' | '+(r.tipo+'                          ').slice(0,26)+' | '+tEsc(r.tecnico))});
   L.push('');
   h.forEach(function(r,i){
     L.push('[REGISTRO '+String(i+1).padStart(4,'0')+']');
-    kv('id',r.id); kv('fecha',r.fecha); kv('tipo',r.tipo); kv('tecnico',r.tecnico); if(r.usuario)kv('usuario',r.usuario);
+    kv('id',r.id);kv('fecha',r.fecha);kv('tipo',r.tipo);kv('tecnico',r.tecnico);if(r.usuario)kv('usuario',r.usuario);
     kv('horometro',hasN(r.horometro)?r.horometro:'');
     (r.actividades||[]).forEach(function(a){kv('actividad',a)});
-    LEC.forEach(function(p){var v=r.lectura&&r.lectura[p[0]]; if(hasN(v))kv(p[1],v)});
+    Object.keys(r.lectura||{}).forEach(function(k){if(hasN(r.lectura[k]))kv(k,r.lectura[k])});
     if(r.refacciones)kv('refacciones',r.refacciones);
     if(r.obs)kv('observaciones',r.obs);
     L.push('');
   });
-  if(st.cfg){var c=st.cfg;
-    L.push('# ---- Acceso del modo técnico. Todo va cifrado; no modifiques estas secciones ----');
-    L.push('[CONFIG]'); kv('cuenta_github',c.owner); kv('repositorio',c.repo); kv('rama',c.branch); kv('archivo',c.path);
-    kv('token_iv',c.tiv); kv('token_cifrado',c.tct); L.push('');
-    c.usuarios.forEach(function(u){
-      L.push('[USUARIO '+u.u+']'); kv('nombre',u.nombre); kv('rol',u.rol); kv('sal',u.s); kv('iv',u.iv); kv('llave_cifrada',u.ct); kv('iteraciones',u.it); L.push('');
-    });
-  }
   return L.join('\r\n');
 }
 
-/* ───── Cifrado: el token se cifra con una llave maestra; cada usuario guarda esa llave cifrada con su contraseña ───── */
+/* ═════════ Cifrado: token cifrado con llave maestra; cada usuario guarda la llave cifrada con su contraseña ═════════ */
 function b64e(u8){var s='';for(var i=0;i<u8.length;i+=8192)s+=String.fromCharCode.apply(null,u8.subarray(i,i+8192));return btoa(s)}
 function b64d(s){var b=atob(String(s).replace(/\s/g,'')),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
-async function llavePw(pw,salt,it){
-  var base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
-  return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:it,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
-}
+async function llavePw(pw,salt,it){var base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:it,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
 function llaveMaestra(raw){return crypto.subtle.importKey('raw',raw,'AES-GCM',false,['encrypt','decrypt'])}
 async function aesCifrar(key,bytes){var iv=crypto.getRandomValues(new Uint8Array(12));var ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,bytes));return {iv:b64e(iv),ct:b64e(ct)}}
 async function aesDescifrar(key,iv,ct){return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv:b64d(iv)},key,b64d(ct)))}
-async function envolverUsuario(kraw,u,nombre,rol,pw){
-  var salt=crypto.getRandomValues(new Uint8Array(16)), k=await llavePw(pw,salt,IT), e=await aesCifrar(k,kraw);
-  return {u:u,nombre:nombre,rol:rol,s:b64e(salt),iv:e.iv,ct:e.ct,it:IT};
-}
+async function envolverUsuario(kraw,u,nombre,rol,pw){var salt=crypto.getRandomValues(new Uint8Array(16)),k=await llavePw(pw,salt,IT),e=await aesCifrar(k,kraw);return {u:u,nombre:nombre,rol:rol,s:b64e(salt),iv:e.iv,ct:e.ct,it:IT}}
 async function cifrarToken(kraw,token){var e=await aesCifrar(await llaveMaestra(kraw),new TextEncoder().encode(token));return {tiv:e.iv,tct:e.ct}}
 async function entrar(u,pw){
-  var us=(S.cfg.usuarios||[]).find(function(x){return x.u===u});
-  if(!us)throw new Error('x');
+  var us=CFG.usuarios.find(function(x){return x.u===u}); if(!us)throw new Error('x');
   var kraw=await aesDescifrar(await llavePw(pw,b64d(us.s),us.it),us.iv,us.ct);
-  var token=new TextDecoder().decode(await aesDescifrar(await llaveMaestra(kraw),S.cfg.tiv,S.cfg.tct));
+  var token=new TextDecoder().decode(await aesDescifrar(await llaveMaestra(kraw),CFG.tiv,CFG.tct));
   return {u:us.u,nombre:us.nombre,rol:us.rol,token:token,kraw:kraw};
 }
+function guardarSesion(){try{if(SES)sessionStorage.setItem('mto_ses',JSON.stringify({u:SES.u,nombre:SES.nombre,rol:SES.rol,token:SES.token,kraw:b64e(SES.kraw)}));else sessionStorage.removeItem('mto_ses')}catch(e){}}
+function leerSesion(){try{var s=JSON.parse(sessionStorage.getItem('mto_ses')||'null');if(s){s.kraw=b64d(s.kraw);return s}}catch(e){}return null}
 function claveValida(pw){return pw.length>=10&&/[a-zA-Z]/.test(pw)&&/\d/.test(pw)}
 function usuarioValido(u){return /^[a-z0-9._-]{3,20}$/.test(u)}
 
-/* ───── GitHub: lee datos.txt, aplica el cambio y lo vuelve a subir ───── */
-async function gh(token,method,url,body){
-  var r=await fetch('https://api.github.com'+url,{method:method,headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},body:body?JSON.stringify(body):undefined,cache:'no-store'});
+/* ═════════ GitHub ═════════ */
+async function gh(method,url,body,token){
+  var r=await fetch('https://api.github.com'+url,{method:method,headers:{'Authorization':'Bearer '+(token||SES.token),'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},body:body?JSON.stringify(body):undefined,cache:'no-store'});
   var j=null;try{j=await r.json()}catch(e){}
   if(!r.ok){var err=new Error((j&&j.message)||('HTTP '+r.status));err.status=r.status;throw err}
   return j;
 }
-function rutaApi(cfg){return '/repos/'+encodeURIComponent(cfg.owner)+'/'+encodeURIComponent(cfg.repo)+'/contents/'+cfg.path.split('/').map(encodeURIComponent).join('/')}
-async function confirmar(cfg,token,cambio,mensaje){
+function rutaRepo(){var parts=location.pathname.split('/').filter(Boolean);parts.shift();if(parts.length&&/\.html?$/i.test(parts[parts.length-1]))parts.pop();return parts.length?parts.join('/')+'/':''}
+function api(cfg,path){return '/repos/'+encodeURIComponent(cfg.owner)+'/'+encodeURIComponent(cfg.repo)+'/contents/'+(rutaRepo()+path).split('/').map(encodeURIComponent).join('/')}
+/* Lee el archivo más reciente, aplica el cambio y lo sube. cambio(textoActual|null) -> textoNuevo */
+async function escribir(cfg,path,cambio,mensaje,token){
   for(var intento=0;intento<2;intento++){
-    var f=null, st;
-    try{ f=await gh(token,'GET',rutaApi(cfg)+'?ref='+encodeURIComponent(cfg.branch)); }
-    catch(e){ if(e.status!==404||!S)throw e; }
-    st = f ? leerTxt(new TextDecoder().decode(b64d(f.content))) : JSON.parse(JSON.stringify(S));
-    cambio(st);
-    try{
-      var body={message:mensaje,content:b64e(new TextEncoder().encode(escribirTxt(st))),branch:cfg.branch};
-      if(f)body.sha=f.sha;
-      await gh(token,'PUT',rutaApi(cfg),body);
-      return st;
-    }catch(e){ if(e.status!==409||intento===1)throw e; }
+    var f=null;
+    try{f=await gh('GET',api(cfg,path)+'?ref='+encodeURIComponent(cfg.branch),null,token)}catch(e){if(e.status!==404)throw e}
+    var nuevo=cambio(f?new TextDecoder().decode(b64d(f.content)):null);
+    var body={message:mensaje,content:b64e(new TextEncoder().encode(nuevo)),branch:cfg.branch};
+    if(f)body.sha=f.sha;
+    try{await gh('PUT',api(cfg,path),body,token);return nuevo}catch(e){if(e.status!==409||intento===1)throw e}
   }
 }
 function errorTexto(e){
   if(e.status===401)return 'El token de GitHub ya no es válido o venció. El administrador debe renovarlo en Usuarios → Renovar token.';
-  if(e.status===403||e.status===404)return 'El token no tiene permiso para escribir en este repositorio. Revisa que tenga "Contents: Read and write".';
+  if(e.status===403||e.status===404)return 'El token no tiene permiso para escribir en el repositorio. Revisa que tenga "Contents: Read and write".';
   if(e.status===409)return 'Otra persona guardó al mismo tiempo. Intenta de nuevo.';
   if(e instanceof TypeError)return 'Sin conexión a internet. Intenta de nuevo.';
   return 'No se pudo guardar: '+e.message;
 }
+async function accion(fn,okTxt,despues){
+  busy=true;notice=null;render();
+  try{await fn();if(despues)despues();notice={ok:true,t:okTxt}}catch(e){notice={ok:false,t:errorTexto(e)}}
+  busy=false;render();window.scrollTo({top:0});
+}
+function guardarEquipo(cambio,mensaje,okTxt,despues){
+  return accion(async function(){
+    var txt=await escribir(CFG,DIR+EQID+'.txt',function(actual){var st=actual?leerEquipo(actual):JSON.parse(JSON.stringify(EQ));cambio(st);return escribirEquipo(st)},mensaje+' · '+EQID+' · '+SES.u);
+    EQ=leerEquipo(txt);EQSRC='nuevo';
+  },okTxt,despues);
+}
+function guardarConfig(cambio,mensaje,okTxt){
+  return accion(async function(){
+    var txt=await escribir(CFG,F_CONFIG,function(actual){var c=actual?leerConfig(actual):JSON.parse(JSON.stringify(CFG));cambio(c);return escribirConfig(c)},mensaje);
+    CFG=leerConfig(txt);
+  },okTxt);
+}
+async function guardarCatalogo(item){
+  var txt=await escribir(CFG,F_CATALOGO,function(actual){var c=actual?leerCatalogo(actual):CAT.slice();var i=c.findIndex(function(x){return x.id===item.id});if(i>=0)c[i]=item;else c.push(item);return escribirCatalogo(c)},'Catálogo: '+item.id);
+  CAT=leerCatalogo(txt);
+}
 
-/* ───── Vista ───── */
-function readings(l){
-  if(!l)return '';var o=[];
-  function add(t,c){o.push('<span class="rd '+(c||'')+'">'+esc(t)+'</span>')}
-  if(hasN(l.comb))add('Comb '+l.comb+' %',+l.comb<25?'b':+l.comb<50?'w':'');
-  if(hasN(l.aceite))add('Aceite '+l.aceite+' bar',+l.aceite<1.5?'b':+l.aceite<2?'w':'');
-  if(hasN(l.temp))add('Temp '+l.temp+' °C',+l.temp>90?'b':+l.temp>75?'w':'');
-  if(hasN(l.bat))add('Bat '+l.bat+' V',(+l.bat<22||+l.bat>29)?'w':'');
-  if(hasN(l.rpm))add(l.rpm+' RPM');
-  if(hasN(l.hz))add(l.hz+' Hz',Math.abs(+l.hz-60)>1?'w':'');
-  if(hasN(l.kwh))add(l.kwh+' kWh');
-  if(hasN(l.vll))add('L-L '+l.vll+' V');
-  if(hasN(l.vln))add('L-N '+l.vln+' V');
+/* ═════════ Vistas ═════════ */
+function lecturasHTML(l){
+  var o=[];EQ.lecturas.forEach(function(x){var v=l&&l[x[0]];if(hasN(v))o.push('<span class="rd">'+esc(x[1])+': '+esc(v)+(x[2]&&!/V L-|v_linea/.test(x[0]+x[1])?' '+esc(x[2]):'')+'</span>')});
+  Object.keys(l||{}).forEach(function(k){if(hasN(l[k])&&!EQ.lecturas.some(function(x){return x[0]===k}))o.push('<span class="rd">'+esc(k)+': '+esc(l[k])+'</span>')});
   return o.length?'<div class="readings">'+o.join('')+'</div>':'';
 }
 function statusHTML(){
   var h=ordenado(),horo=null;
   h.forEach(function(e){if(hasN(e.horometro)&&(horo===null||+e.horometro>horo))horo=+e.horometro});
-  var mp=h.find(function(e){return /preventivo|correctivo/i.test(e.tipo)}), ult=h[0];
-  var nm=h.filter(function(e){return /preventivo|correctivo/i.test(e.tipo)}).length;
+  var mp=h.find(function(e){return esMant(e.tipo)}),ult=h[0],nm=h.filter(function(e){return esMant(e.tipo)}).length;
   return '<div class="status">'+
    '<div class="stat"><span class="k">Último mantenimiento</span><span class="v">'+(mp?fmtF(mp.fecha):'—')+'</span><span class="s">'+(mp?esc(mp.tipo)+' · '+esc(mp.tecnico):'Aún no registrado')+'</span></div>'+
    '<div class="stat"><span class="k">Mantenimientos</span><span class="v">'+nm+'</span><span class="s">preventivos y correctivos</span></div>'+
    '<div class="stat"><span class="k">Horómetro</span><span class="v">'+(horo!==null?horo.toLocaleString('es-MX')+' h':'—')+'</span><span class="s">lectura más alta</span></div>'+
    '<div class="stat"><span class="k">Último registro</span><span class="v">'+(ult?fmtF(ult.fecha):'—')+'</span><span class="s">'+(ult?esc(ult.tipo):'Sin registros')+'</span></div></div>';
 }
-function pasaFiltro(e){
-  if(filtro==='mant')return /preventivo|correctivo/i.test(e.tipo);
-  if(filtro==='corr')return /correctivo/i.test(e.tipo);
-  if(filtro==='lect')return !/preventivo|correctivo/i.test(e.tipo);
-  return true;
-}
+function pasaFiltro(e){if(filtro==='mant')return esMant(e.tipo);if(filtro==='corr')return /correctivo/i.test(e.tipo);if(filtro==='otros')return !esMant(e.tipo);return true}
 function entryHTML(e){
   var acts=(e.actividades||[]).length?'<ul>'+e.actividades.map(function(a){return '<li>'+esc(a)+'</li>'}).join('')+'</ul>':'';
-  var tools=puedeEditar(e)?'<div class="row"><button class="small" data-act="edit" data-id="'+esc(e.id)+'">Editar</button>'+
+  var tools=puedeEditar(e)&&!LEGACY?'<div class="row"><button class="small" data-act="edit" data-id="'+esc(e.id)+'">Editar</button>'+
     (pendingDelete===e.id?'<button class="small danger" data-act="del-ok" data-id="'+esc(e.id)+'">Confirmar eliminar</button><button class="small" data-act="del-no">Cancelar</button>':'<button class="small danger" data-act="del" data-id="'+esc(e.id)+'">Eliminar</button>')+'</div>':'';
   return '<article class="entry"><div class="entry-h"><span class="date">'+fmtF(e.fecha)+'</span><span class="pill '+pillCls(e.tipo)+'">'+esc(e.tipo)+'</span><span class="who">Realizó: '+esc(e.tecnico)+(hasN(e.horometro)?' · '+esc(e.horometro)+' h':'')+'</span></div>'+
-    readings(e.lectura)+acts+(e.refacciones?'<div class="meta"><b>Refacciones:</b> '+esc(e.refacciones)+'</div>':'')+(e.obs?'<div class="obs">'+esc(e.obs)+'</div>':'')+tools+'</article>';
+    lecturasHTML(e.lectura)+acts+(e.refacciones?'<div class="meta"><b>Refacciones:</b> '+esc(e.refacciones)+'</div>':'')+(e.obs?'<div class="obs">'+esc(e.obs)+'</div>':'')+tools+'</article>';
 }
 function formHTML(){
-  var e=editId?S.historial.find(function(x){return x.id===editId}):null, l=(e&&e.lectura)||{};
+  var e=editId?EQ.historial.find(function(x){return x.id===editId}):null,l=(e&&e.lectura)||{},acts=(e&&e.actividades)||[];
   var hoy=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   function v(x){return hasN(x)?esc(x):''}
-  var acts=(e&&e.actividades)||[];
   return '<form class="panel" id="frm" novalidate><div class="legend">'+(e?'Editar registro':'Registrar trabajo realizado')+'</div>'+
    '<div class="grid">'+
     '<label class="f">Fecha<input type="date" id="f-fecha" value="'+(e?esc(e.fecha):hoy)+'"></label>'+
-    '<label class="f">Tipo<select id="f-tipo">'+TIPOS.map(function(t){return '<option'+((e?e.tipo:TIPOS[1])===t?' selected':'')+'>'+t+'</option>'}).join('')+'</select></label>'+
+    '<label class="f">Tipo<select id="f-tipo">'+TIPOS.concat(e&&TIPOS.indexOf(e.tipo)<0?[e.tipo]:[]).map(function(t){return '<option'+((e?e.tipo:TIPOS[0])===t?' selected':'')+'>'+esc(t)+'</option>'}).join('')+'</select></label>'+
     '<label class="f">Técnico<input id="f-tec" value="'+esc(e?e.tecnico:SES.nombre)+'" readonly></label>'+
     '<label class="f">Horómetro (h)<input id="f-horo" type="number" step="0.01" inputmode="decimal" value="'+(e?v(e.horometro):'')+'"></label></div>'+
-   '<div class="legend">Actividades realizadas</div><div class="checks">'+CHECKS.map(function(c,i){return '<label><input type="checkbox" id="c-'+i+'"'+(acts.indexOf(c)>=0?' checked':'')+'><span>'+esc(c)+'</span></label>'}).join('')+'</div>'+
-   '<label class="f">Otros trabajos realizados (uno por renglón)<textarea id="f-otras">'+esc(acts.filter(function(a){return CHECKS.indexOf(a)<0}).join('\n'))+'</textarea></label>'+
-   '<div class="legend">Lecturas del panel (opcional)</div><div class="grid">'+
-    '<label class="f">Combustible %<input id="l-comb" type="number" inputmode="decimal" value="'+v(l.comb)+'"></label>'+
-    '<label class="f">Presión aceite bar<input id="l-aceite" type="number" step="0.01" inputmode="decimal" value="'+v(l.aceite)+'"></label>'+
-    '<label class="f">Temp. motor °C<input id="l-temp" type="number" inputmode="decimal" value="'+v(l.temp)+'"></label>'+
-    '<label class="f">Baterías V<input id="l-bat" type="number" step="0.01" inputmode="decimal" value="'+v(l.bat)+'"></label>'+
-    '<label class="f">RPM<input id="l-rpm" type="number" inputmode="numeric" value="'+v(l.rpm)+'"></label>'+
-    '<label class="f">Frecuencia Hz<input id="l-hz" type="number" step="0.1" inputmode="decimal" value="'+v(l.hz)+'"></label>'+
-    '<label class="f">Energía kWh<input id="l-kwh" type="number" inputmode="numeric" value="'+v(l.kwh)+'"></label>'+
-    '<label class="f">V L-L (L1L2/L2L3/L3L1)<input id="l-vll" value="'+v(l.vll)+'" placeholder="220 / 220 / 221"></label>'+
-    '<label class="f">V L-N (L1/L2/L3)<input id="l-vln" value="'+v(l.vln)+'" placeholder="127 / 127 / 128"></label></div>'+
-   '<label class="f">Refacciones / consumibles<input id="f-ref" value="'+(e?v(e.refacciones):'')+'" placeholder="Ej. filtro de aceite, 40 L aceite 15W-40"></label>'+
+   '<div class="legend">Actividades realizadas</div>'+checklistHTML(acts)+
+   '<label class="f">Otros trabajos realizados (uno por renglón)<textarea id="f-otras">'+esc(acts.filter(function(a){return EQ.checklist.indexOf(a)<0}).join('\n'))+'</textarea></label>'+
+   (EQ.lecturas.length?'<div class="legend">Lecturas (opcional)</div><div class="grid">'+EQ.lecturas.map(function(x,i){return '<label class="f">'+esc(x[1])+(x[2]?' ('+esc(x[2])+')':'')+'<input id="l-'+i+'" inputmode="'+(/v_linea/.test(x[0])?'text':'decimal')+'" value="'+v(l[x[0]])+'"></label>'}).join('')+'</div>':'')+
+   '<label class="f">Refacciones / consumibles<input id="f-ref" value="'+(e?v(e.refacciones):'')+'" placeholder="Ej. filtro de aceite, 20 L de aceite"></label>'+
    '<label class="f">Observaciones<textarea id="f-obs">'+(e?esc(e.obs):'')+'</textarea></label>'+
    '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':e?'Guardar cambios':'Guardar registro')+'</button>'+(e?'<button type="button" data-act="cancel-edit">Cancelar</button>':'')+'</div></form>';
 }
-function placaHTML(){
-  return '<div class="panel"><div class="legend">Datos de placa</div>'+
-   placaTmp.map(function(p,i){return '<div class="spec-edit"><input id="p-k-'+i+'" value="'+esc(p[0])+'" aria-label="Campo"><input id="p-v-'+i+'" value="'+esc(p[1])+'" aria-label="Valor"><button class="small danger" data-act="p-del" data-i="'+i+'">Quitar</button></div>'}).join('')+
-   '<div class="row"><button class="small" data-act="p-add">+ Agregar dato</button></div>'+
-   '<div class="row"><button class="primary" data-act="p-save"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':'Guardar datos de placa')+'</button><button data-act="go-form">Cancelar</button></div></div>';
+function checklistHTML(acts){
+  var grupos=[],idx={};
+  EQ.checklist.forEach(function(c,i){var m=c.match(/^\[([^\]]+)\]\s*(.*)$/),g=m?m[1]:'',t=m?m[2]:c;if(!(g in idx)){idx[g]=grupos.length;grupos.push({g:g,items:[]})}grupos[idx[g]].items.push({i:i,c:c,t:t})});
+  return grupos.map(function(G){return (G.g?'<div class="grupo">'+esc(G.g)+'</div>':'')+'<div class="checks">'+G.items.map(function(x){return '<label><input type="checkbox" id="c-'+x.i+'"'+(acts.indexOf(x.c)>=0?' checked':'')+'><span>'+esc(x.t)+'</span></label>'}).join('')+'</div>'}).join('');
+}
+function fichaHTML(){
+  var t=fichaTmp;
+  return '<form class="panel" id="fichaf" novalidate><div class="legend">Editar ficha del equipo</div>'+
+   '<div class="grid"><label class="f">Nombre<input id="e-nombre" value="'+esc(t.equipo.nombre)+'"></label>'+
+   '<label class="f">Tipo<input id="e-tipo" value="'+esc(t.equipo.tipo)+'"></label>'+
+   '<label class="f">Ubicación<input id="e-ubic" value="'+esc(t.equipo.ubicacion)+'"></label></div>'+
+   '<div class="legend">Datos de placa</div>'+
+   t.placa.map(function(p,i){return '<div class="spec-edit"><input id="p-k-'+i+'" value="'+esc(p[0])+'" aria-label="Campo"><input id="p-v-'+i+'" value="'+esc(p[1])+'" aria-label="Valor"><button type="button" class="small danger" data-act="p-del" data-i="'+i+'">Quitar</button></div>'}).join('')+
+   '<div class="row"><button type="button" class="small" data-act="p-add">+ Agregar dato</button></div>'+
+   '<label class="f">Actividades del checklist (una por renglón)<textarea id="e-check" rows="8">'+esc(t.checklist.join('\n'))+'</textarea></label>'+
+   '<label class="f">Lecturas a capturar (una por renglón: Nombre | unidad)<textarea id="e-lect" rows="5">'+esc(t.lecturas.map(function(x){return x[1]+(x[2]?' | '+x[2]:'')}).join('\n'))+'</textarea></label>'+
+   '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':'Guardar ficha')+'</button><button type="button" data-act="go-form">Cancelar</button></div></form>';
+}
+function qrHTML(){
+  return '<div class="panel"><div class="legend">Etiquetas QR de '+esc(EQID)+'</div><p class="help">Descarga las dos etiquetas e imprímelas. La pública muestra la ficha; la de técnico abre directo el acceso con usuario.</p>'+
+   '<div class="qrs"><figure><canvas id="qr-pub"></canvas><figcaption><button class="small primary" data-act="qr-dl" data-k="pub">Descargar pública</button></figcaption></figure>'+
+   '<figure><canvas id="qr-tec"></canvas><figcaption><button class="small primary" data-act="qr-dl" data-k="tec">Descargar técnico</button></figcaption></figure></div>'+
+   '<p class="meta" style="margin:0;overflow-wrap:anywhere">'+esc(urlEquipo(EQID))+'</p><div class="row"><button data-act="go-form">Cerrar</button></div></div>';
 }
 function usuariosHTML(){
-  var us=S.cfg.usuarios||[];
-  return '<div class="panel"><div class="legend">Usuarios del modo técnico</div>'+
-   '<div class="users">'+us.map(function(u){
+  return '<div class="panel"><div class="legend">Usuarios del modo técnico</div><p class="help">Los usuarios sirven para todos los equipos.</p>'+
+   '<div class="users">'+CFG.usuarios.map(function(u){
      return '<div class="urow"><div><b>'+esc(u.nombre)+'</b><div class="meta">Usuario: '+esc(u.u)+' · '+(u.rol==='admin'?'Administrador':'Técnico')+'</div></div>'+
-       (u.u===SES.u?'<span class="meta">Tú</span>':(pendingUser===u.u?'<div class="row"><button class="small danger" data-act="u-del-ok" data-u="'+esc(u.u)+'">Confirmar quitar</button><button class="small" data-act="u-del-no">Cancelar</button></div>':'<button class="small danger" data-act="u-del" data-u="'+esc(u.u)+'">Quitar</button>'))+'</div>';
-   }).join('')+'</div>'+
-   '<form id="ufrm" novalidate style="display:grid;gap:12px"><div class="legend">Agregar usuario o cambiar contraseña</div>'+
-    '<div class="grid">'+
-     '<label class="f">Usuario<input id="u-u" autocapitalize="off" autocomplete="off" placeholder="ej. brandon"></label>'+
-     '<label class="f">Nombre completo<input id="u-nombre" placeholder="Nombre del técnico"></label>'+
-     '<label class="f">Rol<select id="u-rol"><option value="tecnico">Técnico</option><option value="admin">Administrador</option></select></label></div>'+
-    '<div class="grid">'+
-     '<label class="f">Contraseña<input id="u-pw" type="password" autocomplete="new-password"></label>'+
-     '<label class="f">Repite la contraseña<input id="u-pw2" type="password" autocomplete="new-password"></label></div>'+
+      (u.u===SES.u?'<span class="meta">Tú</span>':(pendingUser===u.u?'<div class="row"><button class="small danger" data-act="u-del-ok" data-u="'+esc(u.u)+'">Confirmar quitar</button><button class="small" data-act="u-del-no">Cancelar</button></div>':'<button class="small danger" data-act="u-del" data-u="'+esc(u.u)+'">Quitar</button>'))+'</div>'}).join('')+'</div>'+
+   '<form id="ufrm" novalidate class="sub"><div class="legend">Agregar usuario o cambiar contraseña</div>'+
+    '<div class="grid"><label class="f">Usuario<input id="u-u" autocapitalize="off" autocomplete="off" placeholder="ej. brandon"></label>'+
+    '<label class="f">Nombre completo<input id="u-nombre"></label>'+
+    '<label class="f">Rol<select id="u-rol"><option value="tecnico">Técnico</option><option value="admin">Administrador</option></select></label></div>'+
+    '<div class="grid"><label class="f">Contraseña<input id="u-pw" type="password" autocomplete="new-password"></label><label class="f">Repite la contraseña<input id="u-pw2" type="password" autocomplete="new-password"></label></div>'+
     '<p class="help">Mínimo 10 caracteres, con letras y números. Si el usuario ya existe, se le cambia la contraseña.</p>'+
     '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':'Guardar usuario')+'</button></div></form>'+
-   '<form id="tfrm" novalidate style="display:grid;gap:12px;border-top:1px solid var(--line);padding-top:14px"><div class="legend">Renovar token de GitHub</div>'+
-    '<p class="help">Cuando venza el token, genera uno nuevo y pégalo aquí. Los usuarios y contraseñas no cambian.</p>'+
+   '<form id="tfrm" novalidate class="sub"><div class="legend">Renovar token de GitHub</div><p class="help">Cuando venza el token, pega aquí uno nuevo. Los usuarios no cambian.</p>'+
     '<label class="f">Token nuevo<input id="t-token" type="password" autocomplete="off" placeholder="github_pat_…"></label>'+
-    '<div class="row"><button type="submit"'+(busy?' disabled':'')+'>Guardar token</button><button type="button" data-act="go-form">Cerrar</button></div></form></div>';
+    '<div class="row"><button type="submit"'+(busy?' disabled':'')+'>Guardar token</button><button type="button" data-act="cerrar">Cerrar</button></div></form></div>';
 }
-function adivinar(){
-  var h=location.hostname, partes=location.pathname.split('/').filter(Boolean);
-  var owner=/\.github\.io$/i.test(h)?h.split('.')[0]:'';
-  var repo=owner?(partes[0]||(owner+'.github.io')):'';
-  var resto=owner&&partes[0]?partes.slice(1):partes;
-  if(resto.length&&/\.html?$/i.test(resto[resto.length-1]))resto=resto.slice(0,-1);
-  return {owner:owner,repo:repo,path:resto.concat([ARCHIVO_DATOS]).join('/'),branch:'main'};
+function nuevoEqHTML(pre){
+  return '<form class="panel" id="nfrm" novalidate><div class="legend">Dar de alta un equipo</div>'+
+   '<div class="grid"><label class="f">ID del equipo<input id="n-id" value="'+esc(pre||'')+'" autocapitalize="characters" placeholder="CGR-CMP-054"></label>'+
+   '<label class="f">Nombre<input id="n-nombre" placeholder="Compresor Quincy 30 HP #54"></label>'+
+   '<label class="f">Ubicación<input id="n-ubic" value="Planta 1"></label>'+
+   '<label class="f">Tipo<input id="n-tipo" placeholder="Compresor de aire"></label></div>'+
+   '<p class="help">El ID va en mayúsculas con guiones, por ejemplo CGR-CMP-054. La segunda parte define el checklist inicial: CMP = compresor, PEM = planta de emergencia, CLI = aire acondicionado, ELE = electrodoméstico; cualquier otra usa uno general. Todo se puede editar después.</p>'+
+   '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Creando…':'Crear equipo')+'</button><button type="button" data-act="cerrar">Cancelar</button></div></form>';
 }
 function configHTML(){
-  if(S.cfg)return '<div class="panel"><div class="legend">Configuración</div><p class="help">El modo técnico ya está configurado. Para agregar técnicos o renovar el token, entra como administrador y abre Usuarios.</p><div class="row"><button class="primary" data-act="login">Entrar</button><button data-act="login-close">Cerrar</button></div></div>';
-  var c=adivinar();
-  return '<form class="panel" id="cfgf" novalidate><div class="legend">Configurar modo técnico</div>'+
-   '<p class="help">Se hace una sola vez. Crea la cuenta del administrador; después él da de alta a los técnicos.</p>'+
-   '<div class="grid">'+
-    '<label class="f">Cuenta de GitHub<input id="g-owner" value="'+esc(c.owner)+'" autocapitalize="off"></label>'+
-    '<label class="f">Repositorio<input id="g-repo" value="'+esc(c.repo)+'" autocapitalize="off"></label>'+
-    '<label class="f">Rama<input id="g-branch" value="main" autocapitalize="off"></label>'+
-    '<label class="f">Archivo de datos<input id="g-path" value="'+esc(c.path)+'" autocapitalize="off"></label></div>'+
+  if(CFG)return '<div class="panel"><div class="legend">Configuración</div><p class="help">El modo técnico ya está configurado. Para agregar técnicos o renovar el token, entra como administrador y abre Usuarios.</p><div class="row"><button class="primary" data-act="login">Entrar</button><button data-act="cerrar">Cerrar</button></div></div>';
+  var h=location.hostname,parts=location.pathname.split('/').filter(Boolean),owner=/\.github\.io$/i.test(h)?h.split('.')[0]:'',repo=owner?(parts[0]||owner+'.github.io'):'';
+  return '<form class="panel" id="cfgf" novalidate><div class="legend">Configurar modo técnico</div><p class="help">Se hace una sola vez para todos los equipos.</p>'+
+   '<div class="grid"><label class="f">Cuenta de GitHub<input id="g-owner" value="'+esc(owner)+'" autocapitalize="off"></label><label class="f">Repositorio<input id="g-repo" value="'+esc(repo)+'" autocapitalize="off"></label><label class="f">Rama<input id="g-branch" value="main" autocapitalize="off"></label></div>'+
    '<label class="f">Token de GitHub (fine-grained)<input id="g-token" type="password" autocomplete="off" placeholder="github_pat_…"></label>'+
-   '<div class="legend">Administrador</div>'+
-   '<div class="grid">'+
-    '<label class="f">Usuario<input id="a-u" autocapitalize="off" autocomplete="off" placeholder="ej. cgil"></label>'+
-    '<label class="f">Nombre completo<input id="a-nombre"></label>'+
-    '<label class="f">Contraseña<input id="a-pw" type="password" autocomplete="new-password"></label>'+
-    '<label class="f">Repite la contraseña<input id="a-pw2" type="password" autocomplete="new-password"></label></div>'+
+   '<div class="legend">Administrador</div><div class="grid"><label class="f">Usuario<input id="a-u" autocapitalize="off" autocomplete="off"></label><label class="f">Nombre completo<input id="a-nombre"></label><label class="f">Contraseña<input id="a-pw" type="password" autocomplete="new-password"></label><label class="f">Repite la contraseña<input id="a-pw2" type="password" autocomplete="new-password"></label></div>'+
    '<p class="help">Usuario: 3 a 20 letras minúsculas o números. Contraseña: mínimo 10 caracteres, con letras y números.</p>'+
-   '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':'Guardar configuración')+'</button><button type="button" data-act="login-close">Cancelar</button></div></form>';
+   '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Guardando…':'Guardar configuración')+'</button><button type="button" data-act="cerrar">Cancelar</button></div></form>';
 }
 function loginHTML(){
-  if(!S.cfg)return '<div class="panel"><div class="legend">Modo técnico</div><p class="help">El modo técnico todavía no está configurado. El jefe de mantenimiento debe configurarlo una vez.</p><div class="row"><button class="primary" data-act="config">Configurar</button><button data-act="login-close">Cancelar</button></div></div>';
-  return '<form class="panel" id="login" novalidate><div class="legend">Modo técnico</div>'+
-   '<div class="grid"><label class="f">Usuario<input id="lg-u" autocapitalize="off" autocomplete="username"></label>'+
-   '<label class="f">Contraseña<input id="lg-pw" type="password" autocomplete="current-password"></label></div>'+
-   '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Verificando…':'Entrar')+'</button><button type="button" data-act="login-close">Cancelar</button></div></form>';
+  if(!CFG)return '<div class="panel"><div class="legend">Modo técnico</div><p class="help">El modo técnico todavía no está configurado.</p><div class="row"><button class="primary" data-act="config">Configurar</button><button data-act="cerrar">Cancelar</button></div></div>';
+  return '<form class="panel" id="login" novalidate><div class="legend">Modo técnico</div><div class="grid"><label class="f">Usuario<input id="lg-u" autocapitalize="off" autocomplete="username"></label><label class="f">Contraseña<input id="lg-pw" type="password" autocomplete="current-password"></label></div>'+
+   '<div class="row"><button type="submit" class="primary"'+(busy?' disabled':'')+'>'+(busy?'Verificando…':'Entrar')+'</button><button type="button" data-act="cerrar">Cancelar</button></div></form>';
 }
-
+function migrarHTML(){
+  return '<div class="panel"><div class="legend">Actualizar al sistema de varios equipos</div><p class="help">Tus usuarios y registros están en el archivo anterior datos.txt. Este paso los pasa a config.txt, equipos.txt y equipos/'+esc(EQ?EQ.equipo.id:'')+'.txt. No se pierde nada y datos.txt queda como respaldo.</p>'+
+   '<div class="row"><button class="primary" data-act="migrar"'+(busy?' disabled':'')+'>'+(busy?'Actualizando…':'Actualizar ahora')+'</button></div></div>';
+}
+function techbar(){
+  return '<div class="techbar">'+(SES?'<span class="meta">Sesión: <b>'+esc(SES.nombre)+'</b> ('+(esAdmin()?'administrador':'técnico')+')</span><div class="row">'+
+    (EQ&&!LEGACY&&view!=='form'?'<button data-act="go-form" class="primary">Nuevo registro</button>':'')+
+    (esAdmin()&&EQ&&!LEGACY&&view!=='ficha'?'<button data-act="go-ficha">Editar ficha</button>':'')+
+    (esAdmin()&&EQ&&!LEGACY&&view!=='qr'?'<button data-act="go-qr">Etiquetas QR</button>':'')+
+    (esAdmin()&&!EQ&&!LEGACY&&view!=='nuevo'?'<button data-act="go-nuevo" class="primary">+ Nuevo equipo</button>':'')+
+    (esAdmin()&&!LEGACY&&view!=='usuarios'?'<button data-act="go-usuarios">Usuarios</button>':'')+
+    '<button data-act="logout">Salir</button></div>'
+   :'<span class="meta">Consulta pública · solo lectura</span>'+(view!=='login'&&view!=='config'?'<button data-act="login">Modo técnico</button>':''))+'</div>';
+}
+function msgHTML(){return notice?'<div class="msg '+(notice.ok?'ok':'err')+'" role="status">'+esc(notice.t)+'</div>':''}
 function render(){
-  if(!S){$('app').innerHTML='<main class="wrap"><div class="empty">'+(notice?esc(notice.t):'Cargando ficha del equipo…')+'</div></main>';return}
-  var q=S.equipo, h=ordenado(), hf=h.filter(pasaFiltro);
-  var html='<main class="wrap"><header class="plate"><div class="stripe"></div><div class="plate-in">'+
-   '<span class="eyebrow">'+esc(q.ubicacion)+' · '+esc(q.subtitulo)+'</span><h1>'+esc(q.nombre)+'</h1>'+
-   '<div class="tags"><span class="tag id">'+esc(q.id)+'</span><span class="tag">'+esc(val('Modelo'))+'</span><span class="tag">'+esc(val('Voltaje'))+' · 3Φ</span><span class="tag">'+esc(val('Frecuencia'))+'</span></div></div></header>'+
-   (notice?'<div class="msg '+(notice.ok?'ok':'err')+'" role="status">'+esc(notice.t)+'</div>':'')+
-   statusHTML()+
-   '<section><h2>Ficha técnica</h2><dl class="specs">'+S.placa.map(function(p){return '<div><dt>'+esc(p[0])+'</dt><dd>'+esc(p[1])+'</dd></div>'}).join('')+'</dl></section>';
-  if(view==='config') html+=configHTML();
-  if(view==='login'&&!SES) html+=loginHTML();
-  if(SES&&view==='placa'&&esAdmin()) html+=placaHTML();
-  if(SES&&view==='usuarios'&&esAdmin()) html+=usuariosHTML();
-  if(SES&&view==='form') html+=formHTML();
+  document.title=EQ?(EQ.equipo.id+' · '+EQ.equipo.nombre):'Fichas Técnicas de Mantenimiento';
+  var html='<main class="wrap">';
+  if(cargando){$('app').innerHTML=html+'<div class="empty">Cargando…</div></main>';return}
+  if(!EQID){ /* Catálogo */
+    var q=buscar.toLowerCase(),lista=CAT.filter(function(e){return !q||(e.id+' '+e.nombre+' '+e.ubicacion+' '+e.tipo).toLowerCase().indexOf(q)>=0});
+    html+='<header class="plate"><div class="stripe"></div><div class="plate-in"><span class="eyebrow">Mantenimiento Industrial</span><h1>Fichas técnicas de equipos</h1><div class="tags"><span class="tag id">'+CAT.length+' equipos</span></div></div></header>'+msgHTML();
+    if(LEGACY&&esAdmin())html+=migrarHTML();
+    if(view==='login'&&!SES)html+=loginHTML();
+    if(view==='config')html+=configHTML();
+    if(view==='nuevo'&&esAdmin())html+=nuevoEqHTML('');
+    if(view==='usuarios'&&esAdmin())html+=usuariosHTML();
+    html+='<section><label class="f">Buscar equipo<input id="buscar" value="'+esc(buscar)+'" placeholder="ID, nombre o ubicación" autocomplete="off"></label>'+
+     (lista.length?'<div class="cat">'+lista.map(function(e){return '<a class="eq" href="?equipo='+encodeURIComponent(e.id)+'" data-eq="'+esc(e.id)+'"><span class="tag id">'+esc(e.id)+'</span><b>'+esc(e.nombre)+'</b><span class="meta">'+esc([e.tipo,e.ubicacion].filter(Boolean).join(' · '))+'</span></a>'}).join('')+'</div>'
+       :'<div class="empty">'+(CAT.length?'Ningún equipo coincide con la búsqueda.':'Todavía no hay equipos en el catálogo.')+'</div>')+'</section>';
+    html+=techbar()+'<footer>Mantenimiento Industrial</footer></main>';
+    $('app').innerHTML=html;return;
+  }
+  html+='<a class="back" href="./" data-act="catalogo">← Todos los equipos</a>';
+  if(!EQ){
+    html+='<header class="plate"><div class="stripe"></div><div class="plate-in"><span class="eyebrow">Equipo no encontrado</span><h1>'+esc(EQID)+'</h1></div></header>'+msgHTML()+
+      '<div class="empty">Este equipo todavía no tiene ficha. '+(esAdmin()?'Dalo de alta abajo.':'Avisa al jefe de mantenimiento.')+'</div>';
+    if(view==='login'&&!SES)html+=loginHTML();
+    if(esAdmin()&&!LEGACY)html+=nuevoEqHTML(EQID);
+    html+=techbar()+'</main>';$('app').innerHTML=html;return;
+  }
+  var e=EQ.equipo,h=ordenado(),hf=h.filter(pasaFiltro);
+  html+='<header class="plate"><div class="stripe"></div><div class="plate-in"><span class="eyebrow">'+esc([e.ubicacion,e.tipo].filter(Boolean).join(' · '))+'</span><h1>'+esc(e.nombre)+'</h1>'+
+   '<div class="tags"><span class="tag id">'+esc(e.id)+'</span>'+['Marca','Modelo','Potencia','Voltaje'].map(function(k){var v=val(k);return v&&!/por capturar/i.test(v)?'<span class="tag">'+esc(v)+'</span>':''}).join('')+'</div></div></header>'+
+   msgHTML()+(LEGACY&&esAdmin()?migrarHTML():'')+(LEGACY&&SES&&!esAdmin()?'<div class="msg err">El administrador debe actualizar el sistema antes de que se puedan guardar registros.</div>':'')+statusHTML()+
+   '<section><h2>Ficha técnica</h2><dl class="specs">'+EQ.placa.map(function(p){return '<div><dt>'+esc(p[0])+'</dt><dd>'+esc(p[1])+'</dd></div>'}).join('')+'</dl></section>';
+  if(view==='config')html+=configHTML();
+  if(view==='login'&&!SES)html+=loginHTML();
+  if(SES&&!LEGACY){
+    if(view==='ficha'&&esAdmin())html+=fichaHTML();
+    if(view==='qr'&&esAdmin())html+=qrHTML();
+    if(view==='usuarios'&&esAdmin())html+=usuariosHTML();
+    if(view==='form')html+=formHTML();
+  }
   html+='<section><h2>Mantenimientos realizados <small>'+hf.length+' de '+h.length+'</small></h2>'+
    '<div class="chips" role="group" aria-label="Filtrar historial">'+FILTROS.map(function(f){return '<button class="chip" data-act="filtro" data-f="'+f[0]+'" aria-pressed="'+(filtro===f[0])+'">'+f[1]+'</button>'}).join('')+'</div>'+
    (hf.length?'<div class="log">'+hf.map(entryHTML).join('')+'</div>':'<div class="empty">'+(h.length?'No hay registros de este tipo.':'Todavía no hay mantenimientos registrados.')+'</div>')+'</section>';
-  html+='<div class="techbar">'+(SES?'<span class="meta">Sesión: <b>'+esc(SES.nombre)+'</b> ('+(esAdmin()?'administrador':'técnico')+')</span><div class="row">'+
-      (view!=='form'?'<button data-act="go-form" class="primary">Nuevo registro</button>':'')+
-      (esAdmin()&&view!=='placa'?'<button data-act="go-placa">Editar placa</button>':'')+
-      (esAdmin()&&view!=='usuarios'?'<button data-act="go-usuarios">Usuarios</button>':'')+
-      '<button data-act="logout">Salir</button></div>'
-    :'<span class="meta">Consulta pública · solo lectura</span>'+(view!=='login'&&view!=='config'?'<button data-act="login">Modo técnico</button>':''))+'</div>'+
-   '<footer>'+esc(q.area)+' · '+esc(q.ubicacion)+'</footer></main>';
+  html+=techbar()+'<footer>'+esc(e.area||'Mantenimiento Industrial')+' · '+esc(e.ubicacion||'')+'</footer></main>';
   $('app').innerHTML=html;
   if(view==='login'&&$('lg-u')&&!busy)$('lg-u').focus();
+  if(view==='qr')dibujarQRs();
 }
 
-async function guardar(cambio,mensaje,okTxt,despues){
-  busy=true;notice=null;render();
-  try{
-    S=await confirmar(S.cfg,SES.token,cambio,mensaje);
-    if(despues)despues();
-    notice={ok:true,t:okTxt};
-  }catch(e){notice={ok:false,t:errorTexto(e)}}
-  busy=false;render();window.scrollTo({top:0});
+/* ═════════ Etiquetas QR (se generan en el navegador) ═════════ */
+var qrLib=null;
+function cargarQR(){if(qrLib)return qrLib;qrLib=new Promise(function(ok,err){var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';s.onload=function(){ok(window.qrcode)};s.onerror=function(){qrLib=null;err(new Error('qr'))};document.head.appendChild(s)});return qrLib}
+function etiqueta(canvas,url,titulo,sub,oscuro){
+  var qr=window.qrcode(0,'H');qr.addData(url);qr.make();
+  var n=qr.getModuleCount(),cell=12,quiet=4,size=(n+quiet*2)*cell,top=110,bottom=110,W=size,H=size+top+bottom;
+  canvas.width=W;canvas.height=H;var c=canvas.getContext('2d');
+  c.fillStyle='#ffffff';c.fillRect(0,0,W,H);
+  c.fillStyle=oscuro?'#1f2a36':'#f2b705';c.fillRect(0,0,W,top);
+  c.fillStyle=oscuro?'#ffffff':'#000000';c.textAlign='center';c.textBaseline='middle';
+  c.font='bold 44px Arial, sans-serif';c.fillText(titulo,W/2,42);
+  c.font='26px Arial, sans-serif';c.fillText((EQID+' · '+EQ.equipo.nombre).slice(0,44),W/2,85);
+  c.fillStyle='#000000';
+  for(var r=0;r<n;r++)for(var k=0;k<n;k++)if(qr.isDark(r,k))c.fillRect((k+quiet)*cell,top+(r+quiet)*cell,cell,cell);
+  c.font='bold 26px Arial, sans-serif';c.fillText(sub,W/2,top+size+38);
+  c.fillStyle='#555555';c.font='22px Arial, sans-serif';c.fillText('Mantenimiento Industrial · '+(EQ.equipo.ubicacion||''),W/2,top+size+80);
 }
-function num(id){var v=$(id).value.trim();return v===''?null:Number(v)}
+function dibujarQRs(){
+  cargarQR().then(function(){
+    var a=$('qr-pub'),b=$('qr-tec');if(!a||!b)return;
+    etiqueta(a,urlEquipo(EQID),'FICHA TÉCNICA','Escanea para ver datos e historial',true);
+    etiqueta(b,urlEquipo(EQID)+'#tecnico','MODO TÉCNICO','Solo mantenimiento · requiere usuario',false);
+  }).catch(function(){notice={ok:false,t:'No se pudo cargar el generador de QR. Revisa tu conexión.'};view='form';render()});
+}
+
+/* ═════════ Carga ═════════ */
+async function cargar(){
+  cargando=true;render();
+  var p=new URLSearchParams(location.search);EQID=normId(p.get('equipo')||p.get('eq')||'')||null;
+  var r=await Promise.all([txtFetch(F_CONFIG).catch(function(){return null}),txtFetch(F_CATALOGO).catch(function(){return null}),EQID?txtFetch(DIR+EQID+'.txt').catch(function(){return null}):null]);
+  CFG=r[0]?leerConfig(r[0]):null;CAT=r[1]?leerCatalogo(r[1]):[];EQ=r[2]?leerEquipo(r[2]):null;EQSRC=r[2]?'nuevo':null;LEGACY=false;
+  if(!CFG||(!EQ&&EQID)||!r[1]){ /* versión anterior: datos.txt */
+    var viejo=await txtFetch(F_VIEJO).catch(function(){return null});
+    if(viejo){
+      var vc=leerConfig(viejo),ve=leerEquipo(viejo);
+      if(!CFG&&vc){CFG=vc;LEGACY=true}
+      if(!r[1]&&ve.equipo.id&&!CAT.some(function(x){return x.id===ve.equipo.id}))CAT.push({id:ve.equipo.id,nombre:ve.equipo.nombre,ubicacion:ve.equipo.ubicacion||'',tipo:ve.equipo.tipo||plantilla(ve.equipo.id).tipo});
+      if(!EQ&&EQID===ve.equipo.id){EQ=ve;EQSRC='viejo'}
+      if(LEGACY)window.__viejo=ve;
+    }
+  }
+  cargando=false;
+  if(location.hash==='#tecnico')view=SES?'form':'login';else if(location.hash==='#configurar')view='config';else if(SES&&EQ)view='form';else view='pub';
+  render();
+}
+function irA(id){
+  history.pushState(null,'',id?'?equipo='+encodeURIComponent(id):location.pathname);
+  notice=null;editId=null;filtro='todos';window.scrollTo({top:0});cargar();
+}
+
+/* ═════════ Eventos ═════════ */
+function num(id){var v=$(id).value.trim();return v===''?null:tNum(v)}
 function txt(id){return $(id).value.trim()}
 function aviso(t){notice={ok:false,t:t};render();window.scrollTo({top:0})}
 
+document.addEventListener('input',function(ev){if(ev.target.id==='buscar'){buscar=ev.target.value;var pos=ev.target.selectionStart;render();var b=$('buscar');b.focus();try{b.setSelectionRange(pos,pos)}catch(e){}}});
 document.addEventListener('submit',async function(ev){
-  ev.preventDefault(); if(busy)return;
-  var id=ev.target.id;
+  ev.preventDefault();if(busy)return;var id=ev.target.id;
   if(id==='login'){
-    var u=txt('lg-u').toLowerCase(), pw=$('lg-pw').value; busy=true; render();
-    try{ SES=await entrar(u,pw); view='form'; notice={ok:true,t:'Bienvenido, '+SES.nombre+'.'}; }
-    catch(e){ notice={ok:false,t:'Usuario o contraseña incorrectos.'}; }
-    busy=false; render(); return;
+    var u=txt('lg-u').toLowerCase(),pw=$('lg-pw').value;busy=true;render();
+    try{SES=await entrar(u,pw);guardarSesion();view=EQ?'form':'pub';notice={ok:true,t:'Bienvenido, '+SES.nombre+'.'}}catch(e){notice={ok:false,t:'Usuario o contraseña incorrectos.'}}
+    busy=false;render();return;
   }
   if(id==='cfgf'){
-    var cfg={owner:txt('g-owner'),repo:txt('g-repo'),branch:txt('g-branch')||'main',path:txt('g-path').replace(/^\/+/,'')||ARCHIVO_DATOS,usuarios:[]};
-    var tok=txt('g-token'), au=txt('a-u').toLowerCase(), an=txt('a-nombre'), p1=$('a-pw').value, p2=$('a-pw2').value;
+    var cfg={owner:txt('g-owner'),repo:txt('g-repo'),branch:txt('g-branch')||'main',usuarios:[]},tok=txt('g-token'),au=txt('a-u').toLowerCase(),an=txt('a-nombre'),p1=$('a-pw').value,p2=$('a-pw2').value;
     if(!cfg.owner||!cfg.repo||!tok)return aviso('Faltan la cuenta de GitHub, el repositorio o el token.');
     if(!usuarioValido(au))return aviso('El usuario debe tener de 3 a 20 letras minúsculas o números, sin espacios.');
     if(!an)return aviso('Falta el nombre del administrador.');
     if(p1!==p2)return aviso('Las contraseñas no coinciden.');
     if(!claveValida(p1))return aviso('La contraseña debe tener al menos 10 caracteres, con letras y números.');
-    busy=true;notice=null;render();
-    try{
-      var kraw=crypto.getRandomValues(new Uint8Array(32));
-      var t=await cifrarToken(kraw,tok); cfg.tiv=t.tiv; cfg.tct=t.tct;
-      cfg.usuarios=[await envolverUsuario(kraw,au,an,'admin',p1)];
-      S=await confirmar(cfg,tok,function(st){st.cfg=cfg},'Configura modo técnico (administrador '+au+')');
-      SES={u:au,nombre:an,rol:'admin',token:tok,kraw:kraw}; view='usuarios';
-      notice={ok:true,t:'Configuración guardada. Ahora da de alta a los técnicos.'};
-    }catch(e){notice={ok:false,t:errorTexto(e)}}
-    busy=false;render();return;
+    busy=true;render();
+    var kraw=crypto.getRandomValues(new Uint8Array(32)),t=await cifrarToken(kraw,tok);cfg.tiv=t.tiv;cfg.tct=t.tct;cfg.usuarios=[await envolverUsuario(kraw,au,an,'admin',p1)];busy=false;
+    await accion(async function(){await escribir(cfg,F_CONFIG,function(){return escribirConfig(cfg)},'Configura modo técnico',tok);CFG=cfg;SES={u:au,nombre:an,rol:'admin',token:tok,kraw:kraw};guardarSesion();view='usuarios'},'Configuración guardada. Ahora da de alta a los técnicos.');
+    return;
   }
   if(id==='ufrm'&&esAdmin()){
-    var nu=txt('u-u').toLowerCase(), nn=txt('u-nombre'), rol=$('u-rol').value, q1=$('u-pw').value, q2=$('u-pw2').value;
+    var nu=txt('u-u').toLowerCase(),nn=txt('u-nombre'),rol=$('u-rol').value,q1=$('u-pw').value,q2=$('u-pw2').value,existe=CFG.usuarios.find(function(x){return x.u===nu});
     if(!usuarioValido(nu))return aviso('El usuario debe tener de 3 a 20 letras minúsculas o números, sin espacios.');
-    var existe=(S.cfg.usuarios||[]).find(function(x){return x.u===nu});
-    if(!nn&&existe)nn=existe.nombre;
-    if(!nn)return aviso('Falta el nombre completo.');
+    if(!nn&&existe)nn=existe.nombre;if(!nn)return aviso('Falta el nombre completo.');
     if(q1!==q2)return aviso('Las contraseñas no coinciden.');
     if(!claveValida(q1))return aviso('La contraseña debe tener al menos 10 caracteres, con letras y números.');
-    busy=true;render();
-    var nuevo=await envolverUsuario(SES.kraw,nu,nn,rol,q1);
-    busy=false;
-    await guardar(function(st){
-      var l=st.cfg.usuarios, i=l.findIndex(function(x){return x.u===nu});
-      if(i>=0)l[i]=nuevo; else l.push(nuevo);
-    },(existe?'Cambia contraseña de ':'Agrega usuario ')+nu,(existe?'Contraseña actualizada para ':'Usuario creado: ')+nu+'.');
+    busy=true;render();var nuevo=await envolverUsuario(SES.kraw,nu,nn,rol,q1);busy=false;
+    await guardarConfig(function(c){var i=c.usuarios.findIndex(function(x){return x.u===nu});if(i>=0)c.usuarios[i]=nuevo;else c.usuarios.push(nuevo)},(existe?'Cambia contraseña de ':'Agrega usuario ')+nu,(existe?'Contraseña actualizada para ':'Usuario creado: ')+nu+'.');
     return;
   }
   if(id==='tfrm'&&esAdmin()){
-    var nt=txt('t-token'); if(!nt)return aviso('Pega el token nuevo.');
-    busy=true;render();
-    var tc=await cifrarToken(SES.kraw,nt); busy=false;
-    var viejo=SES.token; SES.token=nt;
-    await guardar(function(st){st.cfg.tiv=tc.tiv;st.cfg.tct=tc.tct},'Renueva token de GitHub','Token renovado.');
-    if(notice&&!notice.ok)SES.token=viejo;
+    var nt=txt('t-token');if(!nt)return aviso('Pega el token nuevo.');
+    busy=true;render();var tc=await cifrarToken(SES.kraw,nt);busy=false;var viejoTok=SES.token;SES.token=nt;
+    await guardarConfig(function(c){c.tiv=tc.tiv;c.tct=tc.tct},'Renueva token de GitHub','Token renovado.');
+    if(notice&&!notice.ok)SES.token=viejoTok;else guardarSesion();
+    return;
+  }
+  if(id==='nfrm'&&esAdmin()){
+    var nid=normId(txt('n-id')),nnom=txt('n-nombre'),nub=txt('n-ubic'),pl=plantilla(nid),ntipo=txt('n-tipo')||pl.tipo;
+    if(!idValido(nid))return aviso('El ID debe ir en mayúsculas con guiones, por ejemplo CGR-CMP-054.');
+    if(!nnom)return aviso('Falta el nombre del equipo.');
+    if(CAT.some(function(x){return x.id===nid}))return aviso('Ya existe un equipo con el ID '+nid+'.');
+    var st={equipo:{id:nid,nombre:nnom,tipo:ntipo,ubicacion:nub,area:'Mantenimiento Industrial'},placa:[['Marca','Por capturar'],['Modelo','Por capturar'],['No. de serie','Por capturar'],['Potencia','Por capturar'],['Voltaje','Por capturar'],['Año de fabricación','Por capturar']],checklist:pl.checklist.slice(),lecturas:pl.lecturas.map(function(x){return x.slice()}),historial:[]};
+    await accion(async function(){
+      await escribir(CFG,DIR+nid+'.txt',function(actual){return actual||escribirEquipo(st)},'Alta de equipo '+nid+' · '+SES.u);
+      await guardarCatalogo({id:nid,nombre:nnom,ubicacion:nub,tipo:ntipo});
+    },'Equipo '+nid+' creado. Llena sus datos de placa con "Editar ficha" y descarga sus etiquetas QR.',function(){history.pushState(null,'','?equipo='+encodeURIComponent(nid))});
+    if(notice&&notice.ok){var keep=notice;await cargar();notice=keep;view='ficha';fichaTmp=JSON.parse(JSON.stringify(EQ));render()}
+    return;
+  }
+  if(id==='fichaf'&&esAdmin()){
+    syncFicha();var t2=fichaTmp;
+    t2.checklist=txt('e-check').split('\n').map(function(s){return s.trim()}).filter(Boolean);
+    var usadas={};t2.lecturas=txt('e-lect').split('\n').map(function(s){return s.trim()}).filter(Boolean).map(function(s){
+      var p=s.split('|'),nom=p[0].trim(),uni=(p[1]||'').trim(),old=EQ.lecturas.find(function(x){return x[1]===nom});
+      var k=old?old[0]:(nom+(uni?'_'+uni:'')).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/%/g,'pct').replace(/°/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+      while(usadas[k])k+='_2';usadas[k]=1;return [k,nom,uni]});
+    var neq={nombre:txt('e-nombre'),tipo:txt('e-tipo'),ubicacion:txt('e-ubic')};
+    if(!neq.nombre)return aviso('Falta el nombre del equipo.');
+    await guardarEquipo(function(st){st.equipo.nombre=neq.nombre;st.equipo.tipo=neq.tipo;st.equipo.ubicacion=neq.ubicacion;st.placa=t2.placa.filter(function(p){return p[0]||p[1]});st.checklist=t2.checklist;st.lecturas=t2.lecturas},'Actualiza ficha','Ficha guardada.',function(){view='form'});
+    if(notice&&notice.ok){try{await guardarCatalogo({id:EQID,nombre:neq.nombre,ubicacion:neq.ubicacion,tipo:neq.tipo})}catch(e){}}
     return;
   }
   if(id==='frm'){
     if(!txt('f-fecha'))return aviso('Falta la fecha.');
-    var acts=CHECKS.filter(function(c,i){return $('c-'+i).checked});
+    var acts=EQ.checklist.filter(function(c,i){return $('c-'+i).checked});
     txt('f-otras').split('\n').map(function(s){return s.trim()}).filter(Boolean).forEach(function(s){acts.push(s)});
     if(!acts.length&&!txt('f-obs'))return aviso('Marca al menos una actividad o escribe qué se le hizo a la máquina.');
-    var prev=editId?S.historial.find(function(x){return x.id===editId}):null;
-    var reg={id:editId||('r'+Date.now().toString(36)),fecha:txt('f-fecha'),tipo:$('f-tipo').value,
-      tecnico:prev?prev.tecnico:SES.nombre, usuario:prev?(prev.usuario||''):SES.u,
-      horometro:num('f-horo'),actividades:acts,
-      lectura:{comb:num('l-comb'),aceite:num('l-aceite'),temp:num('l-temp'),bat:num('l-bat'),rpm:num('l-rpm'),hz:num('l-hz'),kwh:num('l-kwh'),vll:txt('l-vll'),vln:txt('l-vln')},
-      refacciones:txt('f-ref'),obs:txt('f-obs')};
-    await guardar(function(st){
-      var i=st.historial.findIndex(function(x){return x.id===reg.id});
-      if(i>=0)st.historial[i]=reg; else st.historial.push(reg);
-    },(prev?'Edita':'Agrega')+' registro '+reg.fecha+' · '+reg.tipo+' · '+SES.u,(prev?'Cambios guardados.':'Registro guardado.')+' Quien escanee el QR lo verá en 1 a 2 minutos.',function(){editId=null});
+    var prev=editId?EQ.historial.find(function(x){return x.id===editId}):null,lec={};
+    EQ.lecturas.forEach(function(x,i){var v=txt('l-'+i);if(v!=='')lec[x[0]]=tNum(v)});
+    var reg={id:editId||('r'+Date.now().toString(36)),fecha:txt('f-fecha'),tipo:$('f-tipo').value,tecnico:prev?prev.tecnico:SES.nombre,usuario:prev?(prev.usuario||''):SES.u,horometro:num('f-horo'),actividades:acts,lectura:lec,refacciones:txt('f-ref'),obs:txt('f-obs')};
+    await guardarEquipo(function(st){var i=st.historial.findIndex(function(x){return x.id===reg.id});if(i>=0)st.historial[i]=reg;else st.historial.push(reg)},(prev?'Edita':'Agrega')+' registro '+reg.fecha,(prev?'Cambios guardados.':'Registro guardado.')+' Quien escanee el QR lo verá en 1 a 2 minutos.',function(){editId=null});
   }
 });
-
 document.addEventListener('click',async function(ev){
+  var link=ev.target.closest('a[data-eq]');if(link){ev.preventDefault();irA(link.dataset.eq);return}
   var b=ev.target.closest('[data-act]');if(!b||busy)return;
   var a=b.dataset.act,id=b.dataset.id;
-  if(a==='filtro'){filtro=b.dataset.f;render();}
-  else if(a==='login'){view='login';notice=null;render();}
-  else if(a==='config'){view='config';notice=null;render();}
-  else if(a==='login-close'){view='pub';notice=null;history.replaceState(null,'',location.pathname+location.search);render();}
-  else if(a==='logout'){SES=null;view='pub';editId=null;notice=null;history.replaceState(null,'',location.pathname+location.search);render();}
-  else if(a==='go-form'){view='form';editId=null;render();}
-  else if(a==='go-placa'){placaTmp=S.placa.map(function(p){return p.slice()});view='placa';render();}
-  else if(a==='go-usuarios'){view='usuarios';pendingUser=null;notice=null;render();}
-  else if(a==='cancel-edit'){editId=null;render();}
-  else if(a==='edit'){editId=id;view='form';render();$('frm').scrollIntoView({block:'start'});}
-  else if(a==='del'){pendingDelete=id;render();}
-  else if(a==='del-no'){pendingDelete=null;render();}
-  else if(a==='del-ok'){pendingDelete=null;await guardar(function(st){st.historial=st.historial.filter(function(x){return x.id!==id})},'Elimina registro '+id+' · '+SES.u,'Registro eliminado.');}
-  else if(a==='u-del'){pendingUser=b.dataset.u;render();}
-  else if(a==='u-del-no'){pendingUser=null;render();}
-  else if(a==='u-del-ok'){var uu=b.dataset.u;pendingUser=null;await guardar(function(st){st.cfg.usuarios=st.cfg.usuarios.filter(function(x){return x.u!==uu})},'Quita usuario '+uu,'Usuario quitado: '+uu+'.');}
-  else if(a==='p-add'){syncP();placaTmp.push(['','']);render();}
-  else if(a==='p-del'){syncP();placaTmp.splice(+b.dataset.i,1);render();}
-  else if(a==='p-save'){syncP();var nueva=placaTmp.filter(function(p){return p[0]||p[1]});await guardar(function(st){st.placa=nueva},'Actualiza datos de placa','Datos de placa guardados.',function(){view='form'});}
+  if(a==='catalogo'){ev.preventDefault();irA(null)}
+  else if(a==='filtro'){filtro=b.dataset.f;render()}
+  else if(a==='login'){view='login';notice=null;render()}
+  else if(a==='config'){view='config';notice=null;render()}
+  else if(a==='cerrar'){view=SES&&EQ?'form':'pub';notice=null;if(location.hash)history.replaceState(null,'',location.pathname+location.search);render()}
+  else if(a==='logout'){SES=null;guardarSesion();view='pub';editId=null;notice=null;if(location.hash)history.replaceState(null,'',location.pathname+location.search);render()}
+  else if(a==='go-form'){view='form';editId=null;render()}
+  else if(a==='go-ficha'){fichaTmp=JSON.parse(JSON.stringify(EQ));view='ficha';render()}
+  else if(a==='go-qr'){view='qr';render()}
+  else if(a==='go-nuevo'){view='nuevo';render()}
+  else if(a==='go-usuarios'){view='usuarios';pendingUser=null;notice=null;render()}
+  else if(a==='cancel-edit'){editId=null;render()}
+  else if(a==='edit'){editId=id;view='form';render();$('frm').scrollIntoView({block:'start'})}
+  else if(a==='del'){pendingDelete=id;render()}
+  else if(a==='del-no'){pendingDelete=null;render()}
+  else if(a==='del-ok'){pendingDelete=null;await guardarEquipo(function(st){st.historial=st.historial.filter(function(x){return x.id!==id})},'Elimina registro '+id,'Registro eliminado.')}
+  else if(a==='u-del'){pendingUser=b.dataset.u;render()}
+  else if(a==='u-del-no'){pendingUser=null;render()}
+  else if(a==='u-del-ok'){var uu=b.dataset.u;pendingUser=null;await guardarConfig(function(c){c.usuarios=c.usuarios.filter(function(x){return x.u!==uu})},'Quita usuario '+uu,'Usuario quitado: '+uu+'.')}
+  else if(a==='p-add'){syncFicha();fichaTmp.placa.push(['','']);render()}
+  else if(a==='p-del'){syncFicha();fichaTmp.placa.splice(+b.dataset.i,1);render()}
+  else if(a==='qr-dl'){var cv=$(b.dataset.k==='pub'?'qr-pub':'qr-tec');if(!cv||!cv.width)return;var ln=document.createElement('a');ln.download='QR_'+(b.dataset.k==='pub'?'PUBLICO':'TECNICO')+'_'+EQID+'.png';ln.href=cv.toDataURL('image/png');document.body.appendChild(ln);ln.click();ln.remove()}
+  else if(a==='migrar'&&esAdmin()&&LEGACY){
+    var ve=window.__viejo;
+    await accion(async function(){
+      var c=JSON.parse(JSON.stringify(CFG));
+      await escribir(c,F_CONFIG,function(actual){return actual||escribirConfig(c)},'Migra usuarios a config.txt');
+      if(ve&&ve.equipo.id){
+        await escribir(c,DIR+ve.equipo.id+'.txt',function(actual){return actual||escribirEquipo(ve)},'Migra '+ve.equipo.id+' a equipos/');
+        await escribir(c,F_CATALOGO,function(actual){var cat=actual?leerCatalogo(actual):[];if(!cat.some(function(x){return x.id===ve.equipo.id}))cat.push({id:ve.equipo.id,nombre:ve.equipo.nombre,ubicacion:ve.equipo.ubicacion||'',tipo:ve.equipo.tipo||plantilla(ve.equipo.id).tipo});return escribirCatalogo(cat)},'Crea catálogo de equipos');
+      }
+    },'Sistema actualizado. Ya puedes registrar y dar de alta más equipos. Los cambios se ven en 1 a 2 minutos.');
+    if(notice&&notice.ok){var keep=notice;await cargar();notice=keep;render()}
+  }
 });
-function syncP(){placaTmp.forEach(function(p,i){var k=$('p-k-'+i),v=$('p-v-'+i);if(k&&v){p[0]=k.value.trim();p[1]=v.value.trim();}})}
-
-function porHash(){
-  if(location.hash==='#tecnico'){view=SES?'form':'login'}
-  else if(location.hash==='#configurar'){view='config'}
-  render();
-}
-window.addEventListener('hashchange',porHash);
-render();
-fetch(ARCHIVO_DATOS+'?v='+Date.now(),{cache:'no-store'})
-  .then(function(r){if(!r.ok)throw new Error(r.status);return r.text()})
-  .then(function(t){S=leerTxt(t);porHash()})
-  .catch(function(){notice={ok:false,t:'No se encontró el archivo '+ARCHIVO_DATOS+'. Súbelo a la misma carpeta que index.html.'};render()});
+function syncFicha(){if(!fichaTmp)return;fichaTmp.placa.forEach(function(p,i){var k=$('p-k-'+i),v=$('p-v-'+i);if(k&&v){p[0]=k.value.trim();p[1]=v.value.trim()}})}
+window.addEventListener('popstate',function(){cargar()});
+window.addEventListener('hashchange',function(){if(location.hash==='#tecnico'){view=SES?'form':'login';render()}else if(location.hash==='#configurar'){view='config';render()}});
+SES=leerSesion();
+cargar();
 })();
 </script>
 </body>

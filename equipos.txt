@@ -1,0 +1,28 @@
+# ==========================================================
+# CATÁLOGO DE EQUIPOS (22)
+# Formato:  ID = Nombre | Ubicación | Tipo
+# Cada equipo tiene su archivo en la carpeta equipos/
+# ==========================================================
+
+CGR-ABR-001 = Abridora de Fibra Bridhi | Área de Llenado | Abridora de fibra
+CGR-BOM-001 = Bombas Sumergibles | Embarques / Producción / Patio de Maniobras | Bombeo
+CGR-CCA-001 = Cortadora de Cartón Radillo | Área de Corte de Cartón | Cortadora
+CGR-CMP-051 = Compresor Quincy 30 HP #51 | Cuarto de Compresores · Planta 1 | Compresor de aire
+CGR-CMP-053 = Compresor Quincy 30 HP #53 | Cuarto de Compresores · Planta 1 | Compresor de aire
+CGR-ELV-001 = Elevador de Plataforma – Tapicería | Área de Tapicería / Acceso tapanco | Elevador de carga
+CGR-ELV-002 = Elevador de Plataforma – Embarques | Área de Embarques | Elevador de carga
+CGR-ILU-001 = Iluminación Planta 1 | Planta 1 (24 áreas) | Luminarias
+CGR-INV-001 = Sistema Fotovoltaico – Inversores Growatt | Planta 1 | Inversores solares
+CGR-LEC-001 = Cortadora Lectra iQ80 | Área de Corte | Cortadora automática
+CGR-LEC-002 = Cortadora Lectra iH8 | Área de Corte | Cortadora automática
+CGR-LFP-001 = Línea de Fibra/Pluma | Área de Llenado | Línea de llenado
+CGR-MTC-001 = Montacargas Crown SP3500 | Almacén / Pasillo Racks | Montacargas eléctrico
+CGR-MTC-002 = Montacargas Crown 20MT | Almacén / Embarques | Montacargas eléctrico
+CGR-MTC-003 = Montacargas Komatsu FG25T-16 | Patio de Maniobras / Almacén | Montacargas de combustión
+CGR-MTC-004 = Montacargas Clark CGP25 | Patio de Maniobras / Almacén | Montacargas de combustión
+CGR-PCI-001 = Planta Contra Incendio e Hidrantes | Planta General | Sistema contra incendio
+CGR-PEM-001 = Planta de Emergencia PLANELEC 500 kW | Planta 1 · Muebles Liz | Planta de emergencia
+CGR-POL-001 = Cortadora Polipack | Área de Polipack | Selladora / cortadora
+CGR-TAB-001 = Tableros Eléctricos | Todas las áreas (rotación mensual) | Tableros de distribución
+CGR-TRF-001 = Transformador 500 kVA | Subestación Eléctrica · Planta 1 | Transformador
+CGR-VEN-001 = Ventiladores Industriales | Tapicería / Llenado / Corte / Empaque / Costura | Ventilación

@@ -1,0 +1,43 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-MTC-002 · Montacargas Crown 20MT
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-MTC-002
+nombre = Montacargas Crown 20MT
+tipo = Montacargas eléctrico
+ubicacion = Almacén / Embarques
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Crown
+Modelo = 20MT
+Tipo = Eléctrico
+Cargador = GNB
+No. de serie = Por capturar
+Estado = Unidad nueva
+
+[CHECKLIST]
+actividad = [Mensual] Limpieza con aire comprimido (4-5 kg/cm²) de componentes eléctricos del cargador GNB
+actividad = [Mensual] Nota: tarjeta de control se limpia únicamente con Dielectronic NF – NO usar aire
+actividad = [Mensual] Verificar nivel de electrolito en baterías – completar con agua destilada
+actividad = [Mensual] Revisar terminales de batería – limpiar sulfatación y apretar conexiones
+actividad = [Mensual] Inspección visual de mástil – guías, cadenas y cilindros hidráulicos
+actividad = [Mensual] Verificar funcionamiento de bocina, luces y señales de seguridad
+actividad = [Mensual] Prueba de funcionamiento: elevación, traslación, freno de estacionamiento
+actividad = [Bimestral/Trimestral] Abrir switch de encendido y desconectar batería antes de iniciar
+actividad = [Bimestral/Trimestral] Limpieza con aire comprimido (4 kg/cm²) de componentes eléctricos
+actividad = [Bimestral/Trimestral] Revisión y limpieza del sistema eléctrico completo – tarjetas y cableado
+actividad = [Bimestral/Trimestral] Revisión de nivel de aceite hidráulico – completar con aceite especificado Crown
+actividad = [Bimestral/Trimestral] Revisión de cadenas de elevación – lubricar con aceite mineral de cadenas
+actividad = [Bimestral/Trimestral] Inspección de horquillas – verificar ausencia de grietas o deformación
+actividad = [Bimestral/Trimestral] Revisión de sistema de frenos – ajuste si es necesario
+
+[LECTURAS]
+voltaje_bateria_v = Voltaje de batería | V
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

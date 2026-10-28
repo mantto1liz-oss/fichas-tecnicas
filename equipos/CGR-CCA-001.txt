@@ -1,0 +1,37 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-CCA-001 · Cortadora de Cartón Radillo
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-CCA-001
+nombre = Cortadora de Cartón Radillo
+tipo = Cortadora
+ubicacion = Área de Corte de Cartón
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Radillo
+Tipo = Guillotina de cartón
+No. de serie = Por capturar
+
+[CHECKLIST]
+actividad = [Quincenal] Limpieza con aire comprimido de área de reductores y tablero eléctrico
+actividad = [Quincenal] Limpieza de rodillos, correderas y rodajas del motor de corte
+actividad = [Quincenal] Lubricación con silicón de rodaja y guías donde corre la rodaja de corte
+actividad = [Quincenal] Verificar que la cuchilla de corte trabaje correctamente – revisar filo
+actividad = [Quincenal] Si hay desgaste en cuchilla: solicitar reemplazo (No. Art. SAP: 5000000)
+actividad = [Quincenal] Inspección visual de cadena de transmisión de corte – lubricar
+actividad = [Anual] Cambio de cadena de transmisión de movimiento de la cortadora
+actividad = [Anual] Revisión completa de reductor – verificar nivel de aceite y cambiar si es necesario
+actividad = [Anual] Revisión y cambio de guías y carros de la cuchilla si presentan desgaste
+actividad = [Anual] Limpieza interior completa del gabinete eléctrico – reapriete de terminales
+actividad = [Anual] Revisión de motor eléctrico – medición de aislamiento y consumo de corriente
+
+[LECTURAS]
+corriente_a = Corriente motor | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

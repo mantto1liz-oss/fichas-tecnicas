@@ -1,0 +1,37 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-POL-001 · Cortadora Polipack
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-POL-001
+nombre = Cortadora Polipack
+tipo = Selladora / cortadora
+ubicacion = Área de Polipack
+area = Mantenimiento Industrial
+
+[PLACA]
+Tipo = Selladora termorretráctil / cortadora
+Marca = Por capturar
+No. de serie = Por capturar
+
+[CHECKLIST]
+actividad = [Trimestral] Limpieza y reapriete de conexiones y terminales del tablero eléctrico
+actividad = [Trimestral] Revisión de nivel de aceite del reductor de empuje – verificar condición mecánica
+actividad = [Trimestral] Revisión de teflón de contra de resistencia – cambiar si hay fisuras o desgaste
+actividad = [Trimestral] Revisión de guía de celerón – verificar planitud y desgaste
+actividad = [Trimestral] Revisión del sistema neumático de corte – presión y fugas
+actividad = [Trimestral] Prueba de funcionamiento: temperatura de sellado, velocidad y corte limpio
+actividad = [Anual] Cambio de teflón de resistencia de sellado
+actividad = [Anual] Cambio de guías de celerón si presentan desgaste significativo
+actividad = [Anual] Revisión y cambio de resistencias de sellado si presentan discontinuidad
+actividad = [Anual] Revisión completa del sistema eléctrico – termostato, relés y temporizadores
+actividad = [Anual] Limpieza interior completa y reapriete general de terminales
+
+[LECTURAS]
+corriente_a = Corriente motor | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

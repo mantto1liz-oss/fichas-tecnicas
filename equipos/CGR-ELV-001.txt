@@ -1,0 +1,39 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-ELV-001 · Elevador de Plataforma – Tapicería
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-ELV-001
+nombre = Elevador de Plataforma – Tapicería
+tipo = Elevador de carga
+ubicacion = Área de Tapicería / Acceso tapanco
+area = Mantenimiento Industrial
+
+[PLACA]
+Tipo = Elevador eléctrico / plataforma de carga
+Marca = Por capturar
+Capacidad = Por capturar
+
+[CHECKLIST]
+actividad = [Anual] Asegurarse que el equipo fue bloqueado eléctricamente (LOTO) antes de iniciar
+actividad = [Anual] Revisión del gancho de levante y cadena de elevación – verificar eslabones
+actividad = [Anual] Revisión y medición de nivel de aceite del motoreductor – cambiar si está sucio
+actividad = [Anual] Revisión de guías de plataforma – desgaste, alineación y lubricación
+actividad = [Anual] Revisión de funcionamiento de puertas de seguridad
+actividad = [Anual] Revisión y prueba de micros de seguridad
+actividad = [Anual] Lubricación de cadena de elevación con grasa de litio multipropósito
+actividad = [Anual] Revisión de cables eléctricos y botoneras de operación
+actividad = [Anual] Revisión de piso de plataforma – integridad y estado
+actividad = [Anual] Revisión de estructura metálica – fisuras, corrosión o deformaciones
+actividad = [Anual] Prueba de carga completa con carga máxima nominal
+actividad = [Anual] Verificar correcto funcionamiento de freno de emergencia
+actividad = [Anual] Emitir reporte firmado de mantenimiento
+
+[LECTURAS]
+corriente_a = Corriente motor | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

@@ -1,0 +1,54 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-LEC-002 · Cortadora Lectra iH8
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-LEC-002
+nombre = Cortadora Lectra iH8
+tipo = Cortadora automática
+ubicacion = Área de Corte
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Lectra
+Modelo = iH8
+No. de serie = Por capturar
+
+[CHECKLIST]
+actividad = [Semanal 40 h] Control visual de peines y protecciones de la máquina
+actividad = [Semanal 40 h] Aspirado por la parte superior de los cepillos de corte
+actividad = [Semanal 40 h] Engrase de los raíles X / control de bloques de deslizamiento
+actividad = [Semanal 40 h] Limpieza e inspección de la cadena portacables eje X
+actividad = [Semanal 40 h] Limpieza de rejillas de filtrado del sistema de aspiración
+actividad = [Semanal 40 h] Purga de los filtros neumáticos (drenar condensado)
+actividad = [Semanal 40 h] Engrase de los raíles Y (carros laterales)
+actividad = [Semanal 40 h] Limpieza e inspección de la cadena portacables eje Y
+actividad = [Semanal 40 h] Control de fijación de topes y piñones eje X
+actividad = [Semanal 40 h] Control del piñón Y y fijación de la tapa del cabezal
+actividad = [Semanal 40 h] Limpieza completa y control del cabezal de corte
+actividad = [Semanal 40 h] Limpieza completa y control del filtro de vacío principal
+actividad = [Semanal 40 h] Verificar kit de herramienta completa en máquina
+actividad = [Semanal 40 h] Inspección visual de rieles – verificar que nada obstruya el recorrido
+actividad = [Semanal 40 h] Revisión con operación: guía de afilado – ajustar de ser necesario
+actividad = [Semanal 40 h] Prueba de funcionamiento después de la intervención
+actividad = [Semanal 40 h] Verificar lecturas de horas de vibración y aspiración en pantalla
+actividad = [Mensual] Limpieza área del Presser foot
+actividad = [500 h] Engrasado baleros fijos de cepillos (grasa Lectra especificada)
+actividad = [500 h] Revisión, limpieza y lubricación guía de afilado – sustituir si hay desgaste
+actividad = [500 h] Cambio de filtro de vacío principal (si nivel de suciedad lo requiere)
+actividad = [500 h] Revisión fugas de vacío – aplicar espuma detectora en uniones
+actividad = [500 h] Calibración de presostatos de la mesa de vacío
+actividad = [500 h] Limpieza interior gabinete de control y reapriete de terminales
+actividad = [500 h] Revisión compresor de vacío integrado – nivel de aceite y vibración
+actividad = [500 h] Prueba completa: posicionamiento, vacío, aspiración y corte de prueba
+actividad = [500 h] Documentar lecturas de parámetros en bitácora (horas, velocidad, vacío)
+
+[LECTURAS]
+horas_vibracion_h = Horas de vibración | h
+horas_aspiracion_h = Horas de aspiración | h
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico

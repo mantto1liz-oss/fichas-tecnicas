@@ -1,0 +1,44 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-PCI-001 · Planta Contra Incendio e Hidrantes
+# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-PCI-001
+nombre = Planta Contra Incendio e Hidrantes
+tipo = Sistema contra incendio
+ubicacion = Planta General
+area = Mantenimiento Industrial
+
+[PLACA]
+Bombas = Bomba eléctrica + bomba diésel + jockey
+Sistema = Wet pipe / hidrantes
+Norma = NFPA
+Responsable = Carlos Gil + proveedor certificado
+
+[CHECKLIST]
+actividad = [Semestral] Revisión de válvulas de control del sistema – abiertas y sin bloqueos
+actividad = [Semestral] Prueba de funcionamiento de bomba principal eléctrica – arranque y paro
+actividad = [Semestral] Prueba de funcionamiento de bomba jockey (presurización) – arranque automático
+actividad = [Semestral] Revisión de nivel de agua en cisterna o tanque de almacenamiento
+actividad = [Semestral] Revisión de panel de control de incendio – sin alarmas activas
+actividad = [Semestral] Inspección visual de gabinetes de mangueras – mangueras enrolladas, boquilla presente
+actividad = [Semestral] Verificar que todos los extintores estén en su lugar, vigentes y con precinto
+actividad = [Semestral] Inspección de detectores de humo y calor – limpiar si presentan polvo
+actividad = [Anual · proveedor] Mantenimiento completo de bomba principal – revisión impulsores, sellos y rodamientos
+actividad = [Anual · proveedor] Prueba de flujo y presión del sistema – verificar cobertura de toda la planta
+actividad = [Anual · proveedor] Revisión y carga de extintores con vencimiento – recargar todos los vencidos
+actividad = [Anual · proveedor] Prueba hidrostática de mangueras si aplica según normativa NFPA
+actividad = [Anual · proveedor] Revisión de válvulas de control y alarma del sistema – prueba de operación
+actividad = [Anual · proveedor] Revisión de la cisterna – inspección física, limpieza si es necesario
+actividad = [Anual · proveedor] Revisión de detectores de humo y calor – prueba con generador de humo certificado
+actividad = [Anual · proveedor] Emitir informe de mantenimiento y certificación del sistema
+
+[LECTURAS]
+presion_sistema_psi = Presión del sistema | psi
+nivel_cisterna_pct = Nivel de cisterna | %
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
