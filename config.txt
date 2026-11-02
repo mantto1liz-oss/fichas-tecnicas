@@ -17,3 +17,11 @@ sal = VKW+O+Xs+ILETrrCUfOwLg==
 iv = llRFlaqMQ+tSyJjJ
 llave_cifrada = 03+r7iqQ2U5Pi8jU+hiCBh71K5kGhNk5BGteaqh9nQFOxmVDKdnxPu4Bu17+r8ph
 iteraciones = 600000
+
+[USUARIO benito]
+nombre = Benito Sanchez
+rol = tecnico
+sal = OhAzef0uXAfUaTEgW7z7Dw==
+iv = Vl3Ajk9+6rttsv96
+llave_cifrada = Kz9GvKBRcl14iW9pT+be9S69t9+/bffuOw83gBU14Jzjo0Kowzx4hiJ06MnZ//fC
+iteraciones = 600000
