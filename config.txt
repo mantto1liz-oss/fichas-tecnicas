@@ -25,3 +25,11 @@ sal = OhAzef0uXAfUaTEgW7z7Dw==
 iv = Vl3Ajk9+6rttsv96
 llave_cifrada = Kz9GvKBRcl14iW9pT+be9S69t9+/bffuOw83gBU14Jzjo0Kowzx4hiJ06MnZ//fC
 iteraciones = 600000
+
+[USUARIO brandon]
+nombre = Brandon
+rol = tecnico
+sal = tvlOp1n1XkbIB3nrQKl/5A==
+iv = dIw6JxZESlVG7NPn
+llave_cifrada = 19ui8NmfWpjNG9cG0ATDkdbypDzpTZKnpk96AHBx/hyUCzljlGpWES3AjoORd295
+iteraciones = 600000
