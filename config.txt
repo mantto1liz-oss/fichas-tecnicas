@@ -1,0 +1,19 @@
+# ==========================================================
+# CONFIGURACIÓN DEL MODO TÉCNICO · Fichas técnicas de mantenimiento
+# Todo va cifrado. No modifiques este archivo a mano.
+# ==========================================================
+
+[CONFIG]
+cuenta_github = mantto1liz-oss
+repositorio = fichas-tecnicas
+rama = main
+token_iv = A44GsbdwobjvXfHC
+token_cifrado = y3YAcmtOjqUTfKgmPP38jlA8kESB1nYnOVBSZy2tg/tfGIX/6/e3jWylto3K7VidBBMDs5r1pS/CGeK+brfj9+qy7o1x1qYgtc5p+B86NnUPlzfDiayOzanmkYsGQ9k48eVF4wqgJf2qp3yDLQ==
+
+[USUARIO charlie]
+nombre = CARLOS GR
+rol = admin
+sal = VKW+O+Xs+ILETrrCUfOwLg==
+iv = llRFlaqMQ+tSyJjJ
+llave_cifrada = 03+r7iqQ2U5Pi8jU+hiCBh71K5kGhNk5BGteaqh9nQFOxmVDKdnxPu4Bu17+r8ph
+iteraciones = 600000
