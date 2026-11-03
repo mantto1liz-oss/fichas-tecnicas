@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-002 · Cortadora Lectra iH8
-# Actualizado: 3/11/2026, 3:07:43 p.m.
+# Actualizado: 3/11/2026, 3:08:00 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -52,11 +52,11 @@ horas_aspiracion_h = Horas de aspiración | h
 
 # ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
-# 0001 | 2026-11-03 | Mantenimiento preventivo   | Benito Sanchez
+# 0001 | 2026-11-02 | Mantenimiento preventivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmw16hxnf
-fecha = 2026-11-03
+fecha = 2026-11-02
 tipo = Mantenimiento preventivo
 tecnico = Benito Sanchez
 usuario = benito
