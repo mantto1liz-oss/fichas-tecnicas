@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-002 · Cortadora Lectra iH8
-# Actualizado: 3/11/2026, 3:07:07 p.m.
+# Actualizado: 3/11/2026, 3:07:43 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
