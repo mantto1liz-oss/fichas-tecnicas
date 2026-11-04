@@ -1,15 +1,15 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
-# Equipo: CGR-BOM-001 · Bomba Sumergible Casco
-# Actualizado: 4/11/2026, 4:02:40 p.m.
+# Equipo: CGR-BOM-001 · Bombas Sumergible CASCO
+# Actualizado: 4/11/2026, 4:04:17 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
 [EQUIPO]
 id = CGR-BOM-001
-nombre = Bomba Sumergible Casco
+nombre = Bombas Sumergible CASCO
 tipo = Bombeo
-ubicacion = Embarques / Producción / Patio de Maniobras
+ubicacion = Rampa de Casco
 area = Mantenimiento Industrial
 
 [PLACA]
