@@ -1,0 +1,41 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-CLI-003 · Aire Acondicionado – Sala de Exhibición
+# Actualizado: 3/11/2026, 3:56:28 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-CLI-003
+nombre = Aire Acondicionado – Sala de Exhibición
+tipo = Aire acondicionado
+ubicacion = Sala de Exhibición
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Trane
+Tipo = Unidad paquete
+Capacidad = 30 TR
+No. de serie = Por capturar
+Responsable = Carlos Gil Ramírez + Proveedor A/C
+Programa MTO 2026 = MTO-2026-AC-EXH-S
+
+[CHECKLIST]
+actividad = [Semestral] Limpieza de pre-filtros de retorno de aire (lavar, secar y reinstalar)
+actividad = [Semestral] Limpieza de zona de pleno y distribución de aire
+actividad = [Semestral] Limpieza de condensador con agua y desengrasante
+actividad = [Semestral] Limpieza y sopleteado de tablero de fuerza y control con Dielectronic NF
+actividad = [Semestral] Reapriete de terminales de tablero de fuerza y control
+actividad = [Semestral] Revisión de extractores de calor del condensador
+actividad = [Semestral] Revisión de banda de transmisión del ventilador de pleno
+actividad = [Semestral] Revisión de nivel de refrigerante – medir presiones de operación
+actividad = [Semestral] Limpieza de charola de condensados – verificar desagüe libre
+actividad = [Semestral] Prueba de funcionamiento – temperatura de suministro y retorno
+
+[LECTURAS]
+corriente_a = Corriente compresor | A
+temp_salida_c = Temp. salida de aire | °C
+presion_psi = Presión de refrigerante | psi
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
