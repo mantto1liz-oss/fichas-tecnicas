@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-CMP-053 · Compresor Quincy 30 HP #53
-# Actualizado: 4/11/2026, 1:49:58 p.m.
+# Actualizado: 4/11/2026, 2:09:48 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -15,12 +15,12 @@ area = Mantenimiento Industrial
 [PLACA]
 Marca = Quincy
 Potencia = 30 HP
-Modelo exacto = Por capturar
-No. de serie = Por capturar
-Voltaje = Por capturar
-Presión de trabajo = 100–120 psi (rango normal)
-Capacidad (CFM) = Por capturar
-Año de fabricación = Por capturar
+Modelo exacto = QMB30ACA21SF
+No. de serie = 85620
+Voltaje = 230
+Presión de trabajo = 95–105 psi (rango normal)
+Capacidad (CFM) = 250
+Año de fabricación = //////
 Responsables = Omar Sánchez / Brandon Miranda
 
 [CHECKLIST]
