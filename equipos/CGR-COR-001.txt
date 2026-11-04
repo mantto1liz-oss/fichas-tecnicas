@@ -1,0 +1,38 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-COR-001 · Cortadora Eléctrica Eastman Buzzard
+# Actualizado: 3/11/2026, 3:56:28 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-COR-001
+nombre = Cortadora Eléctrica Eastman Buzzard
+tipo = Cortadora manual
+ubicacion = Área de Corte Manual
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Eastman
+Modelo = Buzzard (cuchilla circular)
+No. de serie = Por capturar
+Responsable = Omar Sánchez / Brandon Miranda
+Programa MTO 2026 = MTO-2026-EBUZZ-T
+
+[CHECKLIST]
+actividad = [Trimestral] Verificar diámetro de cuchilla – comparar con cuchilla nueva; cambiar si está por debajo del mínimo (ref. 5000509)
+actividad = [Trimestral] Verificar engranes de rotación de cuchilla – cambiar si hay desgaste (refs. 524C1-21 y 653C1-1)
+actividad = [Trimestral] Lubricación de engrane de cuchilla con grasa exclusiva Eastman
+actividad = [Trimestral] Revisión de motor de afilado – funcionamiento correcto del afilador integrado
+actividad = [Trimestral] Limpieza completa de componentes mecánicos – rearmar correctamente
+actividad = [Trimestral] Revisión de cable eléctrico de alimentación – sin daños ni aplastamientos
+actividad = [Trimestral] Revisión de interruptor de encendido – funcionamiento seguro
+actividad = [Trimestral] Revisión de banda de transmisión del ventilador de refrigeración del motor
+actividad = [Trimestral] Limpieza de ventilación del motor – verificar que no haya obstrucción
+actividad = [Trimestral] Prueba de funcionamiento – corte de prueba en material de muestra
+
+[LECTURAS]
+corriente_a = Corriente | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
