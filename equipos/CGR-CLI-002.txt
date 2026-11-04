@@ -1,0 +1,41 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-CLI-002 · Aire Acondicionado – Oficinas Generales
+# Actualizado: 3/11/2026, 3:56:28 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-CLI-002
+nombre = Aire Acondicionado – Oficinas Generales
+tipo = Aire acondicionado
+ubicacion = Oficinas Generales
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Trane
+Tipo = Unidad paquete
+Capacidad = 30 TR
+No. de serie = Por capturar
+Responsable = Carlos Gil Ramírez + Proveedor A/C
+Programa MTO 2026 = MTO-2026-AC-OFI-S
+
+[CHECKLIST]
+actividad = [Semestral] Limpieza de pre-filtros de retorno de aire (lavar, secar y reinstalar)
+actividad = [Semestral] Limpieza de zona de pleno y distribución de aire
+actividad = [Semestral] Limpieza de condensador con agua y desengrasante
+actividad = [Semestral] Limpieza y sopleteado de tablero de fuerza y control con Dielectronic NF
+actividad = [Semestral] Reapriete de terminales de tablero de fuerza y control
+actividad = [Semestral] Revisión de extractores de calor del condensador
+actividad = [Semestral] Revisión de banda de transmisión del ventilador de pleno – tensión y desgaste
+actividad = [Semestral] Revisión de nivel de refrigerante – medir presiones
+actividad = [Semestral] Limpieza de charola de condensados – verificar desagüe
+actividad = [Semestral] Prueba de funcionamiento – medir temperatura de suministro y retorno
+
+[LECTURAS]
+corriente_a = Corriente compresor | A
+temp_salida_c = Temp. salida de aire | °C
+presion_psi = Presión de refrigerante | psi
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
