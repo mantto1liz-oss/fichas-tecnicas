@@ -1,0 +1,38 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-CLI-005 · Aire Acondicionado – Ventas Internacionales
+# Actualizado: 3/11/2026, 3:56:28 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-CLI-005
+nombre = Aire Acondicionado – Ventas Internacionales
+tipo = Aire acondicionado
+ubicacion = Área de Ventas Internacionales
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca / modelo = Por definir al momento del servicio
+Estado = Mantenimiento pendiente desde junio 2026
+Responsable = Carlos Gil Ramírez + Proveedor A/C
+Programa MTO 2026 = MTO-2026-AC-VI-S
+
+[CHECKLIST]
+actividad = [Semestral] NOTA: Este programa está PENDIENTE según Análisis de Productividad S24 – programar urgente
+actividad = [Semestral] Limpieza de condensador con agua y desengrasante
+actividad = [Semestral] Limpieza y revisión de terminales de tablero de control y fuerza
+actividad = [Semestral] Limpieza de evaporador – lavar y secar
+actividad = [Semestral] Revisión de filtro de retorno de aire – limpiar o cambiar
+actividad = [Semestral] Revisión de nivel de refrigerante – verificar presiones de operación
+actividad = [Semestral] Limpieza de charola de condensados – verificar desagüe libre
+actividad = [Semestral] Revisión de funcionamiento de control remoto o termostato
+actividad = [Semestral] Prueba de funcionamiento – medir temperatura de suministro y retorno
+
+[LECTURAS]
+corriente_a = Corriente compresor | A
+temp_salida_c = Temp. salida de aire | °C
+presion_psi = Presión de refrigerante | psi
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
