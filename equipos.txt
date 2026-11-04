@@ -1,5 +1,5 @@
 # ==========================================================
-# CATÁLOGO DE EQUIPOS (22)
+# CATÁLOGO DE EQUIPOS (31)
 # Formato:  ID = Nombre | Ubicación | Tipo
 # Cada equipo tiene su archivo en la carpeta equipos/
 # ==========================================================
@@ -7,10 +7,19 @@
 CGR-ABR-001 = Abridora de Fibra Bridhi | Área de Llenado | Abridora de fibra
 CGR-BOM-001 = Bombas Sumergibles | Embarques / Producción / Patio de Maniobras | Bombeo
 CGR-CCA-001 = Cortadora de Cartón Radillo | Área de Corte de Cartón | Cortadora
+CGR-CLI-001 = Aire Acondicionado – Área de Diseño | Área de Diseño | Aire acondicionado
+CGR-CLI-002 = Aire Acondicionado – Oficinas Generales | Oficinas Generales | Aire acondicionado
+CGR-CLI-003 = Aire Acondicionado – Sala de Exhibición | Sala de Exhibición | Aire acondicionado
+CGR-CLI-004 = Aires Acondicionados – RH 1, RH 2/Comedor y Sala de Juntas | Oficinas RH / Comedor / Sala Juntas | Aire acondicionado
+CGR-CLI-005 = Aire Acondicionado – Ventas Internacionales | Área de Ventas Internacionales | Aire acondicionado
 CGR-CMP-051 = Compresor Quincy 30 HP #51 | Cuarto de Compresores · Planta 1 | Compresor de aire
 CGR-CMP-053 = Compresor Quincy 30 HP #53 | Cuarto de Compresores · Planta 1 | Compresor de aire
+CGR-CMP-100 = Compresores Portátiles 100 L | Áreas de Producción (varios) | Compresor de pistón
+CGR-COR-001 = Cortadora Eléctrica Eastman Buzzard | Área de Corte Manual | Cortadora manual
+CGR-COR-002 = Cortadora Eléctrica Eastman Chickadee II | Área de Corte Manual | Cortadora manual
 CGR-ELV-001 = Elevador de Plataforma – Tapicería | Área de Tapicería / Acceso tapanco | Elevador de carga
 CGR-ELV-002 = Elevador de Plataforma – Embarques | Área de Embarques | Elevador de carga
+CGR-HID-001 = Equipo Hidroneumático Planta 1 | Cuarto de Bombas – Planta General | Hidroneumático
 CGR-ILU-001 = Iluminación Planta 1 | Planta 1 (24 áreas) | Luminarias
 CGR-INV-001 = Sistema Fotovoltaico – Inversores Growatt | Planta 1 | Inversores solares
 CGR-LEC-001 = Cortadora Lectra iQ80 | Área de Corte | Cortadora automática
