@@ -1,23 +1,30 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
-# Equipo: CGR-CMP-100 · Compresores Portátiles 100 L
-# Actualizado: 3/11/2026, 3:56:28 p.m.
+# Equipo: CGR-CMP-100 · Compresore Portátil  100LTS
+# Actualizado: 4/11/2026, 4:44:57 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
 [EQUIPO]
 id = CGR-CMP-100
-nombre = Compresores Portátiles 100 L
+nombre = Compresore Portátil  100LTS
 tipo = Compresor de pistón
-ubicacion = Áreas de Producción (varios)
+ubicacion = DISEÑO
 area = Mantenimiento Industrial
 
 [PLACA]
 Tipo = Pistón reciprocante · tanque 100 L
-Marcas = Diversas
-Cantidad = Por capturar
-Responsable = Omar Sánchez / Brandon Miranda
-Programa MTO 2026 = MTO-2026-COMP100-M
+MODELO = VT623305AJ(AGM05)
+NUMERO DE SERIE = L7/13/2009-23049
+Responsable MANTENIMIENTO = Omar Sánchez / Brandon Miranda
+Programa MTO 2026 = MTO-2026-COMP100-M01
+TANQUE = CAMPRELL HAUSFELD
+MOTOR = EMERSON T63BXCLP1398
+VOLTAJE = 120V /60HZ/ 15A
+AMPS = 15.0
+OUTPUT = 2.25KW
+SCFM = 6.5@ 40PSI/ 5.5@ 90PSI
+PSI MAX = 135 PSI
 
 [CHECKLIST]
 actividad = [Mensual] Drenar tanque receptor completamente – abrir válvula de purga
