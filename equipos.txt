@@ -1,5 +1,5 @@
 # ==========================================================
-# CATÁLOGO DE EQUIPOS (34)
+# CATÁLOGO DE EQUIPOS (35)
 # Formato:  ID = Nombre | Ubicación | Tipo
 # Cada equipo tiene su archivo en la carpeta equipos/
 # ==========================================================
@@ -15,6 +15,7 @@ CGR-CLI-002 = Aire Acondicionado – Oficinas Generales | Oficinas Generales | A
 CGR-CLI-003 = Aire Acondicionado – Sala de Exhibición | Sala de Exhibición | Aire acondicionado
 CGR-CLI-004 = Aires Acondicionados – RH 1, RH 2/Comedor y Sala de Juntas | Oficinas RH / Comedor / Sala Juntas | Aire acondicionado
 CGR-CLI-005 = Aire Acondicionado – Ventas Internacionales | Área de Ventas Internacionales | Aire acondicionado
+CGR-CMP-02-100LTS = Compresor portatil 100lts | mantenimiento | compresor de piston
 CGR-CMP-051 = Compresor Quincy 30 HP #51 | Cuarto de Compresores · Planta 1 | Compresor de aire
 CGR-CMP-053 = Compresor Quincy 30 HP #53 | Cuarto de Compresores · Planta 1 | Compresor de aire
 CGR-CMP-100 = Compresore Portátil  100LTS | DISEÑO | Compresor de pistón
