@@ -1,0 +1,36 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-COR-002 · Cortadora Eléctrica Eastman Chickadee II
+# Actualizado: 3/11/2026, 3:56:28 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-COR-002
+nombre = Cortadora Eléctrica Eastman Chickadee II
+tipo = Cortadora manual
+ubicacion = Área de Corte Manual
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Eastman
+Modelo = Chickadee II (cuchilla circular)
+No. de serie = Por capturar
+Responsable = Omar Sánchez / Brandon Miranda
+Programa MTO 2026 = MTO-2026-ECHICK-T
+
+[CHECKLIST]
+actividad = [Trimestral] Verificar diámetro de cuchilla – comparar con cuchilla nueva; cambiar si es necesario (ref. 5000880)
+actividad = [Trimestral] Verificar engranes de rotación de cuchilla – cambiar si hay desgaste (ref. 5000705)
+actividad = [Trimestral] Lubricación de engrane con grasa exclusiva Eastman
+actividad = [Trimestral] Limpieza de tarjeta de potencia con Dielectronic NF – NO usar aire a presión
+actividad = [Trimestral] Limpieza de la máquina en general – remover pelusa y residuos de tela
+actividad = [Trimestral] Revisión de cable eléctrico de alimentación – sin daños ni aplastamientos
+actividad = [Trimestral] Revisión de interruptor de encendido – funcionamiento seguro
+actividad = [Trimestral] Prueba de funcionamiento – corte de prueba en material de muestra
+
+[LECTURAS]
+corriente_a = Corriente | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
