@@ -1,5 +1,5 @@
 # ==========================================================
-# CATÁLOGO DE EQUIPOS (32)
+# CATÁLOGO DE EQUIPOS (33)
 # Formato:  ID = Nombre | Ubicación | Tipo
 # Cada equipo tiene su archivo en la carpeta equipos/
 # ==========================================================
@@ -7,6 +7,7 @@
 CGR-ABR-001 = Abridora de Fibra Bridhi | Área de Llenado | Abridora de fibra
 CGR-BOM-001 = Bombas Sumergibles | Embarques / Producción / Patio de Maniobras | Bombeo
 CGR-BOM002 = Bomba sumergible  almacen | Planta 1 | agua pluvial y lodos
+CGR-BOM003 = Bomba sumergible  EMBARQUES | Planta 1 | agua pluvial y lodos
 CGR-CCA-001 = Cortadora de Cartón Radillo | Área de Corte de Cartón | Cortadora
 CGR-CLI-001 = Aire Acondicionado – Área de Diseño | Área de Diseño | Aire acondicionado
 CGR-CLI-002 = Aire Acondicionado – Oficinas Generales | Oficinas Generales | Aire acondicionado
