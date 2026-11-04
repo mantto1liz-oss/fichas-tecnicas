@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-CMP-051 · Compresor Quincy 30 HP #51
-# Actualizado: 4/11/2026, 1:58:37 p.m.
+# Actualizado: 4/11/2026, 2:07:20 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -14,14 +14,14 @@ area = Mantenimiento Industrial
 
 [PLACA]
 Marca = Quincy
-Serie = QMB/T · tornillo rotativo
+Serie 86473 = QMB/T · tornillo rotativo
 Potencia = 30 HP
-Modelo exacto = Por capturar
-No. de serie = Por capturar
-Voltaje = Por capturar
-Presión de trabajo = 100–120 psi (rango normal)
-Capacidad (CFM) = Por capturar
-Año de fabricación = Por capturar
+Modelo exacto = QMB30ACA21SF
+No. de serie = 86473
+Voltaje = 230
+Presión de trabajo = 95–105 psi (rango normal)
+Capacidad (CFM) = 250
+Año de fabricación = //////
 Transmisión (No. parte) = 142213-G6Z
 Recipiente / separador (No. parte) = 142203-001
 Válvula de admisión (No. parte) = 128900-001
