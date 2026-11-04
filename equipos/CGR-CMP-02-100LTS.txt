@@ -1,0 +1,47 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-CMP-02-100LTS · Compresor portatil 100lts
+# Actualizado: 4/11/2026, 4:51:41 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-CMP-02-100LTS
+nombre = Compresor portatil 100lts
+tipo = compresor de piston
+ubicacion = mantenimiento
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Por capturar
+Modelo = Por capturar
+No. de serie = Por capturar
+Potencia = Por capturar
+Voltaje = Por capturar
+Año de fabricación = Por capturar
+
+[CHECKLIST]
+actividad = Drenar condensados de tanque y separador
+actividad = Revisar nivel de aceite
+actividad = Revisar fugas de aire y aceite
+actividad = Limpiar o cambiar filtro de aire
+actividad = Revisar tensión y estado de bandas
+actividad = Limpiar enfriador / radiador
+actividad = Revisar presiones de carga y descarga
+actividad = Revisar temperatura de descarga
+actividad = Cambio de aceite
+actividad = Cambio de filtro de aceite
+actividad = Cambio de separador aire/aceite
+actividad = Probar válvula de seguridad
+actividad = Engrasar rodamientos del motor
+actividad = Revisar conexiones eléctricas y amperaje
+
+[LECTURAS]
+presion_carga_psi = Presión de carga | psi
+presion_descarga_psi = Presión de descarga | psi
+temp_descarga_c = Temp. descarga | °C
+corriente_a = Corriente motor | A
+horas_carga = Horas en carga | h
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
