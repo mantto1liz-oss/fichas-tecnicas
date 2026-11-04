@@ -1,0 +1,42 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-HID-001 · Equipo Hidroneumático Planta 1
+# Actualizado: 3/11/2026, 3:56:28 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-HID-001
+nombre = Equipo Hidroneumático Planta 1
+tipo = Hidroneumático
+ubicacion = Cuarto de Bombas – Planta General
+area = Mantenimiento Industrial
+
+[PLACA]
+Equipo = Bombas recirculadoras + tanques de presión
+Marca de bombas = Por capturar
+Potencia = Por capturar
+Responsable = Omar Sánchez / Brandon Miranda
+Programa MTO 2026 = MTO-2026-HIDRO-MULT
+
+[CHECKLIST]
+actividad = [Semanal] Mantener área limpia y libre de polvo (tablero, tanques, bombas)
+actividad = [Semanal] Verificar que el control de funcionamiento esté en modo AUTO dentro del tablero
+actividad = [Semanal] Corroborar arranque y paro de bomba para verificar funcionamiento de presostato
+actividad = [Semanal] Revisión visual de bombas recirculadoras – verificar que no haya fuga por voluta
+actividad = [Semanal] Verificar presión del sistema en manómetro – rango normal de operación
+actividad = [Semanal] Inspección visual de mangueras y uniones – detectar micro fugas de agua
+actividad = [Semestral] Limpieza y reapriete de terminales de tablero de control y fuerza (dielectronic NF)
+actividad = [Semestral] Revisión de válvula de alivio del tanque de presión – prueba de apertura
+actividad = [Semestral] Revisión de membrana del tanque hidroneumático – medir presión de nitrógeno
+actividad = [Semestral] Limpieza de filtro de línea de succión de bombas
+actividad = [Semestral] Medición de aislamiento de motores de bombas (megger 500V)
+actividad = [Semestral] Revisión y ajuste de presostato – calibrar puntos de arranque y paro
+
+[LECTURAS]
+presion_psi = Presión del sistema | psi
+precarga_n2_psi = Precarga de nitrógeno | psi
+corriente_a = Corriente bomba | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
