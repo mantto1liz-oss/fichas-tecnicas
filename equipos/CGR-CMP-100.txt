@@ -1,0 +1,37 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-CMP-100 · Compresores Portátiles 100 L
+# Actualizado: 3/11/2026, 3:56:28 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-CMP-100
+nombre = Compresores Portátiles 100 L
+tipo = Compresor de pistón
+ubicacion = Áreas de Producción (varios)
+area = Mantenimiento Industrial
+
+[PLACA]
+Tipo = Pistón reciprocante · tanque 100 L
+Marcas = Diversas
+Cantidad = Por capturar
+Responsable = Omar Sánchez / Brandon Miranda
+Programa MTO 2026 = MTO-2026-COMP100-M
+
+[CHECKLIST]
+actividad = [Mensual] Drenar tanque receptor completamente – abrir válvula de purga
+actividad = [Mensual] Revisar nivel de aceite del cárter – completar si es necesario
+actividad = [Mensual] Limpiar o cambiar filtro de aspiración de aire
+actividad = [Mensual] Inspección visual de mangueras y conexiones – detectar fugas
+actividad = [Mensual] Verificar presión de trabajo en manómetro
+actividad = [Mensual] Revisar funcionamiento del presostato de arranque/paro
+actividad = [Mensual] Limpiar ventilación del motor eléctrico con aire comprimido
+actividad = [Mensual] Verificar ajuste de correa de transmisión (si aplica)
+
+[LECTURAS]
+presion_psi = Presión de corte | psi
+corriente_a = Corriente motor | A
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
