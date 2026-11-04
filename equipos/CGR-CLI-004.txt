@@ -1,0 +1,38 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-CLI-004 · Aires Acondicionados – RH 1, RH 2/Comedor y Sala de Juntas
+# Actualizado: 3/11/2026, 3:56:28 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-CLI-004
+nombre = Aires Acondicionados – RH 1, RH 2/Comedor y Sala de Juntas
+tipo = Aire acondicionado
+ubicacion = Oficinas RH / Comedor / Sala Juntas
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = York
+Equipos = RH 1: 1 TR · RH 2/Comedor: 2 TR · Sala Juntas Producción: 5 TR
+Responsable = Carlos Gil Ramírez + Proveedor A/C
+Programa MTO 2026 = MTO-2026-AC-RH-S
+
+[CHECKLIST]
+actividad = [Semestral] Limpieza de condensador con agua y desengrasante (peine para aletas si es necesario)
+actividad = [Semestral] Limpieza y revisión de terminales de tablero de control y fuerza
+actividad = [Semestral] Limpieza de evaporador (interior del manejadora) – lavar y secar
+actividad = [Semestral] Revisión de funcionamiento del control remoto – todas las funciones
+actividad = [Semestral] Revisión de nivel de refrigerante – verificar presiones de operación
+actividad = [Semestral] Limpieza de charola de condensados – verificar desagüe libre
+actividad = [Semestral] Revisión de filtro de retorno de aire – limpiar o cambiar según condición
+actividad = [Semestral] Prueba de funcionamiento de todos los equipos – medir temperatura de suministro
+actividad = [Semestral] Aplicar a: RH 1 (York 1 TR) / RH 2 Comedor (York 2 TR) / Sala Juntas Producción (York 5 TR)
+
+[LECTURAS]
+corriente_a = Corriente compresor | A
+temp_salida_c = Temp. salida de aire | °C
+presion_psi = Presión de refrigerante | psi
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
