@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-BOM-001 · Bombas Sumergibles
-# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Actualizado: 4/11/2026, 2:17:10 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -13,8 +13,16 @@ ubicacion = Embarques / Producción / Patio de Maniobras
 area = Mantenimiento Industrial
 
 [PLACA]
-Tipo = Aguas negras y pluviales
-Cantidad = Por capturar
+Tipo = pluviales/Lodos
+Potencia = 5 Hp
+Marca = SHIMGE
+Voltaje = 230 / 60hz
+Rpm = 3450
+Wats = 3700
+Flujo Max = 667 L/M
+Modeló = DWE37V
+Ip = X8
+Ubicación de bomba = Casco
 
 [CHECKLIST]
 actividad = [Mensual] Verificar que el pozo o cárcamo no presente acumulación excesiva de agua
