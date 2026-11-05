@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-ILU-001 · Iluminación Planta 1
-# Actualizado: 5/11/2026, 10:59:30 a.m.
+# Actualizado: 5/11/2026, 11:17:13 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -47,10 +47,11 @@ actividad = [Mensual] Revisión de luminarias – Área de Bodegas Traseras
 luminarias_cambiadas = Luminarias cambiadas | pzas
 luminarias_falla = Luminarias con falla | pzas
 
-# ---------------- ÍNDICE DE REGISTROS (2) ----------------
+# ---------------- ÍNDICE DE REGISTROS (3) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-05 | Mantenimiento correctivo   | Benito Sanchez
 # 0002 | 2026-11-05 | Mantenimiento correctivo   | Benito Sanchez
+# 0003 | 2026-11-05 | Mantenimiento correctivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmw3sdcs5
@@ -77,3 +78,16 @@ luminarias_cambiadas = 1
 luminarias_falla = 1
 refacciones = Tubo de led T-8
 observaciones = El consultorio médico cuenta con 1 plafón de 3 tubos, quedando funcionando todos
+
+[REGISTRO 0003]
+id = rmw3t5ze4
+fecha = 2026-11-05
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 11.05
+actividad = [Mensual] Revisión de luminarias – Embarques
+luminarias_cambiadas = 1
+luminarias_falla = 1
+refacciones = Foco de 100w led
+observaciones = El andén de embarques cuenta con 4 lámparas, todas en funcionamiento
