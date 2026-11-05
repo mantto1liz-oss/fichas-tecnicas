@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-CCA-001 · Cortadora de Cartón Radillo
-# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Actualizado: 5/11/2026, 10:16:10 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -33,5 +33,17 @@ actividad = [Anual] Revisión de motor eléctrico – medición de aislamiento y
 [LECTURAS]
 corriente_a = Corriente motor | A
 
-# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2026-11-05 | Mantenimiento preventivo   | CARLOS GR
+
+[REGISTRO 0001]
+id = rmw3qzhqj
+fecha = 2026-11-05
+tipo = Mantenimiento preventivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 131545
+actividad = Desatoramiento de cadena de cortadora
+corriente_a = 127
+observaciones = Próximo mtto semana 46
