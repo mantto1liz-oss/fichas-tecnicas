@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-INV-001 · Sistema Fotovoltaico – Inversores Growatt
-# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Actualizado: 5/11/2026, 1:46:58 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -54,5 +54,21 @@ actividad = [Mensual · tablero] Verificar conexión a tierra del tablero
 [LECTURAS]
 generacion_kwh = Generación reportada | kWh
 
-# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2026-11-05 | Lectura / inspección       | CARLOS GR
+
+[REGISTRO 0001]
+id = rmw3yikod
+fecha = 2026-11-05
+tipo = Lectura / inspección
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 1.44
+actividad = [Semanal · inversores] Verificar encendido y display sin códigos de falla
+actividad = [Semanal · inversores] Revisar LED de estado (verde fijo = operación normal)
+actividad = [Semanal · inversores] Verificar ausencia de ruido anormal o vibración
+actividad = [Semanal · inversores] Revisar temperatura de carcasa (sin sobrecalentamiento aparente)
+actividad = [Mensual · tablero] Revisión de apriete de terminales en contactores ABB (5 unidades)
+actividad = Perdida de alimentación por parte de CFE 1:20PM
+observaciones = Aún no se repara el inversor #2
