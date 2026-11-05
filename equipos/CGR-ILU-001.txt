@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-ILU-001 · Iluminación Planta 1
-# Actualizado: 5/11/2026, 10:58:17 a.m.
+# Actualizado: 5/11/2026, 10:59:30 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -58,7 +58,7 @@ fecha = 2026-11-05
 tipo = Mantenimiento correctivo
 tecnico = Benito Sanchez
 usuario = benito
-horometro = 1030
+horometro = 10.3
 actividad = [Mensual] Revisión de luminarias – Oficinas
 luminarias_cambiadas = 1
 luminarias_falla = 1
