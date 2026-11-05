@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-PEM-001 · Planta de Emergencia PLANELEC 500 kW
-# Actualizado: 5/11/2026, 1:38:52 p.m.
+# Actualizado: 5/11/2026, 1:42:26 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -117,15 +117,14 @@ actividad = Limpieza general del área
 actividad = fgtffbjjkuhgtghmkjggjg
 combustible_pct = 60
 presion_aceite_bar = 90
-temp_motor_c = 100
-baterias_v = 12
-rpm = 3600
+temp_motor_c = 75
+baterias_v = 28.142
+rpm = 1797
 frecuencia_hz = 60
-energia_kwh = 220
+energia_kwh = 4220
 v_linea_linea = 221 221 222
 v_linea_neutro = 127 127 127
-refacciones = fgjythjuj
-observaciones = ghmkuyhtbhhj
+observaciones = Revisión
 
 [REGISTRO 0003]
 id = rmw3y85pu
