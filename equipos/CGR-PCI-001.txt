@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-PCI-001 · Planta Contra Incendio e Hidrantes
-# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Actualizado: 10/11/2026, 2:13:21 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -40,5 +40,23 @@ actividad = [Anual · proveedor] Emitir informe de mantenimiento y certificació
 presion_sistema_psi = Presión del sistema | psi
 nivel_cisterna_pct = Nivel de cisterna | %
 
-# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2026-11-10 | Prueba de funcionamiento   | CARLOS GR
+
+[REGISTRO 0001]
+id = rmwb4nrsi
+fecha = 2026-11-10
+tipo = Prueba de funcionamiento
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 14.1
+actividad = [Semestral] Revisión de válvulas de control del sistema – abiertas y sin bloqueos
+actividad = [Semestral] Prueba de funcionamiento de bomba principal eléctrica – arranque y paro
+actividad = [Semestral] Prueba de funcionamiento de bomba jockey (presurización) – arranque automático
+actividad = [Semestral] Revisión de nivel de agua en cisterna o tanque de almacenamiento
+actividad = [Semestral] Revisión de panel de control de incendio – sin alarmas activas
+actividad = Se deja funcionar durante 10 minutos
+actividad = Cada bomba ( eléctrica, jockey y de combustion diesel)
+nivel_cisterna_pct = 100
+observaciones = Se requiere servicio anual
