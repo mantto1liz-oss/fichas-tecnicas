@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-PEM-001 · Planta de Emergencia PLANELEC 500 kW
-# Actualizado: 5/11/2026, 1:42:26 p.m.
+# Actualizado: 10/11/2026, 2:05:46 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -72,11 +72,12 @@ energia_kwh = Energía acumulada | kWh
 v_linea_linea = V L-L (L1L2/L2L3/L3L1) | V
 v_linea_neutro = V L-N (L1/L2/L3) | V
 
-# ---------------- ÍNDICE DE REGISTROS (3) ----------------
+# ---------------- ÍNDICE DE REGISTROS (4) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-03-20 | Lectura semanal            | Lectura inicial (fotografía del panel)
 # 0002 | 2026-10-28 | Mantenimiento preventivo   | CARLOS GR
 # 0003 | 2026-11-05 | Lectura / inspección       | CARLOS GR
+# 0004 | 2026-11-10 | Lectura / inspección       | CARLOS GR
 
 [REGISTRO 0001]
 id = r1
@@ -144,3 +145,30 @@ energia_kwh = 4214
 v_linea_linea = 67/217/170
 v_linea_neutro = 47/91/128
 observaciones = Empezó a trabajar la planta de emergencia (Generador) 1:20)
+
+[REGISTRO 0004]
+id = rmwb4dz1n
+fecha = 2026-11-10
+tipo = Lectura / inspección
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 137.3
+actividad = [Semanal] Nivel de aceite de motor
+actividad = [Semanal] Nivel de refrigerante
+actividad = [Semanal] Nivel de combustible y fugas
+actividad = [Semanal] Bandas y mangueras
+actividad = [Semanal] Bornes y voltaje de baterías (24 VCD)
+actividad = [Semanal] Cargador de baterías operando
+actividad = [Semanal] Calentador de motor operando
+actividad = [Semanal] Arranque y operación en vacío 15–30 min
+actividad = [Semanal] Radiador limpio y sin obstrucciones
+combustible_pct = 62
+presion_aceite_bar = 2.72
+temp_motor_c = 30
+baterias_v = 28.2
+rpm = 1800
+frecuencia_hz = 60
+energia_kwh = 4323
+v_linea_linea = 217/219/220
+v_linea_neutro = 126/126/127
+observaciones = Se realiza operación en vacío por motivos técnicos,el día de ayer se presentaron 2 cortes de CFE con duración de minutos aproximadamente
