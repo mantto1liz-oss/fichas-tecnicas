@@ -1,5 +1,5 @@
 # ==========================================================
-# CATÁLOGO DE EQUIPOS (37)
+# CATÁLOGO DE EQUIPOS (38)
 # Formato:  ID = Nombre | Ubicación | Tipo
 # Cada equipo tiene su archivo en la carpeta equipos/
 # ==========================================================
@@ -37,6 +37,7 @@ CGR-MTC-004 = Montacargas Clark CGP25 | Patio de Maniobras / Almacén | Montacar
 CGR-PCI-001 = Planta Contra Incendio e Hidrantes | Planta General | Sistema contra incendio
 CGR-PEM-001 = Planta de Emergencia PLANELEC 500 kW | Planta 1 · Muebles Liz | Planta de emergencia
 CGR-POL-001 = Cortadora Polipack | Área de Polipack | Selladora / cortadora
+CGR-REGULADORES8 = Reguladores de voltaje | Planta 1 | Reguladores x capacitores
 CGR-TAB-001 = Tableros Eléctricos | Todas las áreas (rotación mensual) | Tableros de distribución
 CGR-TRF-001 = Transformador 500 kVA | Subestación Eléctrica · Planta 1 | Transformador
 CGR-VAP001 = VAPORERAS | Planta 1 | ITALIANA- JIFFY
