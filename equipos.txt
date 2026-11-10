@@ -1,5 +1,5 @@
 # ==========================================================
-# CATÁLOGO DE EQUIPOS (36)
+# CATÁLOGO DE EQUIPOS (37)
 # Formato:  ID = Nombre | Ubicación | Tipo
 # Cada equipo tiene su archivo en la carpeta equipos/
 # ==========================================================
@@ -39,4 +39,5 @@ CGR-PEM-001 = Planta de Emergencia PLANELEC 500 kW | Planta 1 · Muebles Liz | P
 CGR-POL-001 = Cortadora Polipack | Área de Polipack | Selladora / cortadora
 CGR-TAB-001 = Tableros Eléctricos | Todas las áreas (rotación mensual) | Tableros de distribución
 CGR-TRF-001 = Transformador 500 kVA | Subestación Eléctrica · Planta 1 | Transformador
+CGR-VAP001 = VAPORERAS | Planta 1 | ITALIANA- JIFFY
 CGR-VEN-001 = Ventiladores Industriales | Tapicería / Llenado / Corte / Empaque / Costura | Ventilación
