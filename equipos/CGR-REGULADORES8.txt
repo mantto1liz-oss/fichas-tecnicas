@@ -1,0 +1,36 @@
+# ==========================================================
+# FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
+# Equipo: CGR-REGULADORES8 · Reguladores de voltaje
+# Actualizado: 10/11/2026, 2:18:23 p.m.
+# Formato  campo = valor . Las líneas con # son comentarios.
+# ==========================================================
+
+[EQUIPO]
+id = CGR-REGULADORES8
+nombre = Reguladores de voltaje
+tipo = Reguladores x capacitores
+ubicacion = Planta 1
+area = Mantenimiento Industrial
+
+[PLACA]
+Marca = Por capturar
+Modelo = Por capturar
+No. de serie = Por capturar
+Potencia = Por capturar
+Voltaje = Por capturar
+Año de fabricación = Por capturar
+
+[CHECKLIST]
+actividad = Inspección visual general
+actividad = Limpieza
+actividad = Lubricación
+actividad = Revisión de conexiones eléctricas
+actividad = Ajuste de tornillería
+actividad = Prueba de funcionamiento
+
+[LECTURAS]
+corriente_a = Corriente | A
+temperatura_c = Temperatura | °C
+
+# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# No.  | Fecha      | Tipo                       | Técnico
