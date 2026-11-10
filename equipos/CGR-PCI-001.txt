@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-PCI-001 · Planta Contra Incendio e Hidrantes
-# Actualizado: 10/11/2026, 2:13:21 p.m.
+# Actualizado: 10/11/2026, 2:15:02 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -58,5 +58,6 @@ actividad = [Semestral] Revisión de nivel de agua en cisterna o tanque de almac
 actividad = [Semestral] Revisión de panel de control de incendio – sin alarmas activas
 actividad = Se deja funcionar durante 10 minutos
 actividad = Cada bomba ( eléctrica, jockey y de combustion diesel)
+presion_sistema_psi = 125
 nivel_cisterna_pct = 100
 observaciones = Se requiere servicio anual
