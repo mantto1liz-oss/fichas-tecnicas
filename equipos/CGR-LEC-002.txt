@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-002 · Cortadora Lectra iH8
-# Actualizado: 11/11/2026, 8:18:54 a.m.
+# Actualizado: 11/11/2026, 8:28:24 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -50,10 +50,11 @@ actividad = [500 h] Documentar lecturas de parámetros en bitácora (horas, velo
 horas_vibracion_h = Horas de vibración | h
 horas_aspiracion_h = Horas de aspiración | h
 
-# ---------------- ÍNDICE DE REGISTROS (2) ----------------
+# ---------------- ÍNDICE DE REGISTROS (3) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-02 | Mantenimiento preventivo   | Benito Sanchez
 # 0002 | 2026-11-09 | Mantenimiento preventivo   | Benito Sanchez
+# 0003 | 2026-11-10 | Mantenimiento correctivo   | CARLOS GR
 
 [REGISTRO 0001]
 id = rmw16hxnf
@@ -111,3 +112,15 @@ actividad = [Mensual] Limpieza área del Presser foot
 actividad = Mantenimiento Semanal y se realiza el cambio de sensor de flexión
 horas_vibracion_h = 9919.35
 horas_aspiracion_h = 10637.4
+
+[REGISTRO 0003]
+id = rmwc7s0eu
+fecha = 2026-11-10
+tipo = Mantenimiento correctivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 
+actividad = [Mensual] Limpieza área del Presser foot
+actividad = Se realiza cambio de tarjeta de cabezal al igual se revisa el sensor de Flexion y su cableado se programa para su cambio
+refacciones = Tarjeta cabezal
+observaciones = Se realizan pruebas ,se configura la tarjeta y se revisa el sensor de Flexion
