@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-002 · Cortadora Lectra iH8
-# Actualizado: 3/11/2026, 3:08:00 p.m.
+# Actualizado: 11/11/2026, 8:08:32 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -30,7 +30,7 @@ actividad = [Semanal 40 h] Control de fijación de topes y piñones eje X
 actividad = [Semanal 40 h] Control del piñón Y y fijación de la tapa del cabezal
 actividad = [Semanal 40 h] Limpieza completa y control del cabezal de corte
 actividad = [Semanal 40 h] Limpieza completa y control del filtro de vacío principal
-actividad = [Semanal 40 h] Verificar kit de herramienta completa en máquina
+actividad = [Semanal 40 h] Despues de realizado el mantenimiento anotar en bitacora de máquina
 actividad = [Semanal 40 h] Inspección visual de rieles – verificar que nada obstruya el recorrido
 actividad = [Semanal 40 h] Revisión con operación: guía de afilado – ajustar de ser necesario
 actividad = [Semanal 40 h] Prueba de funcionamiento después de la intervención
