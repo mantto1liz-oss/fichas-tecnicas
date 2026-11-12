@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-ELV-002 · Elevador de Plataforma – Embarques
-# Actualizado: 28/10/2026, 5:11:45 p.m.
+# Actualizado: 12/11/2026, 11:43:21 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -35,5 +35,16 @@ actividad = [Anual] Emitir reporte de mantenimiento firmado – registrar observ
 [LECTURAS]
 corriente_a = Corriente motor | A
 
-# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2026-11-10 | Mantenimiento correctivo   | Benito Sanchez
+
+[REGISTRO 0001]
+id = rmwdu6l70
+fecha = 2026-11-10
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 3.3
+actividad = Se repara el microswitch de la puerta de arriba
+observaciones = Queda funcionando bien
