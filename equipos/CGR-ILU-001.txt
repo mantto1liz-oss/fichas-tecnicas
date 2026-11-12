@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-ILU-001 · Iluminación Planta 1
-# Actualizado: 5/11/2026, 11:17:13 a.m.
+# Actualizado: 12/11/2026, 11:49:24 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -47,11 +47,12 @@ actividad = [Mensual] Revisión de luminarias – Área de Bodegas Traseras
 luminarias_cambiadas = Luminarias cambiadas | pzas
 luminarias_falla = Luminarias con falla | pzas
 
-# ---------------- ÍNDICE DE REGISTROS (3) ----------------
+# ---------------- ÍNDICE DE REGISTROS (4) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-05 | Mantenimiento correctivo   | Benito Sanchez
 # 0002 | 2026-11-05 | Mantenimiento correctivo   | Benito Sanchez
 # 0003 | 2026-11-05 | Mantenimiento correctivo   | Benito Sanchez
+# 0004 | 2026-11-10 | Mantenimiento correctivo   | Brandon
 
 [REGISTRO 0001]
 id = rmw3sdcs5
@@ -91,3 +92,18 @@ luminarias_cambiadas = 1
 luminarias_falla = 1
 refacciones = Foco de 100w led
 observaciones = El andén de embarques cuenta con 4 lámparas, todas en funcionamiento
+
+[REGISTRO 0004]
+id = rmwduecqj
+fecha = 2026-11-10
+tipo = Mantenimiento correctivo
+tecnico = Brandon
+usuario = brandon
+horometro = 2
+actividad = [Mensual] Revisión de luminarias – Diseño
+actividad = Remplazo de reflector LED
+actividad = Modelo- ml -ref - 50w smd
+luminarias_cambiadas = 1
+luminarias_falla = 1
+refacciones = 50 LQ LED M65 MVN TECNOLITE
+observaciones = Se verifica que funcione correctamente el nuevo
