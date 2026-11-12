@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-PCI-001 · Planta Contra Incendio e Hidrantes
-# Actualizado: 12/11/2026, 11:56:06 a.m.
+# Actualizado: 12/11/2026, 12:02:01 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -78,6 +78,6 @@ actividad = [Semestral] Revisión de panel de control de incendio – sin alarma
 actividad = [Semestral] Inspección visual de gabinetes de mangueras – mangueras enrolladas, boquilla presente
 actividad = Se rellena anticongelante consumido
 presion_sistema_psi = 120
-nivel_cisterna_pct = 10000
+nivel_cisterna_pct = 50,000
 refacciones = Anticongelante
 observaciones = Lista para usarse
