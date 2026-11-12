@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-001 · Cortadora Lectra iQ80
-# Actualizado: 5/11/2026, 2:38:53 p.m.
+# Actualizado: 12/11/2026, 1:47:42 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -50,9 +50,10 @@ actividad = [500 h] Documentar lecturas de parámetros en bitácora (horas, velo
 horas_vibracion_h = Horas de vibración | h
 horas_aspiracion_h = Horas de aspiración | h
 
-# ---------------- ÍNDICE DE REGISTROS (1) ----------------
+# ---------------- ÍNDICE DE REGISTROS (2) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-05 | Mantenimiento preventivo   | Brandon
+# 0002 | 2026-11-12 | Mantenimiento preventivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmw40dcrj
@@ -87,3 +88,31 @@ actividad = [500 h] Documentar lecturas de parámetros en bitácora (horas, velo
 horas_vibracion_h = 332818431140
 horas_aspiracion_h = 731140
 observaciones = Un dedo de la gia de afilado necesita ajuste
+
+[REGISTRO 0002]
+id = rmwdymh1o
+fecha = 2026-11-12
+tipo = Mantenimiento preventivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 322.3
+actividad = [Semanal 40 h] Control visual de peines y protecciones de la máquina
+actividad = [Semanal 40 h] Aspirado por la parte superior de los cepillos de corte
+actividad = [Semanal 40 h] Engrase de raíles X – control de bloques de deslizamiento
+actividad = [Semanal 40 h] Limpieza e inspección cadena portacables eje X
+actividad = [Semanal 40 h] Limpieza de rejillas de filtrado del sistema de aspiración
+actividad = [Semanal 40 h] Purga de filtros neumáticos – drenar condensado
+actividad = [Semanal 40 h] Engrase de raíles Y
+actividad = [Semanal 40 h] Limpieza e inspección cadena portacables eje Y
+actividad = [Semanal 40 h] Control de fijación de topes y piñones eje X
+actividad = [Semanal 40 h] Control del piñón Y y fijación tapa del cabezal
+actividad = [Semanal 40 h] Limpieza completa y control del cabezal de corte
+actividad = [Semanal 40 h] Limpieza completa y control del filtro de vacío principal
+actividad = [Semanal 40 h] Verificar funcionamiento sistema de vacío – revisar fugas
+actividad = [Semanal 40 h] Verificar kit de herramienta completa en máquina
+actividad = [Semanal 40 h] Inspección visual de rieles – sin obstrucciones en recorrido
+actividad = [Semanal 40 h] Prueba de funcionamiento después de la intervención
+actividad = [Semanal 40 h] Verificar lecturas de horas de vibración y aspiración en pantalla
+horas_vibracion_h = 3340.53
+horas_aspiracion_h = 7348.32
+observaciones = Mantenimiento semanal.
