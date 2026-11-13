@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-LLENADO-005 · Activides General
-# Actualizado: 13/11/2026, 9:21:24 a.m.
+# Actualizado: 13/11/2026, 9:22:05 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -37,6 +37,7 @@ actividad = Pintura
 [LECTURAS]
 linea = Linea | 
 nombre_operador = Nombre Operador | 
+responsable_del_area = Responsable del Area | 
 
 # ---------------- ÍNDICE DE REGISTROS (0) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
