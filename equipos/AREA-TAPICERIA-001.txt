@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 13/11/2026, 8:47:59 a.m.
+# Actualizado: 13/11/2026, 8:50:11 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -13,7 +13,7 @@ ubicacion = Planta 1
 area = Mantenimiento Industrial
 
 [PLACA]
-Activiidad = Por capturar
+Actividad = Por capturar
 Fecha = Por capturar
 Refaciones Utilizadas = Por capturar
 Quien solicito = Por capturar
