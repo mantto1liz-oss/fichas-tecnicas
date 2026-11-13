@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-BOM-001 · Bombas Sumergible CASCO
-# Actualizado: 4/11/2026, 4:04:17 p.m.
+# Actualizado: 13/11/2026, 9:28:34 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -23,6 +23,7 @@ Flujo Max = 667 L/M
 Modeló = DWE37V
 Ip = X8
 Ubicación de bomba = Casco
+AREA = 
 
 [CHECKLIST]
 actividad = [Mensual] Verificar que el pozo o cárcamo no presente acumulación excesiva de agua
