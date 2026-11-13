@@ -1,5 +1,5 @@
 # ==========================================================
-# CATÁLOGO DE EQUIPOS (45)
+# CATÁLOGO DE EQUIPOS (46)
 # Formato:  ID = Nombre | Ubicación | Tipo
 # Cada equipo tiene su archivo en la carpeta equipos/
 # ==========================================================
@@ -12,6 +12,7 @@ AREA-EMBARQUES-007 = Activides General | Planta 1 | Preventivo-Correctivo
 AREA-LLENADO-005 = Activides General | Planta 1 | Preventivo-Correctivo
 AREA-TAPICERIA-001 = Activides General | Planta 1 | Preventivo-Correctivo
 CGR-ABR-001 = Abridora de Fibra Bridhi | Área de Llenado | Abridora de fibra
+CGR-ABRID-FIBR-012 = Abridora de fibra | Planta 1 | Rodamientos , rodillos,banda
 CGR-BOM-001 = Bombas Sumergibles | Rampa de Casco | Bombeo
 CGR-BOM002 = Bomba sumergible  almacen | Planta 1 | agua pluvial y lodos
 CGR-BOM003 = Bomba sumergible  EMBARQUES | Planta 1 | agua pluvial y lodos
