@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-BOM-001 · Bombas Sumergibles
-# Actualizado: 13/11/2026, 9:29:08 a.m.
+# Actualizado: 13/11/2026, 9:31:14 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -35,9 +35,11 @@ actividad = [Mensual] Revisar conexiones eléctricas en el tablero de control de
 actividad = [Mensual] Probar arranque manual desde tablero – verificar amperaje de operación
 actividad = [Mensual] Limpiar el área del cárcamo – retirar basura o residuos que puedan obstruir
 actividad = [Mensual] Registrar si la bomba presenta vibración, ruido inusual o sobrecalentamiento
+actividad = AREA DE BOMBA
 
 [LECTURAS]
 corriente_a = Corriente de operación | A
+area_de_bomba = Area de bomba | 
 
 # ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
