@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 13/11/2026, 8:36:30 a.m.
+# Actualizado: 13/11/2026, 8:41:32 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -18,15 +18,16 @@ Fecha = Por capturar
 Refaciones Utilizadas = Por capturar
 Quien solicito = Por capturar
 Tipo de Servicio = Por capturar
-# O.T = Por capturar
+Hora = 3:34 pm
 
 [CHECKLIST]
 actividad = Inspección visual general
 actividad = Limpieza
-actividad = Lubricación
-actividad = Revisión de conexiones eléctricas
-actividad = Ajuste de tornillería
-actividad = Prueba de funcionamiento
+actividad = Soldadura
+actividad = Electricidad
+actividad = Reparacion
+actividad = Neumatica
+actividad = Instalacion
 
 [LECTURAS]
 linea = Linea # | 
