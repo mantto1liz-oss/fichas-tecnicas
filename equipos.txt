@@ -1,10 +1,11 @@
 # ==========================================================
-# CATÁLOGO DE EQUIPOS (40)
+# CATÁLOGO DE EQUIPOS (41)
 # Formato:  ID = Nombre | Ubicación | Tipo
 # Cada equipo tiene su archivo en la carpeta equipos/
 # ==========================================================
 
 AREA-COSTURA-002 = Activides General | Planta 1 | Preventivo-Correctivo
+AREA-DISEO-003 = Activides General | Planta 1 | Preventivo-Correctivo
 AREA-TAPICERIA-001 = Activides General | Planta 1 | Preventivo-Correctivo
 CGR-ABR-001 = Abridora de Fibra Bridhi | Área de Llenado | Abridora de fibra
 CGR-BOM-001 = Bombas Sumergible CASCO | Rampa de Casco | Bombeo
