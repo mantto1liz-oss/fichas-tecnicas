@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-COSTURA-002 · Activides General
-# Actualizado: 13/11/2026, 8:30:04 a.m.
+# Actualizado: 13/11/2026, 8:55:06 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -13,24 +13,26 @@ ubicacion = Planta 1
 area = Mantenimiento Industrial
 
 [PLACA]
-Marca = Por capturar
-Modelo = Por capturar
-No. de serie = Por capturar
-Potencia = Por capturar
-Voltaje = Por capturar
-Año de fabricación = Por capturar
+Actividad = Por capturar
+Fecha = Por capturar
+Refaciones Utilizadas = Por capturar
+Quien solicito = Por capturar
+Tipo de Servicio = Por capturar
+Hora = Por capturar
 
 [CHECKLIST]
-actividad = Inspección visual general
+actividad = Inspeccion visual general
 actividad = Limpieza
-actividad = Lubricación
-actividad = Revisión de conexiones eléctricas
-actividad = Ajuste de tornillería
-actividad = Prueba de funcionamiento
+actividad = Soldadura
+actividad = Electricidad
+actividad = Reparacion
+actividad = Neumatica
+actividad = Instalacion
 
 [LECTURAS]
-corriente_a = Corriente | A
-temperatura_c = Temperatura | °C
+linea = Linea# | 
+operacion = Operacion# | 
+nombre_operador = nombre operador | 
 
 # ---------------- ÍNDICE DE REGISTROS (0) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
