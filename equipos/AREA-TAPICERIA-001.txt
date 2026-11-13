@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 13/11/2026, 8:43:07 a.m.
+# Actualizado: 13/11/2026, 8:47:59 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -34,5 +34,20 @@ linea = Linea # |
 operacion = Operacion# | 
 nombre_operdor = Nombre operdor | 
 
-# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2026-11-12 | Mantenimiento correctivo   | CARLOS GR
+
+[REGISTRO 0001]
+id = rmwf3cwxd
+fecha = 2026-11-12
+tipo = Mantenimiento correctivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 
+actividad = Reparacion
+actividad = colocación de abrazadera
+linea = 1
+operacion = 1
+nombre_operdor = Ojos Rojos
+refacciones = mManguera roja LINEA PARA NEUMATICOS
