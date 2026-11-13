@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 13/11/2026, 9:05:24 a.m.
+# Actualizado: 13/11/2026, 9:49:18 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -35,9 +35,10 @@ linea = Linea # |
 operacion = Operacion# | 
 nombre_operdor = Nombre operdor | 
 
-# ---------------- ÍNDICE DE REGISTROS (1) ----------------
+# ---------------- ÍNDICE DE REGISTROS (2) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-12 | Mantenimiento correctivo   | CARLOS GR
+# 0002 | 2026-11-13 | Mantenimiento preventivo   | CARLOS GR
 
 [REGISTRO 0001]
 id = rmwf3cwxd
@@ -52,3 +53,23 @@ linea = 1
 operacion = 1
 nombre_operdor = Ojos Rojos
 refacciones = mManguera roja LINEA PARA NEUMATICOS
+
+[REGISTRO 0002]
+id = rmwf5jrrv
+fecha = 2026-11-13
+tipo = Mantenimiento preventivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 
+actividad = Inspección visual general
+actividad = Soldadura
+actividad = Reparación
+actividad = Neumática
+actividad = Instalación
+actividad = Pintura
+actividad = se entrega vaporera italiana a Elvis
+actividad = se coloca conector niple para manguera
+actividad = se le entrega tijeras que trajo Raul
+linea = supervisor del area
+nombre_operdor = Elvis Martinez
+refacciones = NIPLE
