@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-002 · Cortadora Lectra iH8
-# Actualizado: 17/11/2026, 12:20:54 p.m.
+# Actualizado: 17/11/2026, 3:07:28 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -50,13 +50,14 @@ actividad = [500 h] Documentar lecturas de parámetros en bitácora (horas, velo
 horas_vibracion_h = Horas de vibración | h
 horas_aspiracion_h = Horas de aspiración | h
 
-# ---------------- ÍNDICE DE REGISTROS (5) ----------------
+# ---------------- ÍNDICE DE REGISTROS (6) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-02 | Mantenimiento preventivo   | Benito Sanchez
 # 0002 | 2026-11-09 | Mantenimiento preventivo   | Benito Sanchez
 # 0003 | 2026-11-10 | Mantenimiento correctivo   | CARLOS GR
 # 0004 | 2026-11-17 | Prueba de funcionamiento   | CARLOS GR
 # 0005 | 2026-11-17 | Prueba de funcionamiento   | CARLOS GR
+# 0006 | 2026-11-17 | Mantenimiento preventivo   | Brandon
 
 [REGISTRO 0001]
 id = rmw16hxnf
@@ -150,3 +151,32 @@ actividad = Actualización del Firmware
 horas_vibracion_h = -----
 horas_aspiracion_h = -----
 observaciones = Al reiniciar se actualizo en automático
+
+[REGISTRO 0006]
+id = rmwl6obpx
+fecha = 2026-11-17
+tipo = Mantenimiento preventivo
+tecnico = Brandon
+usuario = brandon
+horometro = 3219.55
+actividad = [Semanal 40 h] Control visual de peines y protecciones de la máquina
+actividad = [Semanal 40 h] Aspirado por la parte superior de los cepillos de corte
+actividad = [Semanal 40 h] Engrase de los raíles X / control de bloques de deslizamiento
+actividad = [Semanal 40 h] Limpieza e inspección de la cadena portacables eje X
+actividad = [Semanal 40 h] Limpieza de rejillas de filtrado del sistema de aspiración
+actividad = [Semanal 40 h] Purga de los filtros neumáticos (drenar condensado)
+actividad = [Semanal 40 h] Engrase de los raíles Y (carros laterales)
+actividad = [Semanal 40 h] Limpieza e inspección de la cadena portacables eje Y
+actividad = [Semanal 40 h] Control de fijación de topes y piñones eje X
+actividad = [Semanal 40 h] Control del piñón Y y fijación de la tapa del cabezal
+actividad = [Semanal 40 h] Limpieza completa y control del cabezal de corte
+actividad = [Semanal 40 h] Limpieza completa y control del filtro de vacío principal
+actividad = [Semanal 40 h] Despues de realizado el mantenimiento anotar en bitacora de máquina
+actividad = [Semanal 40 h] Inspección visual de rieles – verificar que nada obstruya el recorrido
+actividad = [Semanal 40 h] Revisión con operación: guía de afilado – ajustar de ser necesario
+actividad = [Semanal 40 h] Prueba de funcionamiento después de la intervención
+actividad = [Semanal 40 h] Verificar lecturas de horas de vibración y aspiración en pantalla
+actividad = [Mensual] Limpieza área del Presser foot
+horas_vibracion_h = 9931.19
+horas_aspiracion_h = 18667.27
+observaciones = Lista para utilizar la
