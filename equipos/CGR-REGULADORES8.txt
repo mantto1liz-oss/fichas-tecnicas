@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-REGULADORES8 · Reguladores de voltaje
-# Actualizado: 17/11/2026, 2:42:49 p.m.
+# Actualizado: 17/11/2026, 2:43:51 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -47,4 +47,4 @@ actividad = Inspección visual general
 actividad = Revisión de conexiones eléctricas
 actividad = Prueba de funcionamiento
 actividad = Se realizó el cambio de reemplazo de regulador
-observaciones = Se requiere reparación de dos reguladores, uno marca 95v. Y el otro 69v.
+observaciones = Se requiere reparación de dos reguladores, uno marca 95v. Y el otro 69v.\n\nQueda en buen funcionamiento
