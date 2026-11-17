@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-PEM-001 · Planta de Emergencia PLANELEC 500 kW
-# Actualizado: 17/11/2026, 12:30:49 p.m.
+# Actualizado: 17/11/2026, 12:32:40 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -188,4 +188,4 @@ frecuencia_hz = 60
 energia_kwh = 4354
 v_linea_linea = 219-220-221
 v_linea_neutro = 127-126-127
-observaciones = Se utilizo el sábado en el transcurso del día
+observaciones = Se utilizo el sábado en el transcurso del día prendió 15:23  se apagó 18:55
