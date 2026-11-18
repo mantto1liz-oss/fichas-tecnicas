@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 18/11/2026, 9:17:30 a.m.
+# Actualizado: 18/11/2026, 10:25:16 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -101,4 +101,5 @@ actividad = 2 Reemplazos de abrazadera
 actividad = Reemplazo de conector rápido macho
 linea = 4......3
 operacion = 4
+refacciones = Abrazaderas, cople con espiga y conector rápido macho
 observaciones = Quedando en funcionamiento
