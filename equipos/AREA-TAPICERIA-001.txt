@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 18/11/2026, 1:29:54 p.m.
+# Actualizado: 18/11/2026, 1:32:24 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -35,13 +35,14 @@ linea = Linea # |
 operacion = Operacion# | 
 nombre_operdor = Nombre operdor | 
 
-# ---------------- ÍNDICE DE REGISTROS (5) ----------------
+# ---------------- ÍNDICE DE REGISTROS (6) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-12 | Mantenimiento correctivo   | CARLOS GR
 # 0002 | 2026-11-13 | Mantenimiento preventivo   | CARLOS GR
 # 0003 | 2026-11-17 | Mantenimiento preventivo   | Benito Sanchez
 # 0004 | 2026-11-18 | Mantenimiento correctivo   | Benito Sanchez
 # 0005 | 2026-11-18 | Mantenimiento preventivo   | Brandon
+# 0006 | 2026-11-18 | Mantenimiento correctivo   | Brandon
 
 [REGISTRO 0001]
 id = rmwf3cwxd
@@ -117,3 +118,16 @@ linea = 1
 operacion = 5
 refacciones = Una abrazadera y un conector
 observaciones = Las mangueras ya están muy desgastadas
+
+[REGISTRO 0006]
+id = rmwmipxu9
+fecha = 2026-11-18
+tipo = Mantenimiento correctivo
+tecnico = Brandon
+usuario = brandon
+horometro = 1.1
+actividad = Neumática
+linea = 4
+operacion = 1
+refacciones = Abrazadera y conector con espiga
+observaciones = La manguera negra ya está muy vieja
