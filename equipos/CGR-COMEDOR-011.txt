@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-COMEDOR-011 · Comedor -cocina
-# Actualizado: 18/11/2026, 2:42:31 p.m.
+# Actualizado: 18/11/2026, 2:51:46 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -13,24 +13,26 @@ ubicacion = Planta 1
 area = Mantenimiento Industrial
 
 [PLACA]
-Marca = Por capturar
-Modelo = Por capturar
-No. de serie = Por capturar
-Potencia = Por capturar
-Voltaje = Por capturar
-Año de fabricación = Por capturar
+Lugar = Cocina - Comedor
+Tipo de servicio = Por definir
+Hornos -estufas-refrigerador-nevera-luminarias-aire acondicionado -electronicos = Por capturar
+Urgente = No - si
+Status = Reparado - no reparado - en espera
+Hora de OT = 2:30 pm
+Quien solicito = Nombré
 
 [CHECKLIST]
 actividad = Inspección visual general
 actividad = Limpieza
 actividad = Lubricación
 actividad = Revisión de conexiones eléctricas
-actividad = Ajuste de tornillería
+actividad = Ajuste
 actividad = Prueba de funcionamiento
+actividad = En espera de refacciones
+actividad = En proceso
 
 [LECTURAS]
-corriente_a = Corriente | A
-temperatura_c = Temperatura | °C
+de_que_se_trato_la_reparacion = De que se trató la reparación | 
 
 # ---------------- ÍNDICE DE REGISTROS (0) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
