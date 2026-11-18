@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 17/11/2026, 2:38:49 p.m.
+# Actualizado: 18/11/2026, 9:17:30 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -35,11 +35,12 @@ linea = Linea # |
 operacion = Operacion# | 
 nombre_operdor = Nombre operdor | 
 
-# ---------------- ÍNDICE DE REGISTROS (3) ----------------
+# ---------------- ÍNDICE DE REGISTROS (4) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-12 | Mantenimiento correctivo   | CARLOS GR
 # 0002 | 2026-11-13 | Mantenimiento preventivo   | CARLOS GR
 # 0003 | 2026-11-17 | Mantenimiento preventivo   | Benito Sanchez
+# 0004 | 2026-11-18 | Mantenimiento correctivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmwf3cwxd
@@ -84,3 +85,20 @@ usuario = benito
 horometro = 3
 actividad = Se realizó reparación de saca grapas y se realizó un saca grapas nuevo
 observaciones = Quedan funcionando
+
+[REGISTRO 0004]
+id = rmwm9m4tz
+fecha = 2026-11-18
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 9
+actividad = Inspección visual general
+actividad = Reparación
+actividad = Neumática
+actividad = Reemplazo de Cople con espiga
+actividad = 2 Reemplazos de abrazadera
+actividad = Reemplazo de conector rápido macho
+linea = 4......3
+operacion = 4
+observaciones = Quedando en funcionamiento
