@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-COSTURA-002 · Activides General
-# Actualizado: 13/11/2026, 9:04:49 a.m.
+# Actualizado: 18/11/2026, 4:07:10 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -35,5 +35,19 @@ linea = Linea# |
 operacion = Operacion# | 
 nombre_operador = nombre operador | 
 
-# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2026-11-18 | Mantenimiento correctivo   | Benito Sanchez
+
+[REGISTRO 0001]
+id = rmwmo8z5j
+fecha = 2026-11-18
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 3.55
+actividad = Inspección visual general
+actividad = Electricidad
+actividad = Reacomodo de instalación eléctrica en mesa de rayado
+refacciones = Cinchos y extrension
+observaciones = Quedando en funcionamiento
