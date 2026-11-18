@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-CORTE-004 · Activides General
-# Actualizado: 17/11/2026, 3:34:36 p.m.
+# Actualizado: 18/11/2026, 4:06:54 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -34,9 +34,10 @@ actividad = Pintura
 nombre_operacion = Nombre Operacion | 
 area = Area | 
 
-# ---------------- ÍNDICE DE REGISTROS (1) ----------------
+# ---------------- ÍNDICE DE REGISTROS (2) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-17 | Mantenimiento correctivo   | Benito Sanchez
+# 0002 | 2026-11-18 | Prueba de funcionamiento   | Brandon
 
 [REGISTRO 0001]
 id = rmwl7n2yf
@@ -47,3 +48,14 @@ usuario = benito
 horometro = 2
 actividad = Afiliado y ajuste para tijeras para Sara
 observaciones = Quedan en funcionamiento
+
+[REGISTRO 0002]
+id = rmwmo8lsv
+fecha = 2026-11-18
+tipo = Prueba de funcionamiento
+tecnico = Brandon
+usuario = brandon
+horometro = 3.3
+actividad = Instalación
+actividad = Instalación de pantallas led
+observaciones = Listas para usar
