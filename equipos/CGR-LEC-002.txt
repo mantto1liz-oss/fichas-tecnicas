@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-002 · Cortadora Lectra iH8
-# Actualizado: 17/11/2026, 3:07:28 p.m.
+# Actualizado: 18/11/2026, 10:24:53 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -50,7 +50,7 @@ actividad = [500 h] Documentar lecturas de parámetros en bitácora (horas, velo
 horas_vibracion_h = Horas de vibración | h
 horas_aspiracion_h = Horas de aspiración | h
 
-# ---------------- ÍNDICE DE REGISTROS (6) ----------------
+# ---------------- ÍNDICE DE REGISTROS (7) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-02 | Mantenimiento preventivo   | Benito Sanchez
 # 0002 | 2026-11-09 | Mantenimiento preventivo   | Benito Sanchez
@@ -58,6 +58,7 @@ horas_aspiracion_h = Horas de aspiración | h
 # 0004 | 2026-11-17 | Prueba de funcionamiento   | CARLOS GR
 # 0005 | 2026-11-17 | Prueba de funcionamiento   | CARLOS GR
 # 0006 | 2026-11-17 | Mantenimiento preventivo   | Brandon
+# 0007 | 2026-11-18 | Mantenimiento correctivo   | CARLOS GR
 
 [REGISTRO 0001]
 id = rmw16hxnf
@@ -180,3 +181,15 @@ actividad = [Mensual] Limpieza área del Presser foot
 horas_vibracion_h = 9931.19
 horas_aspiracion_h = 18667.27
 observaciones = Lista para utilizar la
+
+[REGISTRO 0007]
+id = rmwmc0rq0
+fecha = 2026-11-18
+tipo = Mantenimiento correctivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 10.19
+actividad = Se coloca cinta doble cara para sujetar conector spot láser
+horas_vibracion_h = ----
+horas_aspiracion_h = -----
+observaciones = A espera de refacción pedida por Victor Ibarra
