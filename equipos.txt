@@ -1,5 +1,5 @@
 # ==========================================================
-# CATÁLOGO DE EQUIPOS (47)
+# CATÁLOGO DE EQUIPOS (48)
 # Formato:  ID = Nombre | Ubicación | Tipo
 # Cada equipo tiene su archivo en la carpeta equipos/
 # ==========================================================
@@ -29,6 +29,7 @@ CGR-CMP-051 = Compresor Quincy 30 HP #51 | Cuarto de Compresores · Planta 1 | C
 CGR-CMP-053 = Compresor Quincy 30 HP #53 | Cuarto de Compresores · Planta 1 | Compresor de aire
 CGR-CMP-100 = Compresore Portátil  100LTS | DISEÑO | Compresor de pistón
 CGR-COMEDOR-011 = Comedor -cocina | Planta 1 | Servicios
+CGR-CONSULTORIO-0012 = Consultorio | Planta 1 | Servicios
 CGR-COR-001 = Cortadora Eléctrica Eastman Buzzard | Área de Corte Manual | Cortadora manual
 CGR-COR-002 = Cortadora Eléctrica Eastman Chickadee II | Área de Corte Manual | Cortadora manual
 CGR-ELV-001 = Elevador de Plataforma – Tapicería | Área de Tapicería / Acceso tapanco | Elevador de carga
