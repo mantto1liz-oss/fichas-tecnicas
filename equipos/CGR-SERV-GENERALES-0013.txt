@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-SERV-GENERALES-0013 · Servicios Generales
-# Actualizado: 19/11/2026, 8:32:49 a.m.
+# Actualizado: 19/11/2026, 8:44:23 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -13,24 +13,29 @@ ubicacion = Planta 1
 area = Mantenimiento Industrial
 
 [PLACA]
-Marca = Por capturar
-Modelo = Por capturar
-No. de serie = Por capturar
-Potencia = Por capturar
-Voltaje = Por capturar
-Año de fabricación = Por capturar
+Actividad = Por capturar
+Fecha = Por capturar
+Refacciones Utilizadas = Por capturar
+Quien solicito = Por capturar
+Tipo de servicio = Por capturar
+Hora = Por capturar
 
 [CHECKLIST]
 actividad = Inspección visual general
 actividad = Limpieza
-actividad = Lubricación
+actividad = Soldadura
 actividad = Revisión de conexiones eléctricas
-actividad = Ajuste de tornillería
+actividad = Electricidad
 actividad = Prueba de funcionamiento
+actividad = Reparación
+actividad = Neumatica
+actividad = Pintura
+actividad = Baños
+actividad = Jardinería
+actividad = Otros
 
 [LECTURAS]
-corriente_a = Corriente | A
-temperatura_c = Temperatura | °C
+orden_de_trabajo_ot = Orden de trabajo OT | 
 
 # ---------------- ÍNDICE DE REGISTROS (0) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
