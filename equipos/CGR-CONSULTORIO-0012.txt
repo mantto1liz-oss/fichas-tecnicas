@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-CONSULTORIO-0012 · Consultorio
-# Actualizado: 19/11/2026, 8:17:55 a.m.
+# Actualizado: 19/11/2026, 8:23:41 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -32,5 +32,19 @@ actividad = Prueba de funcionamiento
 corriente_a = Corriente | A
 temperatura_c = Temperatura | °C
 
-# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2026-11-05 | Mantenimiento correctivo   | CARLOS GR
+
+[REGISTRO 0001]
+id = rmwnn4r8v
+fecha = 2026-11-05
+tipo = Mantenimiento correctivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 11.05
+actividad = Inspección visual general
+actividad = Prueba de funcionamiento
+actividad = Cambio de luminaria dañada tubo led T8
+refacciones = Tubo Led T-8
+observaciones = Reemplazo tubo Led T-8
