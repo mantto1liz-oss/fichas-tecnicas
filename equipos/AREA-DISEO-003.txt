@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-DISEO-003 · Activides General
-# Actualizado: 18/11/2026, 10:24:08 a.m.
+# Actualizado: 19/11/2026, 8:08:36 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -34,9 +34,10 @@ actividad = Pintura
 area = Area | 
 nombre_de_operador = Nombre de operador | 
 
-# ---------------- ÍNDICE DE REGISTROS (1) ----------------
+# ---------------- ÍNDICE DE REGISTROS (2) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-18 | Mantenimiento correctivo   | Benito Sanchez
+# 0002 | 2026-11-18 | Mantenimiento preventivo   | CARLOS GR
 
 [REGISTRO 0001]
 id = rmwmbzt7g
@@ -52,3 +53,14 @@ actividad = Se reemplazó un conector de manguera neumatica
 actividad = Se realizó ajuste de mangueras neumaticas
 refacciones = Conector para manguera neumatica
 observaciones = Queda funcionando, aunque se requiere otro reemplazo de conector para manguera neumática
+
+[REGISTRO 0002]
+id = rmwnmlctc
+fecha = 2026-11-18
+tipo = Mantenimiento preventivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 11.2
+actividad = Se le entrega 3 llantas negras de 1,1\\2" a Jorge Arredondo
+refacciones = Llantas carritos 1,1\\2"
+observaciones = Material para diversas plataformas
