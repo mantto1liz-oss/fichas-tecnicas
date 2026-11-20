@@ -148,3 +148,13 @@ linea = 2
 operacion = 1
 nombre_operdor = -----
 observaciones = Se realiza trabajo en banco de tapicería no funcional
+
+[REGISTRO 0008]
+id = tk-T-0002
+fecha = 2026-11-20
+tipo = Mantenimiento correctivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 
+actividad = Ticket T-0002 · Noe masca chicle: Produce ruidos extraños
+observaciones = Solución: A un chicle nuevo · Reportó: CARLOS GR el 2026-11-20 13:39
