@@ -64,7 +64,8 @@ textarea{min-height:90px;resize:vertical}
 <script>
 (function(){
 var F_CONFIG='config.txt',IT=600000,DIR_T='tickets/',DIR_E='equipos/';
-var CFG=null,SES=null,AREA='',NOMBRE='',TK=[],notice=null,busy=false,tab='pend',vista='lista',cerrando=null;
+var CFG=null,SES=null,AREA='',NOMBRE='',TK=[],notice=null,busy=false,tab='pend',vista='lista',cerrando=null,borrando=null,ultimaCarga=null,timer=null;
+var MAX={lugar:80,descripcion:600,reporta:60,solucion:600};
 function tEsc(v){return String(v==null?'':v).replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n')}
 function tUnesc(v){return v.replace(/\\(n|\\)/g,function(m,c){return c==='n'?'\n':'\\'})}
 function tNum(v){return /^-?\d+(\.\d+)?$/.test(v)?Number(v):v}
@@ -130,6 +131,12 @@ function ahora(){var d=new Date(),p=function(n){return String(n).padStart(2,'0')
 var MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 function fF(s){if(!s)return '—';var m=String(s).match(/^(\d{4})-(\d\d)-(\d\d)\s*(.*)$/);return m?(+m[3])+' '+MES[+m[2]-1]+' '+m[1]+(m[4]?' · '+m[4]:''):s}
 function horas(a,b){var x=new Date(String(a).replace(' ','T')),y=new Date(String(b).replace(' ','T'));if(isNaN(x)||isNaN(y))return '';var m=Math.max(0,Math.round((y-x)/6e4));return m<60?m+' min':m<1440?(m/60).toFixed(1)+' h':(m/1440).toFixed(1)+' días'}
+function hace(s){var d=new Date(String(s).replace(' ','T'));if(isNaN(d))return '';var m=Math.round((Date.now()-d)/6e4);return m<1?'hace un momento':m<60?'hace '+m+' min':m<1440?'hace '+Math.floor(m/60)+' h':'hace '+Math.floor(m/1440)+' d'}
+function edadH(s){var d=new Date(String(s).replace(' ','T'));return isNaN(d)?0:(Date.now()-d)/36e5}
+async function leerFresco(path){
+  if(SES&&CFG){try{var f=await gh('GET',api(CFG,path)+'?ref='+encodeURIComponent(CFG.branch));return new TextDecoder().decode(b64d(f.content))}catch(e){if(e.status===404)return null;if(e.status!==401&&e.status!==403)throw e}}
+  return txtFetch(path);
+}
 function puedeCerrar(){return SES&&(SES.rol==='admin'||SES.rol==='tecnico')}
 
 /* ── Archivo tickets/<AREA>.txt ── */
@@ -191,16 +198,17 @@ function kpisHTML(){
 function tkHTML(t){
   var st=t.estado==='En proceso'?'En':t.estado;
   var h='<div class="tk"><div class="tk-top"><span class="folio">'+esc(t.folio)+'</span><span class="pill st-'+st+'">'+esc(t.estado)+'</span><span class="pill pr-'+esc(t.prioridad||'Media')+'">'+esc(t.prioridad||'Media')+'</span><b>'+esc(t.lugar)+'</b></div>'+
-   '<p>'+esc(t.descripcion)+'</p><div class="meta">Reportó '+esc(t.reporta)+' · '+esc(fF(t.creado))+(t.atiende?' · Atiende '+esc(t.atiende):'')+(t.inicio?' desde '+esc(fF(t.inicio)):'')+'</div>';
+   '<p>'+esc(t.descripcion)+'</p><div class="meta">Reportó '+esc(t.reporta)+' · '+esc(fF(t.creado))+(t.estado!=='Realizado'&&t.creado?' · <b style="color:'+(edadH(t.creado)>24?'var(--bad)':'inherit')+'">'+esc(hace(t.creado))+'</b>':'')+(t.atiende?' · Atiende '+esc(t.atiende):'')+(t.inicio?' desde '+esc(fF(t.inicio)):'')+'</div>';
   if(t.estado==='Realizado')h+='<div class="sol"><b>Realizado</b> '+esc(fF(t.cierre))+(t.cerro_por?' por @'+esc(t.cerro_por):'')+(t.creado&&t.cierre?' · tiempo de atención '+esc(horas(t.creado,t.cierre)):'')+'<br>'+esc(t.solucion)+'</div>';
   if(puedeCerrar()){
-    if(cerrando===t.folio)h+='<div class="f"><label for="sol">¿Qué se hizo para repararlo?</label><textarea id="sol" placeholder="Ej. Se cambió banda y se ajustó tensión"></textarea></div>'+
+    if(cerrando===t.folio)h+='<div class="f"><label for="sol">¿Qué se hizo para repararlo?</label><textarea id="sol" maxlength="600" placeholder="Ej. Se cambió banda y se ajustó tensión"></textarea></div>'+
       '<label class="row meta"><input type="checkbox" id="bit" checked style="width:auto"> Agregar también a la bitácora de '+esc(AREA)+'</label>'+
       '<div class="row"><button class="btn green sm" data-a="cerrar-ok" data-f="'+esc(t.folio)+'"'+(busy?' disabled':'')+'>'+(busy?'<i class="spin"></i>Guardando…':'✓ Confirmar realizado')+'</button><button class="btn light sm" data-a="cerrar-no">Cancelar</button></div>';
     else if(t.estado==='Abierto')h+='<div class="row"><button class="btn amber sm" data-a="tomar" data-f="'+esc(t.folio)+'"'+(busy?' disabled':'')+'>Atender (En proceso)</button><button class="btn green sm" data-a="cerrar" data-f="'+esc(t.folio)+'">Marcar realizado</button></div>';
     else if(t.estado==='En proceso')h+='<div class="row"><button class="btn green sm" data-a="cerrar" data-f="'+esc(t.folio)+'">Marcar realizado</button></div>';
     else if(SES.rol==='admin')h+='<div class="row"><button class="btn light sm" data-a="reabrir" data-f="'+esc(t.folio)+'"'+(busy?' disabled':'')+'>Reabrir</button></div>';
   }
+  if(SES&&SES.rol==='admin'&&cerrando!==t.folio)h+=borrando===t.folio?'<div class="row"><span class="meta">¿Eliminar '+esc(t.folio)+' para siempre?</span><button class="btn red sm" data-a="borrar-ok" data-f="'+esc(t.folio)+'"'+(busy?' disabled':'')+'>Sí, eliminar</button><button class="btn light sm" data-a="borrar-no">No</button></div>':'<div class="row"><button class="btn light sm" data-a="borrar" data-f="'+esc(t.folio)+'" style="color:var(--bad)">Eliminar ticket</button></div>';
   return h+'</div>';
 }
 function listaHTML(){
@@ -213,10 +221,10 @@ function listaHTML(){
 function nuevoHTML(){
   if(!SES)return '<div class="card"><div class="card-b"><b>¿Algo falla en '+esc(NOMBRE)+'?</b><p class="help">Para levantar un ticket entra con tu usuario. Si no tienes, avisa a tu supervisor o a mantenimiento.</p><div class="row"><button class="btn red" data-a="login">⚠ Reportar una falla</button></div></div></div>';
   return '<form class="card" id="nf" novalidate><div class="card-h"><h2>⚠ Nuevo ticket de alerta</h2></div><div class="card-b">'+
-   '<div class="fgrid"><div class="f"><label for="t-lugar">Máquina o lugar</label><input id="t-lugar" placeholder="Ej. Máquina de coser #4, grapadora línea 2"></div>'+
+   '<div class="fgrid"><div class="f"><label for="t-lugar">Máquina o lugar</label><input id="t-lugar" maxlength="80" placeholder="Ej. Máquina de coser #4, grapadora línea 2"></div>'+
    '<div class="f"><label for="t-pri">Prioridad</label><select id="t-pri"><option>Alta</option><option selected>Media</option><option>Baja</option></select></div></div>'+
-   '<div class="f"><label for="t-desc">¿Qué falla?</label><textarea id="t-desc" placeholder="Describe la falla: qué pasa, desde cuándo, si está parada la máquina"></textarea></div>'+
-   '<div class="f"><label for="t-rep">Quién reporta</label><input id="t-rep" value="'+esc(SES.nombre)+'"></div>'+
+   '<div class="f"><label for="t-desc">¿Qué falla?</label><textarea id="t-desc" maxlength="600" placeholder="Describe la falla: qué pasa, desde cuándo, si está parada la máquina"></textarea></div>'+
+   '<div class="f"><label for="t-rep">Quién reporta</label><input id="t-rep" maxlength="60" value="'+esc(SES.nombre)+'"></div>'+
    '<p class="help">Alta = máquina parada o riesgo de seguridad · Media = falla que permite trabajar · Baja = detalle o mejora.</p>'+
    '<div class="row"><button class="btn red" type="submit"'+(busy?' disabled':'')+'>'+(busy?'<i class="spin"></i>Enviando…':'Enviar ticket')+'</button></div></div></form>';
 }
@@ -231,19 +239,25 @@ function render(){
   if(vista==='login'){app.innerHTML=loginHTML();var u=$('l-u');if(u&&!busy&&!u.value)u.focus();return}
   var keep={};['t-lugar','t-pri','t-desc','t-rep','sol'].forEach(function(i){var e=$(i);if(e)keep[i]=e.value});
   app.innerHTML=heroHTML()+(notice?'<div class="msg '+(notice.ok?'ok':'err')+'">'+esc(notice.t)+'</div>':'')+kpisHTML()+nuevoHTML()+listaHTML()+
-   '<div class="row" style="justify-content:space-between"><a class="meta" href="./?equipo='+encodeURIComponent(AREA)+'">Ver ficha y bitácora de '+esc(AREA)+' ↗</a><button class="btn light sm" data-a="recargar">↻ Actualizar</button></div>';
+   '<div class="row" style="justify-content:space-between"><span class="meta">'+(ultimaCarga?'Actualizado '+ultimaCarga+(SES?' · en vivo':' · puede tardar 1-2 min en reflejar cambios'):'')+'</span><a class="meta" href="./?equipo='+encodeURIComponent(AREA)+'">Ver ficha y bitácora de '+esc(AREA)+' ↗</a><button class="btn light sm" data-a="recargar">↻ Actualizar</button></div>';
   Object.keys(keep).forEach(function(i){var e=$(i);if(e)e.value=keep[i]});
 }
 async function cargar(){
   var p=new URLSearchParams(location.search);
   AREA=String(p.get('area')||p.get('equipo')||'AREA-TAPICERIA-001').toUpperCase().replace(/[^A-Z0-9-]/g,'').slice(0,30);
-  var r=await Promise.all([txtFetch(F_CONFIG).catch(function(){return null}),txtFetch(DIR_T+AREA+'.txt').catch(function(){return null}),txtFetch('equipos.txt').catch(function(){return null})]);
-  CFG=r[0]?leerConfig(r[0]):null;TK=r[1]?leerTickets(r[1]):[];
-  NOMBRE=AREA;if(r[2]){var m=r[2].match(new RegExp('^'+AREA+'\\s*=\\s*([^|\\r\\n]*)','m'));if(m)NOMBRE=m[1].trim()}
+  var r=await Promise.all([CFG?null:txtFetch(F_CONFIG).catch(function(){return null}),NOMBRE?null:txtFetch('equipos.txt').catch(function(){return null})]);
+  if(r[0])CFG=leerConfig(r[0]);
+  var tt=await leerFresco(DIR_T+AREA+'.txt').catch(function(){return undefined});
+  if(tt!==undefined)TK=tt?leerTickets(tt):[];else if(!notice)notice={ok:false,t:'Sin conexión: no se pudieron actualizar los tickets.'};
+  ultimaCarga=ahora().slice(11);
+  r=[null,null,r[1]];
+  if(!NOMBRE)NOMBRE=AREA;if(r[2]){var m=r[2].match(new RegExp('^'+AREA+'\\s*=\\s*([^|\\r\\n]*)','m'));if(m)NOMBRE=m[1].trim()}
   var ar=AREA.match(/^AREA-([A-Z]+)/);if(ar){var N={TAPICERIA:'Tapicería',COSTURA:'Costura',DISEO:'Diseño',CORTE:'Corte',LLENADO:'Llenado',ALMACEN:'Almacén',EMBARQUES:'Embarques'};NOMBRE='Área de '+(N[ar[1]]||ar[1].charAt(0)+ar[1].slice(1).toLowerCase())}
   document.title='Tickets · '+NOMBRE;
   if(vista!=='login')vista='lista';render();
+  clearInterval(timer);timer=setInterval(function(){if(document.visibilityState==='visible'&&!busy&&vista==='lista'&&!cerrando&&!borrando)cargar()},60000);
 }
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&!busy&&vista==='lista'&&!cerrando)cargar()});
 document.addEventListener('submit',async function(ev){
   ev.preventDefault();if(busy)return;
   if(ev.target.id==='lf'){
@@ -251,32 +265,37 @@ document.addEventListener('submit',async function(ev){
     if(!CFG){notice={ok:false,t:'No se encontró config.txt.'};render();return}
     busy=true;notice=null;render();
     try{SES=await entrar(u,pw);guardarSesion();vista='lista';notice={ok:true,t:'Bienvenido, '+SES.nombre+'.'}}catch(e){notice={ok:false,t:'Usuario o contraseña incorrectos.'}}
-    busy=false;render();
+    busy=false;if(SES)await cargar();else render();
   }
   if(ev.target.id==='nf'){
     var lugar=$('t-lugar').value.trim(),desc=$('t-desc').value.trim(),rep=$('t-rep').value.trim(),pri=$('t-pri').value;
     if(!lugar||!desc||!rep){notice={ok:false,t:'Llena máquina o lugar, qué falla y quién reporta.'};render();return}
+    lugar=lugar.slice(0,MAX.lugar);desc=desc.slice(0,MAX.descripcion);rep=rep.slice(0,MAX.reporta);
     var folio='';
     var ok=await cambiar(function(l){folio=siguiente(l);l.push({folio:folio,estado:'Abierto',prioridad:pri,lugar:lugar,descripcion:desc,reporta:rep,creado:ahora(),creado_por:SES.u})},'Nuevo ticket','Ticket creado. Mantenimiento ya lo puede ver.');
-    if(ok){notice.t='Ticket '+folio+' creado. Mantenimiento ya lo puede ver.';['t-lugar','t-desc'].forEach(function(i){var e=$(i);if(e)e.value=''});render()}
+    if(ok){notice.t='Ticket '+folio+' creado. Mantenimiento ya lo puede ver.';['t-lugar','t-desc'].forEach(function(i){var e=$(i);if(e)e.value=''});var pr=$('t-pri');if(pr)pr.value='Media';tab='pend';render()}
   }
 });
 document.addEventListener('click',async function(ev){
   var b=ev.target.closest('[data-a]');if(!b||busy)return;var a=b.dataset.a,f=b.dataset.f;
   if(a==='login'){vista='login';notice=null;render()}
   else if(a==='volver'){vista='lista';notice=null;render()}
-  else if(a==='salir'){SES=null;guardarSesion();notice=null;cerrando=null;render()}
+  else if(a==='salir'){SES=null;guardarSesion();notice=null;cerrando=null;borrando=null;render()}
   else if(a==='tab'){tab=b.dataset.v;render()}
   else if(a==='recargar'){notice=null;cargar()}
-  else if(a==='tomar'&&puedeCerrar()){await cambiar(function(l){var t=l.find(function(x){return x.folio===f});if(t&&t.estado==='Abierto'){t.estado='En proceso';t.atiende=SES.nombre;t.inicio=ahora()}},'Atiende '+f,'Ticket '+f+' en proceso.')}
+  else if(a==='tomar'&&puedeCerrar()){await cambiar(function(l){var t=l.find(function(x){return x.folio===f});if(!t)throw Object.assign(new Error('El ticket '+f+' ya no existe.'),{status:0});if(t.estado==='Abierto'){t.estado='En proceso';t.atiende=SES.nombre;t.inicio=ahora()}},'Atiende '+f,'Ticket '+f+' en proceso.')}
   else if(a==='cerrar'&&puedeCerrar()){cerrando=f;render();var s=$('sol');if(s)s.focus()}
   else if(a==='cerrar-no'){cerrando=null;render()}
   else if(a==='cerrar-ok'&&puedeCerrar()){
     var sol=$('sol').value.trim(),bit=$('bit').checked,hecho=null;
     if(!sol){notice={ok:false,t:'Escribe qué se hizo para repararlo.'};render();return}
-    var ok=await cambiar(function(l){var t=l.find(function(x){return x.folio===f});if(t){t.estado='Realizado';t.cierre=ahora();t.cerro_por=SES.u;t.solucion=sol;if(!t.atiende)t.atiende=SES.nombre;if(!t.inicio)t.inicio=t.cierre;hecho=Object.assign({},t)}},'Cierra '+f,'Ticket '+f+' realizado.');
+    sol=sol.slice(0,MAX.solucion);
+    var ok=await cambiar(function(l){var t=l.find(function(x){return x.folio===f});if(!t)throw Object.assign(new Error('El ticket '+f+' ya no existe.'),{status:0});if(t.estado==='Realizado'){hecho=null;return}if(t){t.estado='Realizado';t.cierre=ahora();t.cerro_por=SES.u;t.solucion=sol;if(!t.atiende)t.atiende=SES.nombre;if(!t.inicio)t.inicio=t.cierre;hecho=Object.assign({},t)}},'Cierra '+f,'Ticket '+f+' realizado.');
     if(ok){cerrando=null;if(bit&&hecho){try{await aBitacora(hecho);notice={ok:true,t:'Ticket '+f+' realizado y agregado a la bitácora.'}}catch(e){notice={ok:false,t:'El ticket quedó realizado, pero no se pudo agregar a la bitácora: '+errTxt(e)}}}render()}
   }
+  else if(a==='borrar'&&SES&&SES.rol==='admin'){borrando=f;render()}
+  else if(a==='borrar-no'){borrando=null;render()}
+  else if(a==='borrar-ok'&&SES&&SES.rol==='admin'){borrando=null;await cambiar(function(l){var i=l.findIndex(function(x){return x.folio===f});if(i>=0)l.splice(i,1)},'Elimina '+f,'Ticket '+f+' eliminado.')}
   else if(a==='reabrir'&&SES&&SES.rol==='admin'){await cambiar(function(l){var t=l.find(function(x){return x.folio===f});if(t){t.estado='Abierto';['cierre','cerro_por','solucion','atiende','inicio'].forEach(function(k){delete t[k]})}},'Reabre '+f,'Ticket '+f+' reabierto.')}
 });
 SES=leerSesion();vista='carga';cargar();
