@@ -1,14 +1,14 @@
 # ==========================================================
 # TICKETS DE ALERTA · AREA-TAPICERIA-001 · Área de Tapicería
 # Estados: Abierto -> En proceso -> Realizado
-# Actualizado: 2026-11-20 13:39
-# Abiertos: 2 · En proceso: 0 · Realizados: 0
+# Actualizado: 2026-11-20 13:41
+# Abiertos: 1 · En proceso: 0 · Realizados: 1
 # ==========================================================
 
 # ---------------- ÍNDICE (2) ----------------
 # Folio  | Estado      | Prioridad | Creado           | Lugar
 # T-0001 | Abierto     | Alta      | 2026-11-20 12:06 | Linea 4 fuga de aire operacion 3
-# T-0002 | Abierto     | Alta      | 2026-11-20 13:39 | Noe masca chicle
+# T-0002 | Realizado   | Alta      | 2026-11-20 13:39 | Noe masca chicle
 
 [TICKET 0001]
 folio = T-0001
@@ -22,10 +22,15 @@ creado_por = charlie
 
 [TICKET 0002]
 folio = T-0002
-estado = Abierto
+estado = Realizado
 prioridad = Alta
 lugar = Noe masca chicle
 descripcion = Produce ruidos extraños
 reporta = CARLOS GR
 creado = 2026-11-20 13:39
 creado_por = charlie
+atiende = CARLOS GR
+inicio = 2026-11-20 13:41
+cierre = 2026-11-20 13:41
+cerro_por = charlie
+solucion = A un chicle nuevo
