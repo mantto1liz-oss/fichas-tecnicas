@@ -406,7 +406,10 @@ function pillCls(t){return /preventivo/i.test(t)?'prev':/correctivo/i.test(t)?'c
 function val(k){var f=EQ.placa.find(function(p){return p[0].toLowerCase()===k.toLowerCase()});return f?f[1]:''}
 function ordenado(){return EQ.historial.slice().sort(function(a,b){return a.fecha<b.fecha?1:a.fecha>b.fecha?-1:0})}
 function esAdmin(){return SES&&SES.rol==='admin'}
-function puedeEditar(e){return SES&&(esAdmin()||e.usuario===SES.u)}
+function esReporte(){return !!(SES&&SES.rol==='reporte')}
+function puedeRegistrar(){return !!(SES&&!LEGACY&&!esReporte())}
+function rolTxt(r){return r==='admin'?'Administrador':r==='reporte'?'Solo tickets':'Técnico'}
+function puedeEditar(e){return SES&&!esReporte()&&(esAdmin()||e.usuario===SES.u)}
 function idValido(id){return /^[A-Z0-9]+(-[A-Z0-9]+)+$/.test(id)&&id.length<=30}
 function normId(s){return String(s||'').toUpperCase().replace(/[^A-Z0-9-]/g,'').slice(0,30)}
 function baseURL(){return location.origin+location.pathname.replace(/[^/]*$/,'')}
@@ -710,7 +713,7 @@ function sideHTML(){
   }
   if(esAdmin()&&!LEGACY)h+='<div class="nav-h">Administración</div>'+it('nuevo','plus','Nuevo equipo','',!EQID&&view==='nuevo')+it('usuarios','users','Usuarios y acceso','',!EQID&&view==='usuarios');
   h+='</nav><div class="side-foot">';
-  if(SES)h+='<div class="me"><div class="avatar">'+esc(iniciales(SES.nombre))+'</div><div style="min-width:0"><b>'+esc(SES.nombre)+'</b><small>'+(esAdmin()?'Administrador':'Técnico')+' · @'+esc(SES.u)+'</small></div></div>'+
+  if(SES)h+='<div class="me"><div class="avatar">'+esc(iniciales(SES.nombre))+'</div><div style="min-width:0"><b>'+esc(SES.nombre)+'</b><small>'+rolTxt(SES.rol)+' · @'+esc(SES.u)+'</small></div></div>'+
     '<button class="btn block" data-act="logout">'+ic('out')+' Cerrar sesión</button>';
   else h+='<div class="me"><div class="avatar">'+ic('eye')+'</div><div><b>Consulta pública</b><small>Solo lectura</small></div></div>'+
     '<button class="btn white block" data-act="login">'+ic('lock')+' Iniciar sesión</button>';
@@ -810,7 +813,7 @@ function eqHeroHTML(){
 function eqTabsHTML(){
   function t(v,icon,txt,extra){return '<button class="tab" data-act="nav" data-v="'+v+'" aria-pressed="'+(view===v)+'">'+ic(icon)+txt+(extra||'')+'</button>'}
   var h='<div class="tabs" role="group" aria-label="Secciones del equipo">'+t('ficha','ficha','Ficha')+t('bitacora','log','Bitácora','<span class="cnt">'+EQ.historial.length+'</span>');
-  if(SES&&!LEGACY)h+=t('form','plus',editId?'Editar registro':'Registrar');
+  if(puedeRegistrar())h+=t('form','plus',editId?'Editar registro':'Registrar');
   if(esAdmin()&&!LEGACY)h+=t('editar','edit','Editar ficha')+t('qr','qr','QR');
   return h+'</div>';
 }
@@ -835,7 +838,7 @@ function fichaViewHTML(){
     '<div class="card-b"><dl class="specs" style="grid-template-columns:minmax(0,1fr)">'+EQ.placa.map(function(p){return '<div><dt>'+esc(p[0])+'</dt><dd'+(pc(p[1])?' class="pc"':'')+'>'+esc(p[1])+'</dd></div>'}).join('')+'</dl></div></div>'+
    '<div class="stack"><div class="card"><div class="card-h"><h3>'+ic('pulse')+'Últimos registros</h3><button class="link" data-act="nav" data-v="bitacora">Bitácora'+ic('arrow')+'</button></div>'+
     (h.length?'<div class="list">'+h.slice(0,4).map(function(x){var p=String(x.fecha).split('-');return '<div class="li"><div class="li-date"><b>'+esc(p[2]||'')+'</b><span>'+(p[1]?MESES[+p[1]-1]:'')+'</span></div><div class="li-body"><b>'+esc(x.tipo)+'</b><span>'+esc(x.tecnico)+(hasN(x.horometro)?' · '+esc(x.horometro)+' h':'')+'</span></div></div>'}).join('')+'</div>'
-     :'<div class="card-b"><div class="empty">'+ic('log')+'Sin registros todavía.'+(SES&&!LEGACY?'<button class="btn sm" data-act="nav" data-v="form">'+ic('plus')+'Registrar el primero</button>':'')+'</div></div>')+'</div>'+
+     :'<div class="card-b"><div class="empty">'+ic('log')+'Sin registros todavía.'+(puedeRegistrar()?'<button class="btn sm" data-act="nav" data-v="form">'+ic('plus')+'Registrar el primero</button>':'')+'</div></div>')+'</div>'+
    '<div class="card"><div class="card-h"><h3>'+ic('check')+'Checklist de mantenimiento</h3><span class="sub">'+EQ.checklist.length+' actividades</span></div><div class="card-b">'+checklistLista()+'</div></div></div></div>';
 }
 function pasaFiltro(e){if(filtro==='mant')return esMant(e.tipo);if(filtro==='corr')return /correctivo/i.test(e.tipo);if(filtro==='otros')return !esMant(e.tipo);return true}
@@ -851,7 +854,7 @@ function bitacoraHTML(entering){
   var h=ordenado(),hf=h.filter(pasaFiltro);
   return '<div class="filters"><div class="tabs" role="group" aria-label="Filtrar bitácora">'+FILTROS.map(function(f){return '<button class="tab" data-act="filtro" data-f="'+f[0]+'" aria-pressed="'+(filtro===f[0])+'">'+f[1]+'</button>'}).join('')+'</div>'+
    '<span class="count">Mostrando '+hf.length+' de '+h.length+' registros</span></div>'+
-   (hf.length?'<div class="log'+(entering?' play':'')+'">'+hf.map(entryHTML).join('')+'</div>':'<div class="empty">'+ic('log')+(h.length?'No hay registros de este tipo.':'Todavía no hay mantenimientos registrados.')+(SES&&!LEGACY&&!h.length?'<button class="btn sm" data-act="nav" data-v="form">'+ic('plus')+'Registrar el primero</button>':'')+'</div>');
+   (hf.length?'<div class="log'+(entering?' play':'')+'">'+hf.map(entryHTML).join('')+'</div>':'<div class="empty">'+ic('log')+(h.length?'No hay registros de este tipo.':'Todavía no hay mantenimientos registrados.')+(puedeRegistrar()&&!h.length?'<button class="btn sm" data-act="nav" data-v="form">'+ic('plus')+'Registrar el primero</button>':'')+'</div>');
 }
 function checklistHTML(acts){
   var grupos=[],idx={};
@@ -906,13 +909,13 @@ function usuariosHTML(){
   return '<div class="card"><div class="card-h"><h3>'+ic('users')+'Usuarios con acceso</h3><span class="sub">Sirven para todos los equipos · '+CFG.usuarios.length+' usuarios</span></div><div>'+
    CFG.usuarios.map(function(u){
      return '<div class="urow"><div class="avatar">'+esc(iniciales(u.nombre))+'</div><div class="urow-b"><b>'+esc(u.nombre)+'</b><span>@'+esc(u.u)+'</span></div>'+
-      '<span class="badge'+(u.rol==='admin'?' dark':'')+'">'+(u.rol==='admin'?'Administrador':'Técnico')+'</span>'+
+      '<span class="badge'+(u.rol==='admin'?' dark':'')+'">'+rolTxt(u.rol)+'</span>'+
       (u.u===SES.u?'<span class="badge ok">Tú</span>':(pendingUser===u.u?'<div class="row"><button class="btn sm danger solid" data-act="u-del-ok" data-u="'+esc(u.u)+'">Confirmar</button><button class="btn light sm" data-act="u-del-no">Cancelar</button></div>':'<button class="btn sm danger" data-act="u-del" data-u="'+esc(u.u)+'">'+ic('trash')+'Quitar</button>'))+'</div>'}).join('')+'</div></div>'+
    '<div class="cols even">'+
    '<form class="card" id="ufrm" novalidate><div class="card-h"><h3>'+ic('user')+'Agregar usuario o cambiar contraseña</h3></div><div class="card-b">'+
     '<div class="fgrid"><div class="f"><label for="u-u">Usuario</label><input id="u-u" autocapitalize="off" autocomplete="off" placeholder="ej. brandon"></div>'+
     '<div class="f"><label for="u-nombre">Nombre completo</label><input id="u-nombre"></div></div>'+
-    '<div class="f"><label for="u-rol">Rol</label><select id="u-rol"><option value="tecnico">Técnico</option><option value="admin">Administrador</option></select></div>'+
+    '<div class="f"><label for="u-rol">Rol</label><select id="u-rol"><option value="tecnico">Técnico</option><option value="admin">Administrador</option><option value="reporte">Solo tickets (crea tickets, no registra)</option></select></div>'+
     '<div class="fgrid"><div class="f"><label for="u-pw">Contraseña</label><input id="u-pw" type="password" autocomplete="new-password"></div><div class="f"><label for="u-pw2">Repite la contraseña</label><input id="u-pw2" type="password" autocomplete="new-password"></div></div>'+
     '<p class="help">Mínimo 10 caracteres, con letras y números. Si el usuario ya existe, se le cambia la contraseña.</p>'+
     '<div class="row"><button type="submit" class="btn"'+(busy?' disabled':'')+'>'+(busy?'<i class="spin"></i>Guardando…':'Guardar usuario')+'</button></div></div></form>'+
@@ -950,7 +953,7 @@ function contar(){
 function permitido(v){
   if(!EQID){if(v==='dash'||v==='equipos')return true;return esAdmin()&&!LEGACY&&(v==='usuarios'||v==='nuevo')}
   if(v==='ficha'||v==='bitacora')return true;
-  if(v==='form')return SES&&!LEGACY;
+  if(v==='form')return puedeRegistrar();
   if(v==='editar'||v==='qr')return esAdmin()&&!LEGACY;
   return false;
 }
@@ -1043,7 +1046,7 @@ async function cargar(next){
   cargando=false;
   if(next)view=next;
   else if(enPanel()){
-    if(EQID){if(SES&&location.hash==='#tecnico'&&EQ&&!LEGACY)view='form';else if(GEN[view]||!permitido(view))view='ficha'}
+    if(EQID){if(location.hash==='#tecnico'&&EQ&&puedeRegistrar())view='form';else if(GEN[view]||!permitido(view))view='ficha'}
     else if(!GEN[view])view='dash';
   }
   render();
@@ -1074,7 +1077,7 @@ document.addEventListener('submit',async function(ev){
     var u=txt('lg-u').toLowerCase(),pw=$('lg-pw').value;
     if(!u||!pw)return aviso('Escribe tu usuario y contraseña.');
     busy=true;notice=null;render();
-    try{SES=await entrar(u,pw);guardarSesion();guest=false;limpiar=true;view=EQ&&!LEGACY?'form':(EQID?'ficha':'dash');notice={ok:true,t:'Bienvenido, '+SES.nombre+'.'}}catch(e){notice={ok:false,t:'Usuario o contraseña incorrectos.'}}
+    try{SES=await entrar(u,pw);guardarSesion();guest=false;limpiar=true;view=EQ&&puedeRegistrar()?'form':(EQID?'ficha':'dash');notice={ok:true,t:'Bienvenido, '+SES.nombre+'.'}}catch(e){notice={ok:false,t:'Usuario o contraseña incorrectos.'}}
     busy=false;render();return;
   }
   if(id==='cfgf'){
@@ -1196,7 +1199,7 @@ document.addEventListener('click',async function(ev){
 function syncFicha(){if(!fichaTmp)return;fichaTmp.placa.forEach(function(p,i){var k=$('p-k-'+i),v=$('p-v-'+i);if(k&&v){p[0]=k.value.trim();p[1]=v.value.trim()}})}
 window.addEventListener('popstate',function(){cargar()});
 window.addEventListener('hashchange',function(){
-  if(location.hash==='#tecnico'){if(SES){view=EQ&&!LEGACY?'form':view}else{guest=false;view='login'}render()}
+  if(location.hash==='#tecnico'){if(SES){view=EQ&&puedeRegistrar()?'form':view}else{guest=false;view='login'}render()}
   else if(location.hash==='#configurar'&&!SES){guest=false;view='config';render()}
 });
 
