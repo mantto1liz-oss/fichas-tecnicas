@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-ABRID-FIBR-012 · Abridora de fibra
-# Actualizado: 17/11/2026, 12:13:11 p.m.
+# Actualizado: 23/11/2026, 9:22:02 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -32,9 +32,10 @@ actividad = Prueba de funcionamiento
 corriente_a = Corriente | A
 temperatura_c = Temperatura | °C
 
-# ---------------- ÍNDICE DE REGISTROS (1) ----------------
+# ---------------- ÍNDICE DE REGISTROS (2) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-17 | Mantenimiento preventivo   | Benito Sanchez
+# 0002 | 2026-11-23 | Mantenimiento correctivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmwl0g6vn
@@ -50,3 +51,16 @@ actividad = Prueba de funcionamiento
 actividad = Se realizó nivelación del rodillo abridor
 corriente_a = 230
 observaciones = Todo queda en funcionamiento y limpio
+
+[REGISTRO 0002]
+id = rmwtexwo3
+fecha = 2026-11-23
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 8.15
+actividad = Inspección visual general
+actividad = Ajuste de tornillería
+actividad = Prueba de funcionamiento
+actividad = Balanceo y centrado del rodillo abridor
+observaciones = En funcionamiento
