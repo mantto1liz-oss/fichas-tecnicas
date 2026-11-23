@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-002 · Cortadora Lectra iH8
-# Actualizado: 18/11/2026, 10:24:53 a.m.
+# Actualizado: 23/11/2026, 1:45:57 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -50,7 +50,7 @@ actividad = [500 h] Documentar lecturas de parámetros en bitácora (horas, velo
 horas_vibracion_h = Horas de vibración | h
 horas_aspiracion_h = Horas de aspiración | h
 
-# ---------------- ÍNDICE DE REGISTROS (7) ----------------
+# ---------------- ÍNDICE DE REGISTROS (8) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-02 | Mantenimiento preventivo   | Benito Sanchez
 # 0002 | 2026-11-09 | Mantenimiento preventivo   | Benito Sanchez
@@ -59,6 +59,7 @@ horas_aspiracion_h = Horas de aspiración | h
 # 0005 | 2026-11-17 | Prueba de funcionamiento   | CARLOS GR
 # 0006 | 2026-11-17 | Mantenimiento preventivo   | Brandon
 # 0007 | 2026-11-18 | Mantenimiento correctivo   | CARLOS GR
+# 0008 | 2026-11-23 | Mantenimiento preventivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmw16hxnf
@@ -193,3 +194,30 @@ actividad = Se coloca cinta doble cara para sujetar conector spot láser
 horas_vibracion_h = ----
 horas_aspiracion_h = -----
 observaciones = A espera de refacción pedida por Victor Ibarra
+
+[REGISTRO 0008]
+id = rmwtoello
+fecha = 2026-11-23
+tipo = Mantenimiento preventivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 3220.4
+actividad = [Semanal 40 h] Control visual de peines y protecciones de la máquina
+actividad = [Semanal 40 h] Aspirado por la parte superior de los cepillos de corte
+actividad = [Semanal 40 h] Engrase de los raíles X / control de bloques de deslizamiento
+actividad = [Semanal 40 h] Limpieza e inspección de la cadena portacables eje X
+actividad = [Semanal 40 h] Limpieza de rejillas de filtrado del sistema de aspiración
+actividad = [Semanal 40 h] Purga de los filtros neumáticos (drenar condensado)
+actividad = [Semanal 40 h] Engrase de los raíles Y (carros laterales)
+actividad = [Semanal 40 h] Limpieza e inspección de la cadena portacables eje Y
+actividad = [Semanal 40 h] Control de fijación de topes y piñones eje X
+actividad = [Semanal 40 h] Control del piñón Y y fijación de la tapa del cabezal
+actividad = [Semanal 40 h] Limpieza completa y control del cabezal de corte
+actividad = [Semanal 40 h] Limpieza completa y control del filtro de vacío principal
+actividad = [Semanal 40 h] Despues de realizado el mantenimiento anotar en bitacora de máquina
+actividad = [Semanal 40 h] Inspección visual de rieles – verificar que nada obstruya el recorrido
+actividad = [Semanal 40 h] Prueba de funcionamiento después de la intervención
+actividad = [Semanal 40 h] Verificar lecturas de horas de vibración y aspiración en pantalla
+horas_vibracion_h = 9942.21
+horas_aspiracion_h = 18692.08
+observaciones = Se encontraron los filtros sucios y queda en funcionamiento la máquina \n\nFaltan 27 días para mantenimiento de las 2000 horas
