@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-EMBARQUES-007 · Activides General
-# Actualizado: 18/11/2026, 3:51:38 p.m.
+# Actualizado: 23/11/2026, 4:51:28 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -32,9 +32,10 @@ actividad = Prueba de funcionamiento
 corriente_a = Corriente | A
 temperatura_c = Temperatura | °C
 
-# ---------------- ÍNDICE DE REGISTROS (1) ----------------
+# ---------------- ÍNDICE DE REGISTROS (2) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-18 | Mantenimiento correctivo   | CARLOS GR
+# 0002 | 2026-11-23 | Mantenimiento correctivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmwmnozei
@@ -51,3 +52,15 @@ corriente_a = 127
 temperatura_c = -----
 refacciones = Base giratoria
 observaciones = Se cambia la base y se realizan ajustes de visualización con vigilancia Gerardo guardian hijo
+
+[REGISTRO 0002]
+id = rmwtv16ys
+fecha = 2026-11-23
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 4
+actividad = Inspección visual general
+actividad = Prueba de funcionamiento
+actividad = Se realizó la reparación de un díablito
+observaciones = Queda en funcionamiento
