@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-001 · Cortadora Lectra iQ80
-# Actualizado: 20/11/2026, 2:20:19 p.m.
+# Actualizado: 24/11/2026, 10:21:10 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -50,12 +50,13 @@ actividad = [500 h] Documentar lecturas de parámetros en bitácora (horas, velo
 horas_vibracion_h = Horas de vibración | h
 horas_aspiracion_h = Horas de aspiración | h
 
-# ---------------- ÍNDICE DE REGISTROS (4) ----------------
+# ---------------- ÍNDICE DE REGISTROS (5) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-05 | Mantenimiento preventivo   | Brandon
 # 0002 | 2026-11-12 | Mantenimiento preventivo   | Benito Sanchez
 # 0003 | 2026-11-19 | Mantenimiento preventivo   | Benito Sanchez
 # 0004 | 2026-11-20 | Mantenimiento correctivo   | Benito Sanchez
+# 0005 | 2026-11-24 | Mantenimiento correctivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmw40dcrj
@@ -159,3 +160,13 @@ actividad = Se realizó calibración de X y Y
 actividad = Calibración de mesa de recogida, la operadora inspeccionó
 actividad = Calibración de conveyor
 observaciones = La máquina está lista para operar
+
+[REGISTRO 0005]
+id = rmwuwj3h3
+fecha = 2026-11-24
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 8.1
+actividad = Se enderezó toda la línea de peines
+observaciones = Queda en buen funcionamiento
