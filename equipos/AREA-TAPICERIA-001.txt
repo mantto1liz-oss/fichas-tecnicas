@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 19/11/2026, 2:43:45 p.m.
+# Actualizado: 25/11/2026, 4:36:29 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -35,7 +35,7 @@ linea = Linea # |
 operacion = Operacion# | 
 nombre_operdor = Nombre operdor | 
 
-# ---------------- ÍNDICE DE REGISTROS (7) ----------------
+# ---------------- ÍNDICE DE REGISTROS (9) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-12 | Mantenimiento correctivo   | CARLOS GR
 # 0002 | 2026-11-13 | Mantenimiento preventivo   | CARLOS GR
@@ -44,6 +44,8 @@ nombre_operdor = Nombre operdor |
 # 0005 | 2026-11-18 | Mantenimiento preventivo   | Brandon
 # 0006 | 2026-11-18 | Mantenimiento correctivo   | Brandon
 # 0007 | 2026-11-19 | Prueba de funcionamiento   | CARLOS GR
+# 0008 | 2026-11-20 | Mantenimiento correctivo   | CARLOS GR
+# 0009 | 2026-11-25 | Mantenimiento correctivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmwf3cwxd
@@ -158,3 +160,19 @@ usuario = charlie
 horometro = 
 actividad = Ticket T-0002 · Noe masca chicle: Produce ruidos extraños
 observaciones = Solución: A un chicle nuevo · Reportó: CARLOS GR el 2026-11-20 13:39
+
+[REGISTRO 0009]
+id = rmwwpdmlw
+fecha = 2026-11-25
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 10.5
+actividad = Inspección visual general
+actividad = Soldadura
+actividad = Instalación
+actividad = Se realizó el acople de banco en línea 2
+linea = 2
+operacion = 1
+refacciones = Discos y soldadura
+observaciones = Está en funcionamiento, queda pendiente terminar de soldar el acero inoxidable
