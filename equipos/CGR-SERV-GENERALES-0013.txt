@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-SERV-GENERALES-0013 · Servicios Generales
-# Actualizado: 19/11/2026, 8:44:23 a.m.
+# Actualizado: 25/11/2026, 12:10:01 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -37,5 +37,21 @@ actividad = Otros
 [LECTURAS]
 orden_de_trabajo_ot = Orden de trabajo OT | 
 
-# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2026-11-25 | Mantenimiento correctivo   | CARLOS GR
+
+[REGISTRO 0001]
+id = rmwwfuy0b
+fecha = 2026-11-25
+tipo = Mantenimiento correctivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 11.2
+actividad = Inspección visual general
+actividad = Limpieza
+actividad = Prueba de funcionamiento
+actividad = Reparación
+actividad = Baños
+actividad = Se realiza servicio a mingitorios de producción
+observaciones = Se les pide avisar a sus encargados para que den aviso de futuras reparaciones y así evitamos malos entendidos.saludos
