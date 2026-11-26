@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-002 · Cortadora Lectra iH8
-# Actualizado: 25/11/2026, 4:12:17 p.m.
+# Actualizado: 26/11/2026, 10:40:32 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -50,7 +50,7 @@ actividad = [500 h] Documentar lecturas de parámetros en bitácora (horas, velo
 horas_vibracion_h = Horas de vibración | h
 horas_aspiracion_h = Horas de aspiración | h
 
-# ---------------- ÍNDICE DE REGISTROS (9) ----------------
+# ---------------- ÍNDICE DE REGISTROS (10) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-02 | Mantenimiento preventivo   | Benito Sanchez
 # 0002 | 2026-11-09 | Mantenimiento preventivo   | Benito Sanchez
@@ -61,6 +61,7 @@ horas_aspiracion_h = Horas de aspiración | h
 # 0007 | 2026-11-18 | Mantenimiento correctivo   | CARLOS GR
 # 0008 | 2026-11-23 | Mantenimiento preventivo   | Benito Sanchez
 # 0009 | 2026-11-25 | Prueba de funcionamiento   | CARLOS GR
+# 0010 | 2026-11-26 | Mantenimiento correctivo   | CARLOS GR
 
 [REGISTRO 0001]
 id = rmw16hxnf
@@ -231,3 +232,13 @@ tecnico = CARLOS GR
 usuario = charlie
 horometro = 4.04
 actividad = Revisión de tapa del cabezal se encutra el perno desgastado se revisara para cambiarlo
+
+[REGISTRO 0010]
+id = rmwxs3pks
+fecha = 2026-11-26
+tipo = Mantenimiento correctivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 10.38
+actividad = Cambio de regulador de voltaje se alimenta el ups 220v
+observaciones = Se mandará a reparar regulador  127v/220v
