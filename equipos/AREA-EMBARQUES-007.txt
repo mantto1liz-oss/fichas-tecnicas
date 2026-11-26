@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-EMBARQUES-007 · Activides General
-# Actualizado: 23/11/2026, 4:51:28 p.m.
+# Actualizado: 26/11/2026, 12:23:06 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -32,10 +32,11 @@ actividad = Prueba de funcionamiento
 corriente_a = Corriente | A
 temperatura_c = Temperatura | °C
 
-# ---------------- ÍNDICE DE REGISTROS (2) ----------------
+# ---------------- ÍNDICE DE REGISTROS (3) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-18 | Mantenimiento correctivo   | CARLOS GR
 # 0002 | 2026-11-23 | Mantenimiento correctivo   | Benito Sanchez
+# 0003 | 2026-11-26 | Mantenimiento preventivo   | Brandon
 
 [REGISTRO 0001]
 id = rmwmnozei
@@ -64,3 +65,12 @@ actividad = Inspección visual general
 actividad = Prueba de funcionamiento
 actividad = Se realizó la reparación de un díablito
 observaciones = Queda en funcionamiento
+
+[REGISTRO 0003]
+id = rmwxvrmo5
+fecha = 2026-11-26
+tipo = Mantenimiento preventivo
+tecnico = Brandon
+usuario = brandon
+horometro = 12
+actividad = Se coloca un cuadro en la oficina de embarques
