@@ -303,6 +303,17 @@ textarea{min-height:88px;resize:vertical}
 .msg{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;font-size:13px;font-weight:500;animation:pop .35s var(--ease) both}
 .msg .ic{width:18px;height:18px;margin-top:1px}
 .msg.ok{background:var(--ok-s);color:var(--ok)} .msg.err{background:var(--bad-s);color:var(--bad)} .msg.info{background:var(--soft-2);color:var(--ink)}
+.ug{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.uc{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:8px;background:var(--card,#fff);min-width:0}
+.uc-h{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.uc-h b{font-size:15px;line-height:1.3}.uc-h small{display:flex;gap:4px;align-items:center;color:var(--muted);font-size:12px;margin-top:2px}
+.uc-h small .ic{width:13px;height:13px}
+.uc dl.specs{grid-template-columns:minmax(0,1fr)}.uc dl.specs div{padding:6px 2px}
+.ust{font-size:11px;font-weight:700;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.ust.ok{background:#dcfce7;color:#15803d}.ust.rep{background:#fef3c7;color:#b45309}.ust.off{background:#fee2e2;color:#b91c1c}
+.uc-f{font-size:12px;color:var(--muted)}
+.ue{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px}
+.ue-h{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:700}
 .spec-edit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) auto;gap:8px;align-items:center;animation:up .3s var(--ease) both}
 .urow{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:14px 20px;border-top:1px solid var(--line);transition:background .15s}
 .urow:first-child{border-top:0}
@@ -515,16 +526,22 @@ function escribirCatalogo(cat){
   return L.join('\r\n')+'\r\n';
 }
 /* equipos/<ID>.txt */
+var CAMPOS_U=[['nombre','Nombre o número'],['ubicacion','Ubicación'],['marca','Marca'],['modelo','Modelo'],['potencia','Potencia'],['voltaje','Voltaje'],['capacidad','Capacidad / flujo'],['serie','No. de serie'],['notas','Notas']];
+var ESTADOS_U=['Operando','En reparación','Fuera de servicio'];
+function uKey(u){if(!u._k)Object.defineProperty(u,'_k',{value:Math.random().toString(36).slice(2,8),enumerable:false,writable:true});return u._k}
+function uLabel(u,i){return u.nombre||u.ubicacion||('Unidad '+(i+1))}
+function uTitulo(){return /bomb/i.test((EQ&&EQ.equipo.nombre||'')+' '+(EQ&&EQ.equipo.tipo||''))?'Bombas':'Unidades'}
 function leerEquipo(txt){
-  var st={equipo:{},placa:[],checklist:[],lecturas:[],historial:[]},cur=null;
+  var st={equipo:{},placa:[],checklist:[],lecturas:[],unidades:[],historial:[]},cur=null,cu=null;
   lineas(txt,function(sec,arg,k,v,head){
-    if(head){if(sec==='REGISTRO'){cur={id:'',fecha:'',tipo:'',tecnico:'',usuario:'',horometro:null,actividades:[],lectura:{},refacciones:'',obs:''};st.historial.push(cur)}return}
+    if(head){if(sec==='REGISTRO'){cur={id:'',fecha:'',tipo:'',tecnico:'',usuario:'',unidad:'',horometro:null,actividades:[],lectura:{},refacciones:'',obs:''};st.historial.push(cur)}else if(sec==='UNIDAD'){cu={};st.unidades.push(cu)}return}
+    if(sec==='UNIDAD'){if(cu)cu[k]=v;return}
     if(sec==='EQUIPO')st.equipo[k]=v;
     else if(sec==='PLACA')st.placa.push([k,v]);
     else if(sec==='CHECKLIST')st.checklist.push(v);
     else if(sec==='LECTURAS'){var p=v.split('|');st.lecturas.push([k,(p[0]||k).trim(),(p[1]||'').trim()])}
     else if(sec==='REGISTRO'){
-      if(k==='id'||k==='fecha'||k==='tipo'||k==='tecnico'||k==='usuario'||k==='refacciones')cur[k]=v;
+      if(k==='id'||k==='fecha'||k==='tipo'||k==='tecnico'||k==='usuario'||k==='refacciones'||k==='unidad')cur[k]=v;
       else if(k==='actividad')cur.actividades.push(v);
       else if(k==='horometro')cur.horometro=v===''?null:tNum(v);
       else if(k==='observaciones')cur.obs=v;
@@ -545,12 +562,13 @@ function escribirEquipo(st){
   L.push('[PLACA]');st.placa.forEach(function(p){kv(String(p[0]).replace(/=/g,'-'),p[1])});L.push('');
   L.push('[CHECKLIST]');st.checklist.forEach(function(c){kv('actividad',c)});L.push('');
   L.push('[LECTURAS]');st.lecturas.forEach(function(x){kv(x[0],x[1]+' | '+x[2])});L.push('');
+  var us=st.unidades||[];if(us.length){L.push('# ---------------- UNIDADES / BOMBAS ('+us.length+') ----------------');us.forEach(function(u,i){L.push('[UNIDAD '+String(i+1).padStart(2,'0')+']');CAMPOS_U.map(function(c){return c[0]}).concat(['estado']).forEach(function(k){if(u[k])kv(k,u[k])});L.push('')})}
   L.push('# ---------------- ÍNDICE DE REGISTROS ('+h.length+') ----------------','# No.  | Fecha      | Tipo                       | Técnico');
   h.forEach(function(r,i){L.push('# '+String(i+1).padStart(4,'0')+' | '+r.fecha+' | '+(r.tipo+'                          ').slice(0,26)+' | '+tEsc(r.tecnico))});
   L.push('');
   h.forEach(function(r,i){
     L.push('[REGISTRO '+String(i+1).padStart(4,'0')+']');
-    kv('id',r.id);kv('fecha',r.fecha);kv('tipo',r.tipo);kv('tecnico',r.tecnico);if(r.usuario)kv('usuario',r.usuario);
+    kv('id',r.id);kv('fecha',r.fecha);kv('tipo',r.tipo);kv('tecnico',r.tecnico);if(r.usuario)kv('usuario',r.usuario);if(r.unidad)kv('unidad',r.unidad);
     kv('horometro',hasN(r.horometro)?r.horometro:'');
     (r.actividades||[]).forEach(function(a){kv('actividad',a)});
     Object.keys(r.lectura||{}).forEach(function(k){if(hasN(r.lectura[k]))kv(k,r.lectura[k])});
@@ -807,7 +825,7 @@ function lecturasHTML(l){
 function eqHeroHTML(){
   var e=EQ.equipo;
   return '<section class="hero"><div style="min-width:0"><div class="hero-ic">'+ic(icEq(e.id))+'</div><span class="eyebrow">'+esc([e.ubicacion,e.tipo].filter(Boolean).join(' · '))+'</span><h2>'+esc(e.nombre)+'</h2>'+
-   '<div class="tags"><span class="tag id">'+esc(e.id)+'</span>'+['Marca','Modelo','Potencia','Voltaje'].map(function(k){var v=val(k);return v&&!pc(v)?'<span class="tag">'+esc(v)+'</span>':''}).join('')+'</div></div>'+
+   '<div class="tags"><span class="tag id">'+esc(e.id)+'</span>'+((EQ.unidades||[]).length?'<span class="tag">'+EQ.unidades.length+' '+esc(uTitulo().toLowerCase())+'</span>':'')+['Marca','Modelo','Potencia','Voltaje'].map(function(k){var v=val(k);return v&&!pc(v)?'<span class="tag">'+esc(v)+'</span>':''}).join('')+'</div></div>'+
    '<button class="btn light" data-act="nav" data-v="equipos">'+ic('left')+'Todos los equipos</button></section>';
 }
 function eqTabsHTML(){
@@ -831,9 +849,21 @@ function checklistLista(){
   EQ.checklist.forEach(function(c){var m=c.match(/^\[([^\]]+)\]\s*(.*)$/),g=m?m[1]:'',t=m?m[2]:c;if(!(g in idx)){idx[g]=grupos.length;grupos.push({g:g,items:[]})}grupos[idx[g]].items.push(t)});
   return grupos.map(function(G){return (G.g?'<div class="grupo">'+esc(G.g)+'</div>':'')+'<ul class="chk">'+G.items.map(function(t){return '<li>'+ic('square')+'<span>'+esc(t)+'</span></li>'}).join('')+'</ul>'}).join('');
 }
+function unidadesHTML(){
+  var us=EQ.unidades||[];if(!us.length)return '';var h=ordenado();
+  return '<div class="card"><div class="card-h"><h3>'+ic('drop')+esc(uTitulo())+' <span class="cnt">'+us.length+'</span></h3>'+(esAdmin()&&!LEGACY?'<button class="btn light sm" data-act="nav" data-v="editar">'+ic('edit')+'Editar</button>':'<span class="sub">Todas en este mismo QR</span>')+'</div><div class="card-b"><div class="ug">'+
+   us.map(function(u,i){
+     var lab=uLabel(u,i),st=u.estado||'Operando',cls=st==='Operando'?'ok':st==='En reparación'?'rep':'off',ult=h.find(function(r){return r.unidad===lab});
+     var dat=CAMPOS_U.filter(function(c){return c[0]!=='nombre'&&c[0]!=='ubicacion'&&c[0]!=='notas'&&u[c[0]]});
+     return '<div class="uc"><div class="uc-h"><div style="min-width:0"><b>'+esc(lab)+'</b>'+(u.ubicacion&&u.nombre?'<small>'+ic('pin')+esc(u.ubicacion)+'</small>':'')+'</div><span class="ust '+cls+'">'+esc(st)+'</span></div>'+
+      (dat.length?'<dl class="specs">'+dat.map(function(c){return '<div><dt>'+esc(c[1])+'</dt><dd'+(pc(u[c[0]])?' class="pc"':'')+'>'+esc(u[c[0]])+'</dd></div>'}).join('')+'</dl>':'<div class="uc-f">Sin datos de placa todavía.</div>')+
+      (u.notas?'<div class="uc-f">'+esc(u.notas)+'</div>':'')+
+      '<div class="uc-f">'+ic('wrench')+' Último servicio: '+(ult?esc(fmtF(ult.fecha))+' · '+esc(ult.tipo):'sin registro')+'</div></div>'}).join('')+
+   '</div></div></div>';
+}
 function fichaViewHTML(){
   var h=ordenado();
-  return eqKpisHTML()+
+  return eqKpisHTML()+unidadesHTML()+
    '<div class="cols"><div class="card"><div class="card-h"><h3>'+ic('ficha')+'Datos de placa</h3>'+(esAdmin()&&!LEGACY?'<button class="btn light sm" data-act="nav" data-v="editar">'+ic('edit')+'Editar</button>':'<span class="sub">'+EQ.placa.length+' datos</span>')+'</div>'+
     '<div class="card-b"><dl class="specs" style="grid-template-columns:minmax(0,1fr)">'+EQ.placa.map(function(p){return '<div><dt>'+esc(p[0])+'</dt><dd'+(pc(p[1])?' class="pc"':'')+'>'+esc(p[1])+'</dd></div>'}).join('')+'</dl></div></div>'+
    '<div class="stack"><div class="card"><div class="card-h"><h3>'+ic('pulse')+'Últimos registros</h3><button class="link" data-act="nav" data-v="bitacora">Bitácora'+ic('arrow')+'</button></div>'+
@@ -847,7 +877,7 @@ function entryHTML(e,i){
   var tools=puedeEditar(e)&&!LEGACY?'<div class="entry-tools"><button class="btn light sm" data-act="edit" data-id="'+esc(e.id)+'">'+ic('edit')+'Editar</button>'+
     (pendingDelete===e.id?'<button class="btn sm danger solid" data-act="del-ok" data-id="'+esc(e.id)+'">Confirmar</button><button class="btn light sm" data-act="del-no">Cancelar</button>':'<button class="btn sm danger" data-act="del" data-id="'+esc(e.id)+'">'+ic('trash')+'Eliminar</button>')+'</div>':'';
   return '<article class="card entry" style="--i:'+(i||0)+'"><div class="entry-h"><span class="entry-date">'+ic('cal')+fmtF(e.fecha)+'</span><span class="pill '+pillCls(e.tipo)+'">'+esc(e.tipo)+'</span>'+
-    '<span class="who">'+ic('user')+esc(e.tecnico)+'</span>'+(hasN(e.horometro)?'<span class="who">'+ic('clock')+esc(e.horometro)+' h</span>':'')+tools+'</div>'+
+    '<span class="who">'+ic('user')+esc(e.tecnico)+'</span>'+(e.unidad?'<span class="who">'+ic('pin')+esc(e.unidad)+'</span>':'')+(hasN(e.horometro)?'<span class="who">'+ic('clock')+esc(e.horometro)+' h</span>':'')+tools+'</div>'+
     lecturasHTML(e.lectura)+acts+(e.refacciones?'<div class="meta"><b>Refacciones:</b> '+esc(e.refacciones)+'</div>':'')+(e.obs?'<div class="obs">'+esc(e.obs)+'</div>':'')+'</article>';
 }
 function bitacoraHTML(entering){
@@ -869,6 +899,7 @@ function formHTML(){
    '<div class="sec-t">'+ic('cal')+'Datos generales</div><div class="fgrid">'+
     '<div class="f"><label for="f-fecha">Fecha</label><input type="date" id="f-fecha" value="'+(e?esc(e.fecha):hoy)+'"></div>'+
     '<div class="f"><label for="f-tipo">Tipo de trabajo</label><select id="f-tipo">'+TIPOS.concat(e&&TIPOS.indexOf(e.tipo)<0?[e.tipo]:[]).map(function(t){return '<option'+((e?e.tipo:TIPOS[0])===t?' selected':'')+'>'+esc(t)+'</option>'}).join('')+'</select></div>'+
+    ((EQ.unidades||[]).length?'<div class="f"><label for="f-unidad">'+esc(uTitulo()==='Bombas'?'Bomba':'Unidad')+'</label><select id="f-unidad"><option value="">Todas / general</option>'+EQ.unidades.map(function(u,i){var lb=uLabel(u,i);return '<option'+(e&&e.unidad===lb?' selected':'')+'>'+esc(lb)+'</option>'}).join('')+(e&&e.unidad&&!EQ.unidades.some(function(u,i){return uLabel(u,i)===e.unidad})?'<option selected>'+esc(e.unidad)+'</option>':'')+'</select></div>':'')+
     '<div class="f"><label for="f-tec">Técnico</label><input id="f-tec" value="'+esc(e?e.tecnico:SES.nombre)+'" readonly></div>'+
     '<div class="f"><label for="f-horo">Horómetro (h)</label><input id="f-horo" type="number" step="0.01" inputmode="decimal" class="mono" value="'+(e?v(e.horometro):'')+'"></div></div>'+
    '<div class="sec-t">'+ic('check')+'Actividades realizadas</div>'+checklistHTML(acts)+
@@ -888,6 +919,11 @@ function fichaEditHTML(){
    '<div class="sec-t">'+ic('ficha')+'Datos de placa</div>'+
    t.placa.map(function(p,i){return '<div class="spec-edit"><input id="p-k-'+i+'" value="'+esc(p[0])+'" aria-label="Campo" placeholder="Campo"><input id="p-v-'+i+'" class="mono" value="'+esc(p[1])+'" aria-label="Valor" placeholder="Valor"><button type="button" class="btn sm danger" data-act="p-del" data-i="'+i+'" aria-label="Quitar">'+ic('trash')+'</button></div>'}).join('')+
    '<div class="row"><button type="button" class="btn light sm" data-act="p-add">'+ic('plus')+'Agregar dato</button></div>'+
+   '<div class="sec-t">'+ic('drop')+esc(uTitulo())+' de este QR</div><p class="help">Agrega aquí cada '+(uTitulo()==='Bombas'?'bomba':'unidad')+' con su ubicación y datos. Todas quedan en este mismo QR.</p>'+
+   (t.unidades||[]).map(function(u,i){var K=uKey(u);return '<div class="ue"><div class="ue-h"><span>'+esc(uLabel(u,i))+'</span><button type="button" class="btn sm danger" data-act="u-rm" data-i="'+i+'">'+ic('trash')+'Quitar</button></div><div class="fgrid">'+
+     CAMPOS_U.map(function(c){return '<div class="f"><label for="u'+K+'-'+c[0]+'">'+esc(c[1])+'</label><input id="u'+K+'-'+c[0]+'" value="'+esc(u[c[0]]||'')+'"'+(c[0]==='nombre'?' placeholder="Ej. Bomba Almacén"':c[0]==='voltaje'?' placeholder="Ej. 220 V / 60 Hz"':c[0]==='potencia'?' placeholder="Ej. 5 HP"':c[0]==='capacidad'?' placeholder="Ej. 667 L/min"':'')+'></div>'}).join('')+
+     '<div class="f"><label for="u'+K+'-estado">Estado</label><select id="u'+K+'-estado">'+ESTADOS_U.map(function(x){return '<option'+((u.estado||'Operando')===x?' selected':'')+'>'+x+'</option>'}).join('')+'</select></div></div></div>'}).join('')+
+   '<div class="row"><button type="button" class="btn light sm" data-act="u-add">'+ic('plus')+(uTitulo()==='Bombas'?'Agregar bomba':'Agregar unidad')+'</button></div>'+
    '<div class="f"><label for="e-check">Actividades del checklist (una por renglón)</label><textarea id="e-check" rows="8">'+esc(t.checklist.join('\n'))+'</textarea></div>'+
    '<div class="f"><label for="e-lect">Lecturas a capturar (una por renglón: Nombre | unidad)</label><textarea id="e-lect" rows="5">'+esc(t.lecturas.map(function(x){return x[1]+(x[2]?' | '+x[2]:'')}).join('\n'))+'</textarea></div>'+
    '<div class="row"><button type="submit" class="btn"'+(busy?' disabled':'')+'>'+(busy?'<i class="spin"></i>Guardando…':ic('check')+'Guardar ficha')+'</button><button type="button" class="btn light" data-act="nav" data-v="ficha">Cancelar</button></div></div></form>';
@@ -1133,7 +1169,7 @@ document.addEventListener('submit',async function(ev){
       while(usadas[k])k+='_2';usadas[k]=1;return [k,nom,uni]});
     var neq={nombre:txt('e-nombre'),tipo:txt('e-tipo'),ubicacion:txt('e-ubic')};
     if(!neq.nombre)return aviso('Falta el nombre del equipo.');
-    await guardarEquipo(function(st){st.equipo.nombre=neq.nombre;st.equipo.tipo=neq.tipo;st.equipo.ubicacion=neq.ubicacion;st.placa=t2.placa.filter(function(p){return p[0]||p[1]});st.checklist=t2.checklist;st.lecturas=t2.lecturas},'Actualiza ficha','Ficha guardada.',function(){view='ficha';fichaTmp=null});
+    await guardarEquipo(function(st){st.equipo.nombre=neq.nombre;st.equipo.tipo=neq.tipo;st.equipo.ubicacion=neq.ubicacion;st.placa=t2.placa.filter(function(p){return p[0]||p[1]});st.checklist=t2.checklist;st.lecturas=t2.lecturas;st.unidades=(t2.unidades||[]).filter(function(u){return CAMPOS_U.some(function(c){return u[c[0]]})})},'Actualiza ficha','Ficha guardada.',function(){view='ficha';fichaTmp=null});
     if(notice&&notice.ok){try{await guardarCatalogo({id:EQID,nombre:neq.nombre,ubicacion:neq.ubicacion,tipo:neq.tipo});render()}catch(e){}}
     return;
   }
@@ -1144,7 +1180,7 @@ document.addEventListener('submit',async function(ev){
     if(!acts.length&&!txt('f-obs'))return aviso('Marca al menos una actividad o escribe qué se le hizo a la máquina.');
     var prev=editId?EQ.historial.find(function(x){return x.id===editId}):null,lec={};
     EQ.lecturas.forEach(function(x,i){var v=txt('l-'+i);if(v!=='')lec[x[0]]=tNum(v)});
-    var reg={id:editId||('r'+Date.now().toString(36)),fecha:txt('f-fecha'),tipo:$('f-tipo').value,tecnico:prev?prev.tecnico:SES.nombre,usuario:prev?(prev.usuario||''):SES.u,horometro:num('f-horo'),actividades:acts,lectura:lec,refacciones:txt('f-ref'),obs:txt('f-obs')};
+    var reg={id:editId||('r'+Date.now().toString(36)),fecha:txt('f-fecha'),tipo:$('f-tipo').value,tecnico:prev?prev.tecnico:SES.nombre,usuario:prev?(prev.usuario||''):SES.u,horometro:num('f-horo'),actividades:acts,lectura:lec,refacciones:txt('f-ref'),obs:txt('f-obs'),unidad:$('f-unidad')?$('f-unidad').value:(prev&&prev.unidad||'')};
     await guardarEquipo(function(st){var i=st.historial.findIndex(function(x){return x.id===reg.id});if(i>=0)st.historial[i]=reg;else st.historial.push(reg)},(prev?'Edita':'Agrega')+' registro '+reg.fecha,(prev?'Cambios guardados.':'Registro guardado.')+' Quien escanee el QR lo verá en 1 a 2 minutos.',function(){editId=null;view='bitacora'});
   }
 });
@@ -1182,6 +1218,8 @@ document.addEventListener('click',async function(ev){
   else if(a==='u-del-ok'){var uu=b.dataset.u;pendingUser=null;await guardarConfig(function(c){c.usuarios=c.usuarios.filter(function(x){return x.u!==uu})},'Quita usuario '+uu,'Usuario quitado: '+uu+'.')}
   else if(a==='p-add'){syncFicha();fichaTmp.placa.push(['','']);render();var k=$('p-k-'+(fichaTmp.placa.length-1));if(k)k.focus()}
   else if(a==='p-del'){syncFicha();fichaTmp.placa.splice(+b.dataset.i,1);render()}
+  else if(a==='u-add'){syncFicha();if(!fichaTmp.unidades)fichaTmp.unidades=[];var nu={estado:'Operando'};fichaTmp.unidades.push(nu);render();var un=$('u'+uKey(nu)+'-nombre');if(un)un.focus()}
+  else if(a==='u-rm'){syncFicha();fichaTmp.unidades.splice(+b.dataset.i,1);render()}
   else if(a==='qr-dl'){var cv=$(b.dataset.k==='pub'?'qr-pub':'qr-tec');if(!cv||!cv.width)return;var ln=document.createElement('a');ln.download='QR_'+(b.dataset.k==='pub'?'PUBLICO':'TECNICO')+'_'+EQID+'.png';ln.href=cv.toDataURL('image/png');document.body.appendChild(ln);ln.click();ln.remove()}
   else if(a==='migrar'&&esAdmin()&&LEGACY){
     var ve=window.__viejo;
@@ -1196,7 +1234,8 @@ document.addEventListener('click',async function(ev){
     if(notice&&notice.ok){TODOS=null;await cargar()}
   }
 });
-function syncFicha(){if(!fichaTmp)return;fichaTmp.placa.forEach(function(p,i){var k=$('p-k-'+i),v=$('p-v-'+i);if(k&&v){p[0]=k.value.trim();p[1]=v.value.trim()}})}
+function syncFicha(){if(!fichaTmp)return;fichaTmp.placa.forEach(function(p,i){var k=$('p-k-'+i),v=$('p-v-'+i);if(k&&v){p[0]=k.value.trim();p[1]=v.value.trim()}});
+  if(!fichaTmp.unidades)fichaTmp.unidades=[];fichaTmp.unidades.forEach(function(u,i){CAMPOS_U.concat([['estado']]).forEach(function(c){var el=$('u'+uKey(u)+'-'+c[0]);if(el)u[c[0]]=el.value.trim()})})}
 window.addEventListener('popstate',function(){cargar()});
 window.addEventListener('hashchange',function(){
   if(location.hash==='#tecnico'){if(SES){view=EQ&&puedeRegistrar()?'form':view}else{guest=false;view='login'}render()}
