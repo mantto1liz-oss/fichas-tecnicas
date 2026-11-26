@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-LLENADO-005 · Activides General
-# Actualizado: 13/11/2026, 9:22:05 a.m.
+# Actualizado: 26/11/2026, 11:12:29 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -39,5 +39,19 @@ linea = Linea |
 nombre_operador = Nombre Operador | 
 responsable_del_area = Responsable del Area | 
 
-# ---------------- ÍNDICE DE REGISTROS (0) ----------------
+# ---------------- ÍNDICE DE REGISTROS (1) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
+# 0001 | 2026-11-26 | Mantenimiento correctivo   | Benito Sanchez
+
+[REGISTRO 0001]
+id = rmwxt8s3b
+fecha = 2026-11-26
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 8.3
+actividad = Inspección visual general
+actividad = Soldadura
+actividad = Reparación
+actividad = Se soldaron y cambiaron 2 bases con llantas
+observaciones = Quedó listo y en funcionamiento
