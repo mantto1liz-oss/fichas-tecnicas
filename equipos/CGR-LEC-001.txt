@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-LEC-001 · Cortadora Lectra iQ80
-# Actualizado: 27/11/2026, 9:54:07 a.m.
+# Actualizado: 27/11/2026, 4:30:35 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -50,7 +50,7 @@ actividad = [500 h] Documentar lecturas de parámetros en bitácora (horas, velo
 horas_vibracion_h = Horas de vibración | h
 horas_aspiracion_h = Horas de aspiración | h
 
-# ---------------- ÍNDICE DE REGISTROS (6) ----------------
+# ---------------- ÍNDICE DE REGISTROS (7) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-05 | Mantenimiento preventivo   | Brandon
 # 0002 | 2026-11-12 | Mantenimiento preventivo   | Benito Sanchez
@@ -58,6 +58,7 @@ horas_aspiracion_h = Horas de aspiración | h
 # 0004 | 2026-11-20 | Mantenimiento correctivo   | Benito Sanchez
 # 0005 | 2026-11-24 | Mantenimiento correctivo   | Benito Sanchez
 # 0006 | 2026-11-26 | Mantenimiento preventivo   | Benito Sanchez
+# 0007 | 2026-11-27 | Mantenimiento preventivo   | CARLOS GR
 
 [REGISTRO 0001]
 id = rmw40dcrj
@@ -199,3 +200,14 @@ actividad = [Semanal 40 h] Verificar lecturas de horas de vibración y aspiraci�
 horas_vibracion_h = 3358.1
 horas_aspiracion_h = 7396.19
 observaciones = La máquina queda lista para operar
+
+[REGISTRO 0007]
+id = rmwzk1qnd
+fecha = 2026-11-27
+tipo = Mantenimiento preventivo
+tecnico = CARLOS GR
+usuario = charlie
+horometro = 4.28
+actividad = Se encuentra la aguja del drill atorada por rollo que agarro el cabezal bonfort se repara y queda funcionando la maquina
+horas_vibracion_h = ....
+horas_aspiracion_h = .....
