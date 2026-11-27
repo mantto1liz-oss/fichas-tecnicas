@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 25/11/2026, 4:36:29 p.m.
+# Actualizado: 27/11/2026, 11:45:11 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -35,7 +35,7 @@ linea = Linea # |
 operacion = Operacion# | 
 nombre_operdor = Nombre operdor | 
 
-# ---------------- ÍNDICE DE REGISTROS (9) ----------------
+# ---------------- ÍNDICE DE REGISTROS (10) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-12 | Mantenimiento correctivo   | CARLOS GR
 # 0002 | 2026-11-13 | Mantenimiento preventivo   | CARLOS GR
@@ -46,6 +46,7 @@ nombre_operdor = Nombre operdor |
 # 0007 | 2026-11-19 | Prueba de funcionamiento   | CARLOS GR
 # 0008 | 2026-11-20 | Mantenimiento correctivo   | CARLOS GR
 # 0009 | 2026-11-25 | Mantenimiento correctivo   | Benito Sanchez
+# 0010 | 2026-11-27 | Mantenimiento preventivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmwf3cwxd
@@ -176,3 +177,19 @@ linea = 2
 operacion = 1
 refacciones = Discos y soldadura
 observaciones = Está en funcionamiento, queda pendiente terminar de soldar el acero inoxidable
+
+[REGISTRO 0010]
+id = rmwz9upn4
+fecha = 2026-11-27
+tipo = Mantenimiento preventivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 11
+actividad = Inspección visual general
+actividad = Soldadura
+actividad = Reparación
+actividad = Se realizó la soldadura de acero inoxidable en banco de tapicería linea 2
+actividad = Se colocaron 2 rodillos en el conveyor, igual línea 2
+linea = 2
+refacciones = Soldadura 1/8” E308L-16
+observaciones = Quedó listo y funcionando
