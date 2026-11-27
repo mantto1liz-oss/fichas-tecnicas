@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 27/11/2026, 11:45:38 a.m.
+# Actualizado: 27/11/2026, 2:29:46 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -35,7 +35,7 @@ linea = Linea # |
 operacion = Operacion# | 
 nombre_operdor = Nombre operdor | 
 
-# ---------------- ÍNDICE DE REGISTROS (10) ----------------
+# ---------------- ÍNDICE DE REGISTROS (11) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-12 | Mantenimiento correctivo   | CARLOS GR
 # 0002 | 2026-11-13 | Mantenimiento preventivo   | CARLOS GR
@@ -47,6 +47,7 @@ nombre_operdor = Nombre operdor |
 # 0008 | 2026-11-20 | Mantenimiento correctivo   | CARLOS GR
 # 0009 | 2026-11-25 | Mantenimiento correctivo   | Benito Sanchez
 # 0010 | 2026-11-27 | Mantenimiento correctivo   | Benito Sanchez
+# 0011 | 2026-11-27 | Mantenimiento correctivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmwf3cwxd
@@ -193,3 +194,17 @@ actividad = Se colocaron 2 rodillos en el conveyor, igual línea 2
 linea = 2
 refacciones = Soldadura 1/8” E308L-16
 observaciones = Quedó listo y funcionando
+
+[REGISTRO 0011]
+id = rmwzfqcys
+fecha = 2026-11-27
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 2.27
+actividad = Inspección visual general
+actividad = Neumática
+actividad = Instalación
+actividad = Se reemplaza una manguera vieja, por una nueva, con conector rápido y conector con espiga
+refacciones = Manguera, abrazaderas, conector rápido y conector con espiga
+observaciones = Queda en buen funcionamiento
