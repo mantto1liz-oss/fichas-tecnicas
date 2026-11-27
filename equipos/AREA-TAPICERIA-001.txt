@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: AREA-TAPICERIA-001 · Activides General
-# Actualizado: 27/11/2026, 11:45:11 a.m.
+# Actualizado: 27/11/2026, 11:45:38 a.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -46,7 +46,7 @@ nombre_operdor = Nombre operdor |
 # 0007 | 2026-11-19 | Prueba de funcionamiento   | CARLOS GR
 # 0008 | 2026-11-20 | Mantenimiento correctivo   | CARLOS GR
 # 0009 | 2026-11-25 | Mantenimiento correctivo   | Benito Sanchez
-# 0010 | 2026-11-27 | Mantenimiento preventivo   | Benito Sanchez
+# 0010 | 2026-11-27 | Mantenimiento correctivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmwf3cwxd
@@ -181,7 +181,7 @@ observaciones = Está en funcionamiento, queda pendiente terminar de soldar el a
 [REGISTRO 0010]
 id = rmwz9upn4
 fecha = 2026-11-27
-tipo = Mantenimiento preventivo
+tipo = Mantenimiento correctivo
 tecnico = Benito Sanchez
 usuario = benito
 horometro = 11
