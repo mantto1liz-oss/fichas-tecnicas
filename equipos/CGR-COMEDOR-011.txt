@@ -1,7 +1,7 @@
 # ==========================================================
 # FICHA TÉCNICA Y BITÁCORA DE MANTENIMIENTO
 # Equipo: CGR-COMEDOR-011 · Comedor -cocina
-# Actualizado: 18/11/2026, 2:54:08 p.m.
+# Actualizado: 27/11/2026, 1:33:17 p.m.
 # Formato  campo = valor . Las líneas con # son comentarios.
 # ==========================================================
 
@@ -34,9 +34,10 @@ actividad = En proceso
 [LECTURAS]
 de_que_se_trato_la_reparacion = De que se trató la reparación | 
 
-# ---------------- ÍNDICE DE REGISTROS (1) ----------------
+# ---------------- ÍNDICE DE REGISTROS (2) ----------------
 # No.  | Fecha      | Tipo                       | Técnico
 # 0001 | 2026-11-18 | Mantenimiento correctivo   | CARLOS GR
+# 0002 | 2026-11-27 | Mantenimiento correctivo   | Benito Sanchez
 
 [REGISTRO 0001]
 id = rmwmln0qo
@@ -50,3 +51,15 @@ actividad = Prueba de funcionamiento
 actividad = Se detecta horno en mal funcionamiento termostato dañado
 de_que_se_trato_la_reparacion = -
 observaciones = Se repara horno 2:40 pm
+
+[REGISTRO 0002]
+id = rmwzdpqbs
+fecha = 2026-11-27
+tipo = Mantenimiento correctivo
+tecnico = Benito Sanchez
+usuario = benito
+horometro = 12
+actividad = Inspección visual general
+actividad = Limpieza
+actividad = Se realizó limpieza en el bajante
+observaciones = Se soluciona la filtración del agua por exceso de basura en bajante y se requiere impermeabilizar
